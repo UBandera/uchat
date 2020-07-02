@@ -114,8 +114,8 @@ void activate(GtkApplication* app, gpointer user_data) {
 }
 
 void activate_chat(GtkApplication* app, gpointer user_data) {
-    GtkBuilder *builder;
-    GtkWidget *window;
+    GtkBuilder *builder = NULL;
+    GtkWidget *window = NULL;
     builder = gtk_builder_new ();
     // window = gtk_application_window_new(app);
     gtk_builder_add_from_file(builder, "./gui.glade", NULL);
@@ -138,8 +138,8 @@ void entry_smth(GtkApplication* app, gpointer user_data) {
 
     g_signal_connect(G_OBJECT(form_template->log_in_btn), "clicked", G_CALLBACK(validation), form_template);
 
-    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    gtk_widget_show_all(window);
+    g_signal_connect(form_template->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    gtk_widget_show_all(form_template->window);
 }
 
 int login(int argc, char **argv, gpointer user_data) {
