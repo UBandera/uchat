@@ -1,8 +1,7 @@
 #include "mx_server.h"
 
 void request_handling(gchar *data, t_server *server) {
-
-    g_print("request = %s\n", data);
+    mx_print_json(data);
     (void)server;
 }
 
@@ -20,7 +19,7 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer user_data) {
     if (data) {
         request_handling(data, server);
         g_free(data);
-        return;
+        // return;
     }
     if (error) {
         g_error("%s\n", error->message);
@@ -40,6 +39,8 @@ gboolean incoming_callback(GSocketService *service,
     GDataInputStream *data_in = g_data_input_stream_new(istream);
     GDataOutputStream *data_out = g_data_output_stream_new(ostream);
     t_server *server = g_malloc(sizeof(t_server));
+
+    g_print("Client connected!\n");
 
     server->istream = g_object_ref(istream);
     server->ostream = g_object_ref(ostream);

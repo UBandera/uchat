@@ -11,7 +11,7 @@ typedef enum s_request_types {
     RQ_LOG_OUT,
 }            e_request_types;
 
-JsonBuilder *mx_init_json(gint request_type, gchar **data);
+JsonBuilder *mx_init_json(gint request_type, GHashTable *data);
 gchar *mx_json_to_str(JsonNode * root);
 JsonParser *mx_str_to_json(gchar *data);
 void mx_print_json(gchar *data);

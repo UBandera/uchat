@@ -4,6 +4,7 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#include "mx_json.h"
 
 typedef struct s_server {
     GSocketConnection *connection;

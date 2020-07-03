@@ -18,7 +18,7 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer user_data) {
     if (data) {
         g_print("response = %s [from serv]\n", data);
         g_free(data);
-        return;
+        // return;
     }
     g_data_input_stream_read_line_async(client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, client);
     (void)source_object;
@@ -61,7 +61,8 @@ int main(int argc, char **argv) {
         g_clear_error(&error);
     }
     client_st = init_client(connection);
-
+    mx_send_data(client_st->data_out, "connected\n");
+    mx_form_login_request("admin", "12345678", client_st);
     // ui (for testing)
     // mx_application_run(argc, argv, mx_application_init(client_st));
     login(argc, argv, client_st);
