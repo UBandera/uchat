@@ -35,6 +35,8 @@
 *.i*86
 *.x86_64
 *.hex
+uchat_server
+uchat_client
 
 # Debug files
 *.dSYM/
