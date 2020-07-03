@@ -1,6 +1,7 @@
 #include "mx_server.h"
 
 void request_handling(gchar *data, t_server *server) {
+    
     g_print("%s\n", data);
     (void)server;
 }
