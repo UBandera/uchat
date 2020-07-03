@@ -1,7 +1,7 @@
 #include "mx_server.h"
 
 void request_handling(gchar *data, t_server *server) {
-    mx_print_json(data);
+    g_print("%s\n", data);
     (void)server;
 }
 
