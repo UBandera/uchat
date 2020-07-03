@@ -30,8 +30,9 @@ void pushing(GtkButton *button, t_form *data) {
     gchar *login = (gchar *)gtk_entry_get_text(GTK_ENTRY(((t_form *)data)->login_input));
     t_client *client = data->client;
 
-    mx_send_data(client->data_out, login);
-    mx_send_data(client->data_out, "\n");
+    // mx_send_data(client->data_out, login);
+    // mx_send_data(client->data_out, "\n");
+    mx_form_login_request(login, NULL, client);
     (void)button;
 }
 
