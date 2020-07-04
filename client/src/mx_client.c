@@ -61,12 +61,13 @@ int main(int argc, char **argv) {
         g_clear_error(&error);
     }
     client_st = init_client(connection);
-    // mx_send_data(client_st->data_out, "connected\n");
+
     // mx_form_login_request("admin", "12345678", client_st);
+
     // ui (for testing)
     // mx_application_run(argc, argv, mx_application_init(client_st));
     login(argc, argv, client_st);
-
+    g_object_unref(connection);
     g_free(client_st);
     return 0;
 }

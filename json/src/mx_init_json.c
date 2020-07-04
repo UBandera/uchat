@@ -7,8 +7,9 @@ static void get_data(gpointer key, gpointer value, gpointer user_data) {
     json_builder_add_string_value(builder, g_strdup((gchar *)value));
 }
 
-JsonBuilder *mx_init_json(gint request_type, GHashTable *data) {
+JsonNode *mx_init_json(gint request_type, GHashTable *data) {
     JsonBuilder *builder = json_builder_new();
+    JsonNode *json = NULL;
 
     json_builder_begin_object(builder);
 
@@ -22,6 +23,7 @@ JsonBuilder *mx_init_json(gint request_type, GHashTable *data) {
     json_builder_end_object(builder);
 
     json_builder_end_object(builder);
-    return builder;
-    // g_object_unref(builder);
+    json = json_builder_get_root(builder);
+    g_object_unref(builder);
+    return json;
 }
