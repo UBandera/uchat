@@ -16,7 +16,7 @@ typedef struct s_client {
 }              t_client;
 
 /*
-   contain connection from new client and hash table in which should be add 
+   contain connection from new client and hash table in which should be add
    uid as a key and streams of client as a value
 */
 typedef struct s_new_client {
@@ -24,6 +24,9 @@ typedef struct s_new_client {
     t_client *client;
 }              t_new_client;
 
+
+
+GHashTable **mx_get_online_users(void);
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 
 
