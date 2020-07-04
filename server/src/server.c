@@ -3,13 +3,13 @@ const gboolean NEW_USER = 0;
 gint64 gui = 1;
 
 void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
-    g_print("Connected user id is %s\n", (gchar *)key);
+    g_print("Connected user id is %lld\n", *(gint64 *)key);
 }
 
 void request_handling(gchar *data, t_client *client) {
     GHashTable **online_users = mx_get_online_users();
 
-    g_hash_table_insert(*online_users, "1", client);
+    g_hash_table_insert(*online_users, &uid, client);
     g_hash_table_foreach(*online_users, print_hash_table, NULL);
     g_print("%s\n",data);
     (void)client;
@@ -52,6 +52,7 @@ gboolean incoming_callback(GSocketService *service,
     GDataInputStream *data_in = g_data_input_stream_new(istream);
     GDataOutputStream *data_out = g_data_output_stream_new(ostream);
     t_client *socket = g_malloc(sizeof(t_client));
+    gint64 uid = gui++;
     // t_new_client *new_client = g_malloc(sizeof(t_new_client));
 
     g_print("Client connected!\n");
@@ -61,6 +62,7 @@ gboolean incoming_callback(GSocketService *service,
     socket->data_in = g_object_ref(data_in);
     socket->data_out = g_object_ref(data_out);
     socket->connection = g_object_ref(connection);
+    socket->uid = uid;
 
     // new_client->client = socket;
     // new_client->online_users = (GHashTable *)online_users;
@@ -87,7 +89,7 @@ int main(int argc, char **argv) {
     GError *error = NULL;
     GHashTable **online_users = mx_get_online_users();
 
-    *online_users = g_hash_table_new_full(g_int64_hash, NULL,
+    *online_users = g_hash_table_new_full(g_int_hash, NULL,
                                           NULL, NULL);
     service = g_socket_service_new();
     g_socket_listener_add_inet_port((GSocketListener*)service, 5050, NULL, &error);
