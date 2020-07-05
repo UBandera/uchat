@@ -2,7 +2,6 @@
 
 gchar *mx_form_contact_list_request(void) {
     gchar *request = NULL;
-    JsonBuilder *builder = NULL;
     JsonNode *json = NULL;
 
     json = mx_init_json(RQ_CONTACT_LIST, NULL);

@@ -8,7 +8,7 @@ gchar *mx_form_auth_request(gchar *login, gchar *password, gint type) {
     g_hash_table_insert(data, "login", login);
     g_hash_table_insert(data, "password", password);
     json = mx_init_json(type, data);
-    request = json_to_string(json, TRUE);
+    request = json_to_string(json, FALSE);
     g_hash_table_destroy(data);
     json_node_free(json);
     return request;

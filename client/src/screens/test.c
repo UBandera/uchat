@@ -40,7 +40,6 @@ int login(int argc, char **argv, gpointer user_data) {
 
     gtk_init(&argc, &argv);
     form_template->client = (t_client *)user_data;
-    mx_send_data(form_template->client->data_out, "Client inited\n");
     form_template->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     form_template->body = gtk_box_new(GTK_ORIENTATION_VERTICAL, 15);
     form_template->entry_buffer = gtk_entry_buffer_new(NULL, -1);

@@ -1,6 +1,9 @@
 #include "mx_server.h"
+
 const gboolean NEW_USER = 0;
+
 gint64 gui = 1;
+gint request_count = 0;
 
 void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
     g_print("Connected user id is %lld\n", *(gint64 *)key);
@@ -8,21 +11,28 @@ void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
 
 void request_handling(gchar *data, t_client *client) {
     GHashTable **online_users = mx_get_online_users();
+    gint64 user_id = (client->uid == 1) ? 2 : 1;
 
-    g_hash_table_insert(*online_users, &uid, client);
-    g_hash_table_foreach(*online_users, print_hash_table, NULL);
+    // mx_json_parser(data);
+    request_count++;
+
+    g_hash_table_insert(*online_users, &(client->uid), client);
+    // g_hash_table_foreach(*online_users, print_hash_table, NULL);
+    if (request_count > 1) {
+        GDataOutputStream *data_out = mx_get_socket_by_user_id(user_id);
+
+        if (data_out)
+            mx_send_data(data_out, data);
+    }
     g_print("%s\n",data);
     (void)client;
 }
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     t_client *new_client = (t_client*)socket;
-    // t_client *client = new_client->client;
-    // GHashTable *online_users = new_client->online_users;
     GError *error = NULL;
     gsize size = 0;
     gchar *data = NULL;
-    // gint64 uid = gui++;
 
     if (!g_socket_connection_is_connected(new_client->connection)) {
         g_print("Client logout!\n");
@@ -52,8 +62,6 @@ gboolean incoming_callback(GSocketService *service,
     GDataInputStream *data_in = g_data_input_stream_new(istream);
     GDataOutputStream *data_out = g_data_output_stream_new(ostream);
     t_client *socket = g_malloc(sizeof(t_client));
-    gint64 uid = gui++;
-    // t_new_client *new_client = g_malloc(sizeof(t_new_client));
 
     g_print("Client connected!\n");
 
@@ -62,10 +70,8 @@ gboolean incoming_callback(GSocketService *service,
     socket->data_in = g_object_ref(data_in);
     socket->data_out = g_object_ref(data_out);
     socket->connection = g_object_ref(connection);
-    socket->uid = uid;
+    socket->uid = gui++;
 
-    // new_client->client = socket;
-    // new_client->online_users = (GHashTable *)online_users;
     g_data_input_stream_read_line_async(socket->data_in, G_PRIORITY_DEFAULT, NULL, get_data, socket);
     (void)service;
     (void)source_object;

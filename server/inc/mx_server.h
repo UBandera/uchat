@@ -27,6 +27,7 @@ typedef struct s_new_client {
 
 
 GHashTable **mx_get_online_users(void);
+GDataOutputStream *mx_get_socket_by_user_id(gint64 user_id);
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 
 

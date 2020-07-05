@@ -17,5 +17,6 @@ typedef enum s_request_types {
 
 JsonNode *mx_init_json(gint request_type, GHashTable *data);
 void mx_print_json(JsonNode *node);
+GHashTable *mx_json_parser(gchar *data);
 
 #endif /* end of include guard: JSON_H */

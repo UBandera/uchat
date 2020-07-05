@@ -55,6 +55,7 @@ int main(int argc, char **argv) {
     // g_socket_client_set_enable_proxy(client, TRUE); // Future release
 
     connection = g_socket_client_connect_to_host(client, (gchar *)"0.0.0.0", 5050, NULL, &error);
+    g_socket_client_set_timeout(client, 10);
 
     if (error) {
         g_error("%s\n", error->message);
