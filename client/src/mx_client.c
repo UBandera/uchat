@@ -55,18 +55,20 @@ int main(int argc, char **argv) {
     // g_socket_client_set_enable_proxy(client, TRUE); // Future release
 
     connection = g_socket_client_connect_to_host(client, (gchar *)"0.0.0.0", 5050, NULL, &error);
+    g_socket_client_set_timeout(client, 10);
 
     if (error) {
         g_error("%s\n", error->message);
         g_clear_error(&error);
     }
     client_st = init_client(connection);
-    mx_send_data(client_st->data_out, "connected\n");
-    mx_form_login_request("admin", "12345678", client_st);
+
+    // mx_form_login_request("admin", "12345678", client_st);
+
     // ui (for testing)
     // mx_application_run(argc, argv, mx_application_init(client_st));
     login(argc, argv, client_st);
-
+    g_object_unref(connection);
     g_free(client_st);
     return 0;
 }

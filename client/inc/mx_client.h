@@ -17,7 +17,12 @@ typedef struct s_client {
 int mx_application_run(int argc, char **argv, GApplication *app);
 GApplication *mx_application_init(gpointer user_data);
 void mx_notify(GApplication *application);
-void mx_form_login_request(gchar *login, gchar *password, t_client *client);
+
+// requests
+gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);
+gchar *mx_form_contact_list_request(void);
+gchar *mx_form_chat_data_request(gchar *user_id);
+gchar *mx_form_send_message_request(gchar *user_id, gchar *message);
 
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 int login(int argc, char **argv, gpointer user_data); // for testing

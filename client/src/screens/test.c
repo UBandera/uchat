@@ -30,8 +30,8 @@ void pushing(GtkButton *button, t_form *data) {
     gchar *login = (gchar *)gtk_entry_get_text(GTK_ENTRY(((t_form *)data)->login_input));
     t_client *client = data->client;
 
-    mx_send_data(client->data_out, login);
-    mx_send_data(client->data_out, "\n");
+    gchar *request = mx_form_auth_request(login, NULL, RQ_SIGN_IN);
+    mx_send_data(client->data_out, request);
     (void)button;
 }
 
@@ -40,7 +40,6 @@ int login(int argc, char **argv, gpointer user_data) {
 
     gtk_init(&argc, &argv);
     form_template->client = (t_client *)user_data;
-    mx_send_data(form_template->client->data_out, "Client inited\n");
     form_template->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     form_template->body = gtk_box_new(GTK_ORIENTATION_VERTICAL, 15);
     form_template->entry_buffer = gtk_entry_buffer_new(NULL, -1);
