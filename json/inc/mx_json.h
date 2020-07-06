@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
+#include "cJSON.h"
 
 typedef enum s_request_types {
     RQ_SIGN_IN,
