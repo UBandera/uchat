@@ -5,6 +5,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include "mx_json.h"
+#include <sqlite3.h>
 
 typedef struct s_server {
     GSocketConnection *connection;
