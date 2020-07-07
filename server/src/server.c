@@ -13,7 +13,7 @@ void request_handling(gchar *data, t_client *client) {
     GHashTable **online_users = mx_get_online_users();
     gint64 user_id = (client->uid == 1) ? 2 : 1;
 
-    // mx_json_parser(data);
+    mx_json_parser(data);
     request_count++;
 
     g_hash_table_insert(*online_users, &(client->uid), client);
