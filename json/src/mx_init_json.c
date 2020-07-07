@@ -14,10 +14,12 @@ JsonNode *mx_init_json(gint request_type, GHashTable *data) {
     json_builder_begin_object(builder);
     json_builder_set_member_name(builder, "request_type");
     json_builder_add_int_value(builder, request_type);
+
     // json_builder_set_member_name(builder, "data");
     // json_builder_begin_object(builder);
     g_hash_table_foreach(data, get_data, builder);
     // json_builder_end_object(builder);
+
     json_builder_end_object(builder);
     json = json_builder_get_root(builder);
     g_object_unref(builder);
