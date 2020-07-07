@@ -4,16 +4,20 @@
 #include <stdlib.h>
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
+#include "cJSON.h"
 
 typedef enum s_request_types {
     RQ_SIGN_IN,
     RQ_SIGN_UP,
-    RQ_LOG_OUT,
+    RQ_SIGN_OUT,
+    RQ_CONTACT_LIST,
+    RQ_CHAT_DATA,
+    RQ_PROFILE_DATA,
+    RQ_SEND_MESSAGE,
 }            e_request_types;
 
-JsonBuilder *mx_init_json(gint request_type, gchar **data);
-gchar *mx_json_to_str(JsonNode * root);
-JsonParser *mx_str_to_json(gchar *data);
-void mx_print_json(gchar *data);
+JsonNode *mx_init_json(gint request_type, GHashTable *data);
+void mx_print_json(JsonNode *node);
+GHashTable *mx_json_parser(gchar *data);
 
 #endif /* end of include guard: JSON_H */

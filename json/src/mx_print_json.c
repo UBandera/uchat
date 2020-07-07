@@ -1,7 +1,8 @@
 #include "mx_json.h"
 
-void mx_print_json(gchar *data) {
-    gchar *str = json_parser_get_root(mx_str_to_json(data));
+void mx_print_json(JsonNode *json) {
+    gchar *str = json_to_string(json, TRUE);
 
     g_print("%s", str);
+    g_free(str);
 }
