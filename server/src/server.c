@@ -13,7 +13,8 @@ void sign_up(gchar *data, t_client *client) {
     GHashTable **online_users = mx_get_online_users();
     gint64 user_id = (client->uid == 1) ? 2 : 1;
 
-    mx_json_parser(data);
+    g_print("%s\n",data);
+    // mx_json_parser(data);
 
     g_hash_table_insert(*online_users, &(client->uid), client);
     // g_hash_table_foreach(*online_users, print_hash_table, NULL);
@@ -23,7 +24,6 @@ void sign_up(gchar *data, t_client *client) {
         if (data_out)
             mx_send_data(data_out, data);
     }
-    g_print("%s\n",data);
     (void)client;
 }
 
@@ -43,7 +43,8 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     }
     data = g_data_input_stream_read_line_finish(new_client->data_in, res, &size, &error);
     if (data) {
-        fp[0](data, new_client);
+        sign_up(data, new_client);
+        // fp[0](data, new_client);
         g_free(data);
     }
     if (error) {

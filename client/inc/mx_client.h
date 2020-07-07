@@ -21,8 +21,10 @@ void mx_notify(GApplication *application);
 // requests
 gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);
 gchar *mx_form_contact_list_request(void);
-gchar *mx_form_chat_data_request(gchar *user_id);
-gchar *mx_form_send_message_request(gchar *user_id, gchar *message);
+gchar *mx_form_chat_data_request(gint user_id);
+gchar *mx_form_profile_data_request(void);
+gchar *mx_form_send_message_request(gint user_id, gchar *message);
+gchar *mx_form_signout_request(void);
 
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 int login(int argc, char **argv, gpointer user_data); // for testing

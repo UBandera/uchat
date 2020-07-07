@@ -31,6 +31,7 @@ void pushing(GtkButton *button, t_form *data) {
     t_client *client = data->client;
 
     gchar *request = mx_form_auth_request(login, NULL, RQ_SIGN_IN);
+    g_print("req = %s\n", request);
     mx_send_data(client->data_out, request);
     (void)button;
 }

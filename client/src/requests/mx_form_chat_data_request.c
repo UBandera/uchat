@@ -1,14 +1,17 @@
 #include "mx_client.h"
 
-gchar *mx_form_chat_data_request(gchar *user_id) {
-    GHashTable *data = g_hash_table_new(g_str_hash, g_str_equal);
+gchar *mx_form_chat_data_request(gint user_id) {
+    cJSON *json = cJSON_CreateObject();
     gchar *request = NULL;
-    JsonNode *json = NULL;
 
-    g_hash_table_insert(data, "user_id", user_id);
-    json = mx_init_json(RQ_CHAT_DATA, data);
-    request = json_to_string(json, TRUE);
-    g_hash_table_destroy(data);
-    json_node_free(json);
+    cJSON_AddItemToObject(json,
+                          "request_type",
+                          cJSON_CreateNumber(RQ_CHAT_DATA));
+    cJSON_AddItemToObject(json, "user_id", cJSON_CreateNumber(user_id));
+    request = cJSON_Print(json);
+    if (!request){
+        g_error("Failed to print make request.\n");
+    }
+    cJSON_Delete(json);
     return request;
 }
