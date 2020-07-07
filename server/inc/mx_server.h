@@ -6,6 +6,7 @@
 #include <string.h>
 #include "mx_json.h"
 #include <sqlite3.h>
+#include <stdbool.h>
 
 typedef struct s_client {
     GSocketConnection *connection;
