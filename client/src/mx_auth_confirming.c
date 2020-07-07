@@ -9,15 +9,15 @@ static gboolean mx_check_repeat_password(const gchar *password,
 
 static gboolean mx_check_password(const gchar *password) {
     if (strlen(password) < 6) {
-        g_error("The password should be 6 to 50 characters long!\n");
+        g_print("The password should be 6 to 50 characters long!\n");
         return FALSE;
     }
     if (mx_match(password, MX_FORBIDEN_PATTERN, 0, 0)) {
-        g_error("The password includes forbidden character!\n");
+        g_print("The password includes forbidden character!\n");
         return FALSE;
     }
     if (!mx_match(password, MX_ALLOWED_PATTERN, 0, 0)) {
-        g_error("The password must contain uppercase and lowercase "
+        g_print("The password must contain uppercase and lowercase "
                 "letters and numbers!\n");
         return FALSE;
     }
@@ -27,11 +27,11 @@ static gboolean mx_check_password(const gchar *password) {
 
 static gboolean mx_check_login(const gchar *login) {
     if (strlen(login) < 6) {
-        g_error("The login should be 6 to 48 characters long!\n");
+        g_print("The login should be 6 to 48 characters long!\n");
         return FALSE;
     }
     if (mx_match(login, MX_FORBIDEN_PATTERN, 0, 0)) {
-        g_error("The password includes forbidden character!\n");
+        g_print("The password includes forbidden character!\n");
         return FALSE;
     }
     return TRUE;

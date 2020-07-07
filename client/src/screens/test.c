@@ -32,8 +32,10 @@ void sign_in_req(GtkButton *button, t_form *data) {
     gchar *password = (gchar *)gtk_entry_get_text(GTK_ENTRY(((t_form *)data)->password_input));
     t_client *client = data->client;
 
-    gchar *request = mx_form_auth_request(login, password, RQ_SIGN_IN);
-    mx_send_data(client->data_out, request);
+    if (mx_auth_confirming(login, password, NULL) == MX_VALID) {
+        gchar *request = mx_form_auth_request(login, password, RQ_SIGN_UP);
+        mx_send_data(client->data_out, request);
+    }
     (void)button;
 }
 
@@ -42,8 +44,10 @@ void sign_up_req(GtkButton *button, t_form *data) {
     gchar *password = (gchar *)gtk_entry_get_text(GTK_ENTRY(((t_form *)data)->password_input));
     t_client *client = data->client;
 
-    gchar *request = mx_form_auth_request(login, password, RQ_SIGN_UP);
-    mx_send_data(client->data_out, request);
+    if (mx_auth_confirming(login, password, NULL) == MX_VALID) {
+        gchar *request = mx_form_auth_request(login, password, RQ_SIGN_UP);
+        mx_send_data(client->data_out, request);
+    }
     (void)button;
 }
 
