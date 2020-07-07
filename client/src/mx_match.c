@@ -1,5 +1,4 @@
-// #include "mx_client.h"
-#include <gio/gio.h>
+#include "mx_client.h"
 
 gboolean mx_match(const gchar *str,
                   const gchar *pattern,

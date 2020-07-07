@@ -6,12 +6,12 @@
 #include <string.h>
 #include "mx_json.h"
 
-typedef enum e_auth_data_validation {
+enum e_auth_data_validation {
     MX_VALID = 0,
     MX_LOGIN_ERROR,
     MX_PASSWORD_ERROR,
     MX_REPEAT_PASSWORD_ERROR,
-}            e_auth_data_validation;
+}
 
 #define MX_FORBIDEN_PATTERN "[^A-Z&^a-z&^0-9&^(!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)]"
 #define MX_ALLOWED_PATTERN "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~]).{6,48}$"
