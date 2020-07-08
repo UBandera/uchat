@@ -6,6 +6,16 @@
 #include <string.h>
 #include "mx_json.h"
 
+enum e_auth_data_validation {
+    MX_VALID = 0,
+    MX_LOGIN_ERROR,
+    MX_PASSWORD_ERROR,
+    MX_REPEAT_PASSWORD_ERROR,
+};
+
+#define MX_FORBIDEN_PATTERN "[^A-Z&^a-z&^0-9&^(!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)]"
+#define MX_ALLOWED_PATTERN "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~]).{6,48}$"
+
 typedef struct s_client {
     GSocketConnection *connection;
     GInputStream *istream;
@@ -26,5 +36,9 @@ gchar *mx_form_send_message_request(gchar *user_id, gchar *message);
 
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 int login(int argc, char **argv, gpointer user_data); // for testing
+
+
+gboolean mx_match(const gchar *str, const gchar *pattern, gint compile_flags, gint match_flag);
+gint mx_auth_confirming(gchar *login, gchar *password, gchar *repeat_password);
 
 #endif /* end of include guard: CLIENT_H */
