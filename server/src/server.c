@@ -1,4 +1,4 @@
-#include "mx_server.h"
+#include "server.h"
 
 const gboolean NEW_USER = 0;
 
@@ -7,6 +7,8 @@ gint request_count = 0;
 
 void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
     g_print("Connected user id is %lld\n", *(gint64 *)key);
+    (void)user_data;
+    (void)value;
 }
 
 sqlite3 **mx_get_db(void) {
@@ -15,69 +17,8 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
-int mx_sign_up_quary(cJSON *root, sqlite3 *db) {
-    gchar *quary = "INSERT INTO users_credential(login, passwd_hash), \
-                    VALUE(?, ?);";
-    sqlite3_stmt *stmt = NULL;
-    gchar *login = cJSON_GetObjectItem(root, "login")->valuestring;
-    gchar *passwd = cJSON_GetObjectItem(root, "passwd_hash")->valuestring;
-    int rc = 0; // should move to the function arguments );
-
-    if ((rc = sqlite3_prepare_v2(db, quary, -1, &stmt, 0)) != SQLITE_OK)
-        g_warning("sign_up_quary prepare: %s\n", sqlite3_errmsg(db));
-    if ((sqlite3_bind_text(stmt, 1, login, -1, NULL)) != SQLITE_OK)
-        g_warning("sign_up_quary bind:\nlogin:%s\n%s\n",
-                   login, sqlite3_errmsg(db));
-    if ((sqlite3_bind_text(stmt, 2, passwd, -1, NULL)) != SQLITE_OK)
-        g_warning("sign_up_quary bind: login:%s\n%s\n",
-                   login, sqlite3_errmsg(db));
-    if ((rc = sqlite3_step(stmt)) != SQLITE_OK)
-        g_warning("sign_up_quary step: %s\n", sqlite3_errmsg(db));
-    if ((rc = sqlite3_finalize(stmt)) != SQLITE_OK)
-        g_warning("sign_up_quary finalize: %s\n", sqlite3_errmsg(db));
-    return rc;
-}
-
-gboolean mx_check_if_user_excist(cJSON *root, sqlite3 *db) {
-    gchar *quary = "SELECT login FROM users_credential WHERE login = ?;";
-    sqlite3_stmt *stmt = NULL;
-    gchar *login = cJSON_GetObjectItem(root, "login")->valuestring;
-    const guchar *result = NULL;
-    gchar *errmsg = NULL;
-    int rc = 0;
-
-    if ((rc = sqlite3_prepare_v2(db, quary, -1, &stmt, NULL)) != SQLITE_OK)
-        g_warning("check_if_excist prepare: %s\n", sqlite3_errstr(rc));
-    if ((sqlite3_bind_text(stmt, 1, login, -1, NULL)) != SQLITE_OK)
-        g_warning("check_if_excist bind: login:%s %s\n",
-                   login, sqlite3_errstr(rc));
-    if ((rc = sqlite3_step(stmt)) != SQLITE_OK)
-        g_warning("check_if_excist step rc: %d, %s\n", rc, sqlite3_errstr(rc));
-    if ((result = sqlite3_column_text(stmt, 1)) == NULL)
-        g_warning("check_if_excist fetch rc: %d %s\n", rc, sqlite3_errstr(rc));
-    if ((rc = sqlite3_finalize(stmt)) != SQLITE_OK)
-        g_warning("check_if_excist finalize rc:%d %s\n", rc, sqlite3_errstr(rc));
-    return true;
-}
-
-void mx_sign_up(cJSON *root, t_client *client) {
-    sqlite3 *db = *(mx_get_db());
-
-    if (mx_check_if_user_excist(root, db) == false) {
-        mx_sign_up_quary(root, db);
-        g_print("User not exsist\n");
-    }
-    else {
-        g_print("User exsist\n");
-    }
-
-    (void)client;
-}
-
-// void sign_up(cJSON *root, t_client *client) {
+// void sign_in(cJSON *root, t_client *client) {
     // GHashTable **online_users = mx_get_online_users();
-    // gint64 user_id = (client->uid == 1) ? 2 : 1;
-
 
     // g_hash_table_insert(*online_users, &(client->uid), client);
     // // g_hash_table_foreach(*online_users, print_hash_table, NULL);
@@ -87,8 +28,6 @@ void mx_sign_up(cJSON *root, t_client *client) {
         // if (data_out)
             // mx_send_data(data_out, data);
     // }
-    // g_print("sign_up input: %s\n",data);
-    // (void)client;
 // }
 
 void (*const request_handler[])() = {
@@ -147,6 +86,7 @@ gboolean incoming_callback(GSocketService *service,
     g_data_input_stream_read_line_async(socket->data_in, G_PRIORITY_DEFAULT, NULL, get_data, socket);
     (void)service;
     (void)source_object;
+    (void)user_data;
     return FALSE;
 }
 
@@ -182,7 +122,7 @@ int main(int argc, char **argv) {
     if ((rc = sqlite3_exec(*db, "SELECT User_id FROM users_credential LIMIT 1;",
                     NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE users_credential ( \
-                            user_id INTEGER NOT NULL, \
+                            user_id INTEGER, \
                             login VARCHAR(50) NOT NULL, \
                             passwd_hash VARCHAR(32) NOT NULL, \
                             PRIMARY KEY(user_id));", NULL, NULL, &errmsg)) != SQLITE_OK) {

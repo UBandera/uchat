@@ -1,4 +1,4 @@
-#include "mx_server.h"
+#include "server.h"
 
 static gboolean find_socket(gpointer key,
                             gpointer value,
@@ -7,6 +7,7 @@ static gboolean find_socket(gpointer key,
         return TRUE;
     }
     return FALSE;
+    (void)value;
 }
 
 GDataOutputStream *mx_get_socket_by_user_id(gint64 user_id) {

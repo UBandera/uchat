@@ -1,4 +1,4 @@
-#include "mx_server.h"
+#include "server.h"
 
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data) {
     GError *error = NULL;

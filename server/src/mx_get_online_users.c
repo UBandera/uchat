@@ -1,4 +1,4 @@
-#include "mx_server.h"
+#include "server.h"
 
 GHashTable **mx_get_online_users(void) {
     static GHashTable *online_users = NULL;
