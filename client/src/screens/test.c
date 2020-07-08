@@ -33,7 +33,7 @@ void sign_in_req(GtkButton *button, t_form *data) {
     t_client *client = data->client;
 
     if (mx_auth_confirming(login, password, NULL) == MX_VALID) {
-        gchar *request = mx_form_auth_request(login, password, RQ_SIGN_UP);
+        gchar *request = mx_form_auth_request(login, password, RQ_SIGN_IN);
         mx_send_data(client->data_out, request);
     }
     (void)button;
