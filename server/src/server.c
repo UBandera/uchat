@@ -17,18 +17,51 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
-// void sign_in(cJSON *root, t_client *client) {
-    // GHashTable **online_users = mx_get_online_users();
+gint get_user_id_run(sqlite3_stmt **stmt, t_client *client) {
+    gint rc = 0;
 
-    // g_hash_table_insert(*online_users, &(client->uid), client);
-    // // g_hash_table_foreach(*online_users, print_hash_table, NULL);
-    // if (request_count > 1) {
-        // GDataOutputStream *data_out = mx_get_socket_by_user_id(user_id);
+    if ((rc = sqlite3_step(stmt)) == SQLITE_DONE)
+        client->uid = -1;
+    else if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+        client->uid = sqlite3_column_int(stmt, 1);
+    else 
+        g_warning("get_user_id_run step rc:%d\n", rc);
+    if ((rc = sqlite3_finalize(stmt)) != SQLITE_OK)
+        g_warning("get_user_id_run finalize rc:%d\n", rc);
+    return rc;
+}
 
-        // if (data_out)
-            // mx_send_data(data_out, data);
-    // }
-// }
+gint get_user_id_prepare(cJSON *root, sqlite3 *db, t_client *client) {
+    gchar *quary = "SELECT login, passwd_hash FROM users_credential \
+                    WHERE login = ? passwd_hash = ?;";
+    gchar *login = cJSON_GetObjectItem(root, "login")->valuestring;
+    gchar *passwd = cJSON_GetObjectItem(root, "password")->valuestring;
+    sqlite3_stmt *stmt = NULL;
+    gint rc = 0;
+
+    if ((rc = sqlite3_prepare_v2(db, quary, -1, &stmt, NULL)) != SQLITE_OK)
+        g_warning("get_user_id_prepare prepare: %s\n", sqlite3_errstr(rc));
+    if ((sqlite3_bind_text(stmt, 1, login, -1, NULL)) != SQLITE_OK)
+        g_warning("get_user_id_prepare bind: login:%s %s\n",
+                   login, sqlite3_errstr(rc));
+    return get_user_id_run(strm, client);
+}
+
+void sign_in(cJSON *root, t_client *client) {
+    GHashTable **online_users = mx_get_online_users();
+    sqlite3 *db = *(get_db());
+
+    if (get_user_id_prepare(root, db, client) != SQLITE_OK)
+        // TODO: send error?;
+    else {
+        if (client->uid == -1)
+            mx_send_data(client->data_out, "sign_in failed\n");
+        else if (client->uid > 0) {
+            mx_send_data(client->data_out, "sign_in successfully\n");
+            g_hash_table_insert(*online_users, &(client->uid), client);
+        }
+    }
+}
 
 void (*const request_handler[])() = {
     mx_sign_up
