@@ -17,54 +17,10 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
-gint get_user_id_run(sqlite3_stmt **stmt, t_client *client) {
-    gint rc = 0;
-
-    if ((rc = sqlite3_step(stmt)) == SQLITE_DONE)
-        client->uid = -1;
-    else if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-        client->uid = sqlite3_column_int(stmt, 1);
-    else 
-        g_warning("get_user_id_run step rc:%d\n", rc);
-    if ((rc = sqlite3_finalize(stmt)) != SQLITE_OK)
-        g_warning("get_user_id_run finalize rc:%d\n", rc);
-    return rc;
-}
-
-gint get_user_id_prepare(cJSON *root, sqlite3 *db, t_client *client) {
-    gchar *quary = "SELECT login, passwd_hash FROM users_credential \
-                    WHERE login = ? passwd_hash = ?;";
-    gchar *login = cJSON_GetObjectItem(root, "login")->valuestring;
-    gchar *passwd = cJSON_GetObjectItem(root, "password")->valuestring;
-    sqlite3_stmt *stmt = NULL;
-    gint rc = 0;
-
-    if ((rc = sqlite3_prepare_v2(db, quary, -1, &stmt, NULL)) != SQLITE_OK)
-        g_warning("get_user_id_prepare prepare: %s\n", sqlite3_errstr(rc));
-    if ((sqlite3_bind_text(stmt, 1, login, -1, NULL)) != SQLITE_OK)
-        g_warning("get_user_id_prepare bind: login:%s %s\n",
-                   login, sqlite3_errstr(rc));
-    return get_user_id_run(strm, client);
-}
-
-void sign_in(cJSON *root, t_client *client) {
-    GHashTable **online_users = mx_get_online_users();
-    sqlite3 *db = *(get_db());
-
-    if (get_user_id_prepare(root, db, client) != SQLITE_OK)
-        // TODO: send error?;
-    else {
-        if (client->uid == -1)
-            mx_send_data(client->data_out, "sign_in failed\n");
-        else if (client->uid > 0) {
-            mx_send_data(client->data_out, "sign_in successfully\n");
-            g_hash_table_insert(*online_users, &(client->uid), client);
-        }
-    }
-}
-
 void (*const request_handler[])() = {
+    mx_sign_in,
     mx_sign_up
+    // mx_send_message
 };
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
@@ -78,8 +34,8 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     }
     data = g_data_input_stream_read_line_finish(new_client->data_in,
                                                 res, NULL, &error);
-    g_print("input data: %s\n", data);
     if (data) {
+    g_print("input data: %s\n", data);
         cJSON *root = cJSON_Parse(data);
         gint req_type = cJSON_GetObjectItem(root, "request_type")->valueint;
 
@@ -94,7 +50,6 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     g_data_input_stream_read_line_async(new_client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, new_client);
     (void)source_object;
 }
-
 
 /* this function will get called everytime a client attempts to connect */
 gboolean incoming_callback(GSocketService *service,
@@ -140,30 +95,11 @@ int main(int argc, char **argv) {
     GError *error = NULL;
     GHashTable **online_users = mx_get_online_users();
 
-    *online_users = g_hash_table_new_full(g_int_hash, NULL,
-                                          NULL, NULL);
-    // database variable
-    char *errmsg = NULL;
-    sqlite3 **db = mx_get_db();
-    int rc = 0;
-
-    // database setup start
-    if ((rc = sqlite3_open("uchat_db", db)) != SQLITE_OK) {
-            g_error("Can't open database: %s\n", sqlite3_errmsg(*db));
-            sqlite3_close(*db);
-    }
-    if ((rc = sqlite3_exec(*db, "SELECT User_id FROM users_credential LIMIT 1;",
-                    NULL, NULL, &errmsg)) != SQLITE_OK) {
-        if ((rc = sqlite3_exec(*db, "CREATE TABLE users_credential ( \
-                            user_id INTEGER, \
-                            login VARCHAR(50) NOT NULL, \
-                            passwd_hash VARCHAR(32) NOT NULL, \
-                            PRIMARY KEY(user_id));", NULL, NULL, &errmsg)) != SQLITE_OK) {
-                g_error("Failed to create table: %s\n", errmsg);
-                sqlite3_close(*db);
-        }
-    }
+    *online_users = g_hash_table_new_full(g_int_hash, NULL, NULL, NULL);
     service = g_socket_service_new();
+
+    mx_db_init();
+
     g_socket_listener_add_inet_port((GSocketListener*)service, 5050, NULL, &error);
     g_signal_connect(service, "incoming", G_CALLBACK(incoming_callback), NULL);
 

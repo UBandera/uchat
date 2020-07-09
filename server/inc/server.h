@@ -14,7 +14,7 @@ typedef struct s_client {
     GOutputStream *ostream;
     GDataInputStream *data_in;
     GDataOutputStream *data_out;
-    guint64 uid;
+    gint64 uid;
 }              t_client;
 
 /*
@@ -33,9 +33,18 @@ sqlite3 **mx_get_db(void);
 GDataOutputStream *mx_get_socket_by_user_id(gint64 user_id);
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 
+//database
+void mx_db_init(void);
+
 //Sign_up_rq
 gint mx_sign_up_quary(cJSON *root, sqlite3 *db);
 gboolean mx_check_if_user_excist(cJSON *root, sqlite3 *db);
 void mx_sign_up(cJSON *root, t_client *client);
+
+//Sign_up_rq
+gint get_user_id_run(sqlite3_stmt *stmt, t_client *client);
+gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt);
+void mx_sign_in(cJSON *root, t_client *client);
+
 
 #endif /* end of include guard: SERVER_H */
