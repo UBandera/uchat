@@ -1,3 +1,4 @@
+#test
 APP = uchat_server
 
 CC = clang
