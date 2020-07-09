@@ -9,7 +9,7 @@ gchar *mx_form_signout_request(void) {
                           cJSON_CreateNumber(RQ_SIGN_OUT));
     request = cJSON_Print(json);
     if (!request){
-        g_error("Failed to print make request.\n");
+        g_warning("Failed to print make request.\n");
     }
     cJSON_Delete(json);
     return request;

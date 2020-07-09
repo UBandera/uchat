@@ -9,7 +9,7 @@ gchar *mx_form_profile_data_request(void) {
                           cJSON_CreateNumber(RQ_PROFILE_DATA));
     request = cJSON_Print(json);
     if (!request){
-        g_error("Failed to print make request.\n");
+        g_warning("Failed to print make request.\n");
     }
     cJSON_Delete(json);
     return request;

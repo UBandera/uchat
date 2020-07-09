@@ -36,6 +36,7 @@ t_client *init_client(GSocketConnection *connection) {
     client->ostream = g_object_ref(ostream);
     client->data_in = g_object_ref(data_in);
     client->data_out = g_object_ref(data_out);
+    mx_init_handlers(client);
     g_data_input_stream_read_line_async(data_in, G_PRIORITY_DEFAULT, NULL, get_data, client);
     return client;
 }

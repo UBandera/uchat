@@ -10,7 +10,7 @@ gchar *mx_form_chat_data_request(gint user_id) {
     cJSON_AddItemToObject(json, "user_id", cJSON_CreateNumber(user_id));
     request = cJSON_Print(json);
     if (!request){
-        g_error("Failed to print make request.\n");
+        g_warning("Failed to print make request.\n");
     }
     cJSON_Delete(json);
     return request;

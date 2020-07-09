@@ -11,7 +11,7 @@ gchar *mx_form_send_message_request(gint user_id, gchar *message) {
     cJSON_AddItemToObject(json, "message", cJSON_CreateString(message));
     request = cJSON_Print(json);
     if (!request){
-        g_error("Failed to print make request.\n");
+        g_warning("Failed to print make request.\n");
     }
     cJSON_Delete(json);
     return request;

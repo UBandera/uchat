@@ -9,7 +9,7 @@ gchar *mx_form_auth_request(gchar *login, gchar *password, gint type) {
     cJSON_AddItemToObject(json, "password", cJSON_CreateString(password));
     request = cJSON_Print(json);
     if (!request){
-        g_error("Failed to print make request.\n");
+        g_warning("Failed to print make request.\n");
     }
     cJSON_Delete(json);
     return request;
