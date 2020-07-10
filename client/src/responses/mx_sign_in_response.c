@@ -25,7 +25,7 @@ void mx_sign_in_response(cJSON *json, t_client *client) {
     else if (status == MX_SIGN_IN_SUCCESSFULLY) {
         // redirect to main_window
         g_print("User will successfully sign in.\n");
-        mx_main_window(client);
+        // mx_main_window(client);
     }
     // if unknown error eccured
     else {

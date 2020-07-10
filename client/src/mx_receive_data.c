@@ -1,6 +1,5 @@
 #include "client.h"
 
-
 void mx_init_handlers(t_client *client) {
     client->response_handler[RS_SIGN_IN] = mx_sign_in_response;
     client->response_handler[RS_SIGN_UP] = mx_sign_up_response;
