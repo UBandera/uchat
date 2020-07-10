@@ -1,14 +1,14 @@
 #include "server.h"
 
-const gboolean NEW_USER = 0;
+void mx_dest_client(gpointer data) {
+    t_client *socket = (t_client*)data;
 
-gint64 gui = 1;
-gint request_count = 0;
-
-void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
-    g_print("Connected user id is %lld\n", *(gint64 *)key);
-    (void)user_data;
-    (void)value;
+    g_object_unref(socket->istream);
+    g_object_unref(socket->ostream);
+    g_object_unref(socket->data_in);
+    g_object_unref(socket->data_out);
+    g_object_unref(socket->connection);
+    g_free(socket);
 }
 
 sqlite3 **mx_get_db(void) {
@@ -28,14 +28,19 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     GError *error = NULL;
     gchar *data = NULL;
 
-    if (!g_socket_connection_is_connected(new_client->connection)) {
-        g_print("Client logout!\n");
+    if (g_input_stream_is_closed(new_client->istream)) {
+        g_print("is is closed\n");
         return;
     }
+    if (g_output_stream_is_closed(new_client->ostream)) {
+        g_print("out is closed\n");
+        return;
+    }
+
     data = g_data_input_stream_read_line_finish(new_client->data_in,
                                                 res, NULL, &error);
+    g_print("input data: %d\n", new_client->uid);
     if (data) {
-    g_print("input data: %s\n", data);
         cJSON *root = cJSON_Parse(data);
         gint req_type = cJSON_GetObjectItem(root, "request_type")->valueint;
 
@@ -47,6 +52,10 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
         g_error("%s\n", error->message);
         g_clear_error(&error);
     }
+    // else if (data == NULL && error == NULL) {
+        // mx_dest_client(new_client);
+        // return;
+    // }
     g_data_input_stream_read_line_async(new_client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, new_client);
     (void)source_object;
 }
@@ -69,7 +78,7 @@ gboolean incoming_callback(GSocketService *service,
     socket->data_in = g_object_ref(data_in);
     socket->data_out = g_object_ref(data_out);
     socket->connection = g_object_ref(connection);
-    socket->uid = gui++;
+    socket->uid = 0;
 
     g_data_input_stream_read_line_async(socket->data_in, G_PRIORITY_DEFAULT, NULL, get_data, socket);
     (void)service;
@@ -78,15 +87,37 @@ gboolean incoming_callback(GSocketService *service,
     return FALSE;
 }
 
-void mx_dest_client(gpointer data) {
-    t_client *socket = (t_client*)data;
+void check_if_user_online(gpointer key, gpointer value, gpointer user_data) {
+    t_client *client = (t_client*)value;
 
-    g_object_unref(socket->istream);
-    g_object_unref(socket->ostream);
-    g_object_unref(socket->data_in);
-    g_object_unref(socket->data_out);
-    g_object_unref(socket->connection);
-    g_free(socket);
+    if (g_socket_connection_is_connected(client->connection) == false) {
+        g_print("Client logout!\n");
+        mx_dest_client(client);
+    }
+    (void)key;
+    (void)user_data;
+}
+
+gint64 mx_generate_chat_id(gint32 uid1, gint32 uid2) {
+    gint64 chat_id;
+    gint32 bocal;
+
+    if (uid1 < uid2) {
+        bocal = uid1;
+        uid1 = uid2;
+        uid2 = bocal;
+    }
+    chat_id = uid1;
+    chat_id = chat_id << 32;
+    chat_id += (gint64)uid2;
+
+    // if need to get uids from chat_id
+    // gint64 left = 0xffffffff00000000;
+    // gint64 right = 0x00000000ffffffff;
+    // right = chat_id & right;
+    // left = (chat_id & left) >> 32;
+    // g_print("right = %lld left = %lld\n", right, left);
+    return chat_id;
 }
 
 int main(int argc, char **argv) {
@@ -103,7 +134,11 @@ int main(int argc, char **argv) {
     g_socket_listener_add_inet_port((GSocketListener*)service, 5050, NULL, &error);
     g_signal_connect(service, "incoming", G_CALLBACK(incoming_callback), NULL);
 
+    g_print("chat_id = %lld\n", mx_generate_chat_id(14, 1));
+    g_print("chat_id = %lld\n", mx_generate_chat_id(1, 14));
     g_print("Waiting for client!\n");
+
+    // g_hash_table_foreach(*online_users, check_if_user_online, NULL);
 
     loop = g_main_loop_new(NULL, FALSE);
     g_main_loop_run(loop);

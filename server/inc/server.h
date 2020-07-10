@@ -14,7 +14,7 @@ typedef struct s_client {
     GOutputStream *ostream;
     GDataInputStream *data_in;
     GDataOutputStream *data_out;
-    gint64 uid;
+    gint32 uid;
 }              t_client;
 
 /*

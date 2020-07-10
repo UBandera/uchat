@@ -45,7 +45,7 @@ void sign_up_req(GtkButton *button, t_form *data) {
     t_client *client = data->client;
 
     if (mx_auth_confirming(login, password, NULL) == MX_VALID) {
-        gchar *request = mx_form_auth_request(login, password, RQ_SIGN_UP);
+        gchar *request = mx_form_send_massage_request(login, password, RQ_SEND_MESSAGE);
         mx_send_data(client->data_out, request);
     }
     (void)button;
@@ -61,7 +61,7 @@ int login(int argc, char **argv, gpointer user_data) {
     form_template->login_input = gtk_entry_new();
     form_template->password_input = gtk_entry_new();
     form_template->log_in_btn = GTK_BUTTON(gtk_button_new_with_label("SIGN IN"));
-    form_template->sign_up_btn = GTK_BUTTON(gtk_button_new_with_label("SIGN UP"));
+    form_template->sign_up_btn = GTK_BUTTON(gtk_button_new_with_label("Send massege"));
 
     gtk_container_add(GTK_CONTAINER(form_template->window), form_template->body);
 
