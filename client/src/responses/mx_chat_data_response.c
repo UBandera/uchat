@@ -1,4 +1,4 @@
-#include "mx_client.h"
+#include "client.h"
 
 #define MX_CHAT_DATA_NOT_FOUND 1
 #define MX_SUCCESS 0
@@ -19,7 +19,7 @@ static void get_message_data_from_json(cJSON *json, t_client *client) {
     cJSON_ArrayForEach(data, chatting) {
         gchar *message = cJSON_GetObjectItem(data, "message")->valuestring;
         gchar *time = cJSON_GetObjectItem(data, "time")->valuestring;
-        gboolean owner = cJSON_GetObjectItem(data, "owner")->valuebool;
+        gint owner = cJSON_GetObjectItem(data, "owner")->valueint;
 
         // mx_show_message_in_ui(client->builder, message, time, owner);
     }
@@ -36,7 +36,7 @@ static void get_message_data_from_json(cJSON *json, t_client *client) {
 void mx_chat_data_response(cJSON *json, t_client *client) {
     gint status = cJSON_GetObjectItem(json, "status")->valueint;
     gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
-    
+
     if (status == MX_CHAT_DATA_NOT_FOUND) {
         // print label in ui with showing this error_message
         // message = "U haven't chatting with this user yet"
@@ -44,7 +44,7 @@ void mx_chat_data_response(cJSON *json, t_client *client) {
     }
     else if (status == MX_SUCCESS) {
         // load chat_history in ui
-        get_message_data_from_json(json);
+        get_message_data_from_json(json, client);
     }
     // if unknown error eccured
     else {

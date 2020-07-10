@@ -1,4 +1,4 @@
-#include "mx_client.h"
+#include "client.h"
 
 gchar *mx_form_profile_data_request(void) {
     cJSON *json = cJSON_CreateObject();

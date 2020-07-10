@@ -1,4 +1,4 @@
-#include "mx_client.h"
+#include "client.h"
 
 void mx_notify(GApplication *application) {
     GNotification *notification;

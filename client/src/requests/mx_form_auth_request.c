@@ -1,4 +1,4 @@
-#include "mx_client.h"
+#include "client.h"
 
 gchar *mx_form_auth_request(gchar *login, gchar *password, gint type) {
     cJSON *json = cJSON_CreateObject();

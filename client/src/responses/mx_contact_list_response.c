@@ -1,4 +1,4 @@
-#include "mx_client.h"
+#include "client.h"
 
 #define MX_CONTACTS_NOT_FOUND 1
 #define MX_SUCCESS 0
@@ -18,7 +18,7 @@ static void get_contact_from_json(cJSON *json, t_client *client) {
 
     cJSON_ArrayForEach(data, contacts) {
         gchar *username = cJSON_GetObjectItem(data, "username")->valuestring;
-        gchar *user_id = cJSON_GetObjectItem(data, "user_id")->valueint;
+        gint user_id = cJSON_GetObjectItem(data, "user_id")->valueint;
 
         // mx_show_contact_in_ui(client->builder, username, user_id);
     }

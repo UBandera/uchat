@@ -1,4 +1,4 @@
-#include "mx_client.h"
+#include "client.h"
 
 #define MX_SIGN_UP_ERROR 1
 #define MX_SIGN_UP_SUCCESSFULLY 0

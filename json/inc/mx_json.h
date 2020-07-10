@@ -3,7 +3,6 @@
 
 #include <stdlib.h>
 #include <glib-object.h>
-#include <json-glib/json-glib.h>
 #include "cJSON.h"
 
 enum e_request_types {

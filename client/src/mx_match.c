@@ -1,4 +1,4 @@
-#include "mx_client.h"
+#include "client.h"
 
 /*
  * PURPOSE : Autogenerates function contract comments

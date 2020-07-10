@@ -1,4 +1,4 @@
-#include "mx_client.h"
+#include "client.h"
 
 gchar *mx_form_chat_data_request(gint user_id) {
     cJSON *json = cJSON_CreateObject();
