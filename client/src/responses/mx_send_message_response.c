@@ -15,7 +15,7 @@ void mx_send_message_response(cJSON *json, t_client *client) {
 
     if (status == MX_SUCCESS) {
         // load message in chat ui
-        mx_chat_data_response(json, client);
+        get_message_data_from_json(json, client);
     }
     // if unknown error eccured
     else {

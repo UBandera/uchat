@@ -17,10 +17,15 @@ void mx_sign_in_response(cJSON *json, t_client *client) {
 
     if (status == MX_SIGN_IN_ERROR) {
         // print label in ui with showing this error_message
-        g_warning("%s\n", message);
+        GtkLabel *label = GTK_LABEL(gtk_builder_get_object(client->builder, "info_label"));
+
+        gtk_label_set_text(label, message);
+        gtk_widget_show(GTK_WIDGET(label));
     }
     else if (status == MX_SIGN_IN_SUCCESSFULLY) {
         // redirect to main_window
+        g_print("User will successfully sign in.\n");
+        mx_main_window(client);
     }
     // if unknown error eccured
     else {

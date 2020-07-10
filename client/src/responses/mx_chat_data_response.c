@@ -12,7 +12,7 @@
  * RETURNS : void
  *   NOTES : -
  */
-static void get_message_data_from_json(cJSON *json, t_client *client) {
+void get_message_data_from_json(cJSON *json, t_client *client) {
     cJSON *chatting = cJSON_GetObjectItemCaseSensitive(json, "chat");
     cJSON *data = NULL;
 

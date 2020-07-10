@@ -10,7 +10,10 @@ static void get_data_from_input(GtkButton *button, t_client *client) {
 
     if (mx_auth_confirming(login, password, NULL) == MX_VALID) {
         gchar *request = mx_form_auth_request(login, password, RQ_SIGN_IN);
+        GtkLabel *label = GTK_LABEL(gtk_builder_get_object(client->builder, "info_label"));
+
         mx_send_data(client->data_out, request);
+        gtk_widget_hide(GTK_WIDGET(label));
         g_free(request);
     }
     (void)button;

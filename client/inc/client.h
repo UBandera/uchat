@@ -25,6 +25,9 @@ typedef struct s_client {
                                                   struct s_client *client);
 }              t_client;
 
+// screens
+void mx_login_window(t_client *client);
+void mx_main_window(t_client *client);
 
 // requests
 gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);
@@ -57,7 +60,7 @@ gint mx_auth_confirming(gchar *login, gchar *password,
 // Utils
 gboolean mx_match(const gchar *str, const gchar *pattern,
                   gint compile_flags, gint match_flag);
-
+void get_message_data_from_json(cJSON *json, t_client *client);
 // Trash
 int login(int argc, char **argv, gpointer user_data); // for testing
 // int mx_application_run(int argc, char **argv, GApplication *app);
