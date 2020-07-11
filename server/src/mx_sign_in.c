@@ -1,10 +1,10 @@
 #include "server.h"
 
-void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
-    g_print("Connected user id is %lld\n", *(gint64 *)key);
-    (void)user_data;
-    (void)value;
-}
+// void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
+    // g_print("Connected user id is %lld\n", *(gint64 *)key);
+    // (void)user_data;
+    // (void)value;
+// }
 
 gint get_user_id_run(sqlite3_stmt *stmt, t_client *client) {
     gint rc = 0;

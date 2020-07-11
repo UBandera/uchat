@@ -67,15 +67,15 @@ static gboolean mx_check_login(const gchar *login) {
 gint mx_auth_confirming(gchar *login,
                         gchar *password,
                         gchar *repeat_password) {
-    if (!mx_check_login(login)) {
-        return MX_LOGIN_ERROR;
-    }
-    if (!mx_check_password(password)) {
-        return MX_PASSWORD_ERROR;
-    }
-    if (repeat_password) {
-        if (!mx_check_repeat_password(password, repeat_password))
-            return MX_REPEAT_PASSWORD_ERROR;
-    }
+    // if (!mx_check_login(login)) {
+        // return MX_LOGIN_ERROR;
+    // }
+    // if (!mx_check_password(password)) {
+        // return MX_PASSWORD_ERROR;
+    // }
+    // if (repeat_password) {
+        // if (!mx_check_repeat_password(password, repeat_password))
+            // return MX_REPEAT_PASSWORD_ERROR;
+    // }
     return MX_VALID;
 }
