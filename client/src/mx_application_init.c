@@ -1,4 +1,4 @@
-#include "mx_client.h"
+#include "client.h"
 
 int mx_application_run(int argc, char **argv, GApplication *app) {
     int status;
