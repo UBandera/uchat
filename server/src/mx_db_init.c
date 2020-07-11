@@ -15,6 +15,7 @@ void mx_db_init(void) {
                             user_id INTEGER, \
                             login VARCHAR(50) NOT NULL, \
                             passwd_hash VARCHAR(32) NOT NULL, \
+                            recovery_passwd VARCHAR(32), \
                             PRIMARY KEY(user_id));", NULL, NULL, &errmsg)) != SQLITE_OK) {
                 sqlite3_close(*db);
                 g_error("Failed to create table: %s\n", errmsg);

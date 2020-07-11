@@ -17,6 +17,17 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
+void mx_init_handlers(t_client *client) {
+    client->request_handler[RQ_SIGN_IN] = mx_sign_in;
+    client->request_handler[RQ_SIGN_UP] = mx_sign_up;
+    // client->request_handler[RQ_SIGN_OUT] = ;
+    // client->request_handler[RQ_CONTACT_LIST] = ;
+    // client->request_handler[RQ_CHAT_DATA] = ;
+    // client->request_handler[RQ_PROFILE_DATA] = ;
+    // client->request_handler[RQ_SEND_MESSAGE] = ;
+    client->request_handler[RQ_RECOVERY_PASSWD] = mx_recovery_password;
+}
+
 void (*const request_handler[])() = {
     mx_sign_in,
     mx_sign_up
@@ -39,7 +50,7 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
         cJSON *root = cJSON_Parse(data);
         gint req_type = cJSON_GetObjectItem(root, "request_type")->valueint;
 
-        request_handler[req_type](root, new_client);
+        new_client->request_handler[req_type](root, new_client);
         g_free(data);
         cJSON_Delete(root);
     }
@@ -69,6 +80,7 @@ gboolean incoming_callback(GSocketService *service,
     socket->data_in = g_object_ref(data_in);
     socket->data_out = g_object_ref(data_out);
     socket->connection = g_object_ref(connection);
+    mx_init_handlers(socket);
     socket->uid = gui++;
 
     g_data_input_stream_read_line_async(socket->data_in, G_PRIORITY_DEFAULT, NULL, get_data, socket);
