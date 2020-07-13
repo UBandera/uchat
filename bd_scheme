@@ -19,7 +19,7 @@ Table chats {
   name varchar
 }
 
-Table massages {
+Table messages {
   id int [pk, increment]
   text varchar
   user_id int
