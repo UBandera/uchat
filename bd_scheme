@@ -5,7 +5,7 @@ Table users_credential as UC {
   login varchar
   passwd varchar
   temp_passwd varchar
-  token_auth varchar
+  auth_token varchar
 }
 
 Table user_profile as UP {
