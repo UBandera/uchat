@@ -1,28 +1,29 @@
+
 // Run this code on https://dbdiagram.io/d
 Table users_credential as UC {
-  id int [pk, increment] // auto-increment
+  user_id int [pk, increment] // auto-increment
   login varchar
   passwd timestamp
-  temp_passwd int
+  temp_passwd varchar
   token_auth varchar
 }
 
 Table user_profile as UP {
-  id int [pk]
+  user_id int [pk]
   name varchar
   photo object
 }
 
 Table chats {
-  id int [pk]
+  chat_id int [pk, increment]
   name varchar
 }
 
 Table massages {
   id int [pk, increment]
   text varchar
-  sender int
-  chat id
+  user_id int
+  chat_id int
   data timestamp
 }
 
@@ -36,12 +37,12 @@ Table user_contact_list {
   contact int
 }
 
-Ref: "massages"."chat" < "chats"."id"
+Ref: "massages"."chat_id" < "chats"."chat_id"
 
-Ref: "users_credential"."id" < "user_profile"."id"
+Ref: "users_credential"."user_id" < "user_profile"."user_id"
 
-Ref: "massages"."sender" < "users_credential"."id"
+Ref: "massages"."user_id" < "users_credential"."user_id"
 
-Ref: "chats"."id" < "users_in_chat"."chat_id"
+Ref: "chats"."chat_id" < "users_in_chat"."chat_id"
 
-Ref: "user_contact_list"."user_id" < "users_credential"."id"
+Ref: "user_contact_list"."user_id" < "users_credential"."user_id"
