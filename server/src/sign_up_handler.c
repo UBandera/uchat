@@ -46,9 +46,21 @@ gboolean mx_check_if_user_excist(cJSON *root, sqlite3 *db) {
     return result;
 }
 
+static gboolean is_valid(cJSON *root) {
+    if (cJSON_GetObjectItem(root, "login") == NULL)
+        return FALSE;
+    if (cJSON_GetObjectItem(root, "password") == NULL)
+        return FALSE;
+    return TRUE;
+}
+
 void mx_sign_up(cJSON *root, t_client *client) {
     sqlite3 *db = *(mx_get_db());
 
+    if (is_valid(root) == FALSE) {
+        g_warning("Invalid sign_up request\n");
+        return;
+    }
     if (mx_check_if_user_excist(root, db) == false) {
         mx_sign_up_quary(root, db);
         g_print("User not exsist\n");

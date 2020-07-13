@@ -28,24 +28,28 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     GError *error = NULL;
     gchar *data = NULL;
 
-    if (!g_socket_connection_is_connected(new_client->connection)) {
-        g_print("Client logout!\n");
-        return;
-    }
     data = g_data_input_stream_read_line_finish(new_client->data_in,
                                                 res, NULL, &error);
+        g_print("input data: %s\n", data);
     if (data) {
-    g_print("input data: %s\n", data);
         cJSON *root = cJSON_Parse(data);
-        gint req_type = cJSON_GetObjectItem(root, "request_type")->valueint;
+        cJSON *req_type = cJSON_GetObjectItem(root, "request_type");
 
-        request_handler[req_type](root, new_client);
-        g_free(data);
-        cJSON_Delete(root);
+        if (root != NULL || req_type != NULL) {
+            request_handler[req_type->valueint](root, new_client);
+            g_free(data);
+            cJSON_Delete(root);
+        }
+        else
+            g_warning("Invalid request\n");
     }
-    if (error) {
+    else if (error) {
         g_error("%s\n", error->message);
         g_clear_error(&error);
+    }
+    else {
+        g_print("Client logout!\n");
+        return;
     }
     g_data_input_stream_read_line_async(new_client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, new_client);
     (void)source_object;

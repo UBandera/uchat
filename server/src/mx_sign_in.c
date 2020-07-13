@@ -1,5 +1,11 @@
 #include "server.h"
 
+// void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
+    // g_print("Connected user id is %lld\n", *(gint64 *)key);
+    // (void)user_data;
+    // (void)value;
+// }
+
 gint get_user_id_run(sqlite3_stmt *stmt, t_client *client) {
     gint rc = 0;
 
@@ -31,11 +37,23 @@ gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt) {
     return rc;
 }
 
+static gboolean is_valid(cJSON *root) {
+    if (cJSON_GetObjectItem(root, "login") == NULL)
+        return FALSE;
+    if (cJSON_GetObjectItem(root, "password") == NULL)
+        return FALSE;
+    return TRUE;
+}
+
 //TODO: write function which will send erro response
-void mx_sign_in(cJSON *root, t_client *client) {
+void mx_sign_in(cJSON *root, t_client *client) { // Auditor
     GHashTable **online_users = mx_get_online_users();
     sqlite3_stmt *stmt = NULL;
 
+    if (is_valid(root) == FALSE) {
+        g_warning("Invalid sign_up request\n");
+        return;
+    }
     if (get_user_id_prepare(root, &stmt) != SQLITE_OK)
         g_warning("get_user_id_prepare failed\n");
         // TODO: send error?;
@@ -46,9 +64,10 @@ void mx_sign_in(cJSON *root, t_client *client) {
         if (client->uid == -1)
             mx_send_data(client->data_out, "sign_in failed\n");
         else if (client->uid > 0) {
-            g_print("%lld\n", client->uid);
+            g_print("%d\n", client->uid);
             mx_send_data(client->data_out, "sign_in successfully\n");
             g_hash_table_insert(*online_users, &(client->uid), client);
         }
     }
+    // g_hash_table_foreach(*online_users, print_hash_table, NULL);
 }
