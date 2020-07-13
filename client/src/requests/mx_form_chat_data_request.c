@@ -8,7 +8,7 @@ gchar *mx_form_chat_data_request(gint user_id) {
                           "request_type",
                           cJSON_CreateNumber(RQ_CHAT_DATA));
     cJSON_AddItemToObject(json, "user_id", cJSON_CreateNumber(user_id));
-    request = cJSON_Print(json);
+    request = cJSON_PrintUnformatted(json);
     if (!request){
         g_warning("Failed to print make request.\n");
     }

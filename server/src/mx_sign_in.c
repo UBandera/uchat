@@ -37,11 +37,23 @@ gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt) {
     return rc;
 }
 
+static gboolean is_valid(cJSON *root) {
+    if (cJSON_GetObjectItem(root, "login") == NULL)
+        return FALSE;
+    if (cJSON_GetObjectItem(root, "password") == NULL)
+        return FALSE;
+    return TRUE;
+}
+
 //TODO: write function which will send erro response
-void mx_sign_in(cJSON *root, t_client *client) {
+void mx_sign_in(cJSON *root, t_client *client) { // Auditor
     GHashTable **online_users = mx_get_online_users();
     sqlite3_stmt *stmt = NULL;
 
+    if (is_valid(root) == FALSE) {
+        g_warning("Invalid sign_up request\n");
+        return;
+    }
     if (get_user_id_prepare(root, &stmt) != SQLITE_OK)
         g_warning("get_user_id_prepare failed\n");
         // TODO: send error?;
