@@ -35,7 +35,7 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
         cJSON *root = cJSON_Parse(data);
         cJSON *req_type = cJSON_GetObjectItem(root, "request_type");
 
-        if (root != NULL || req_type != NULL) {
+        if (root != NULL && req_type != NULL) {
             request_handler[req_type->valueint](root, new_client);
             g_free(data);
             cJSON_Delete(root);
