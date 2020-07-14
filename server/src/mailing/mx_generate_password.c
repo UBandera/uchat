@@ -19,7 +19,7 @@ char *mx_generate_password(void) {
     pass[2] = rand() % (90 - 65) + 65;
     pass[3] = rand() % (122 - 97) + 97;
     for (int i = 4; i < length; i++)
-        pass[i] = rand() % 33 + (126 - 33);
+        pass[i] = rand() % (126 - 33) + 33;
     for (int i = 3; i; i--)
         swap(&pass, rand() % length, rand() % length);
     return pass;

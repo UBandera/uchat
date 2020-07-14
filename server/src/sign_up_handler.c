@@ -1,11 +1,12 @@
 #include "server.h"
 
 gint mx_sign_up_quary(cJSON *root, sqlite3 *db) {
-    gchar *quary = "INSERT INTO users_credential(login, passwd_hash) \
+    gchar *quary = "INSERT INTO users_credential(login, passwd_hash, user_name) \
                     VALUES(?, ?);";
     sqlite3_stmt *stmt = NULL;
     gchar *login = cJSON_GetObjectItem(root, "login")->valuestring;
     gchar *passwd = cJSON_GetObjectItem(root, "password")->valuestring;
+    // gchar *user_name = cJSON_GetObjectItem(root, "user_name")->valuestring;
     gint rc = 0;
 
     if ((rc = sqlite3_prepare_v2(db, quary, -1, &stmt, 0)) != SQLITE_OK)
@@ -59,4 +60,3 @@ void mx_sign_up(cJSON *root, t_client *client) {
 
     (void)client; // Need to use to send response
 }
-
