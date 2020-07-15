@@ -1,7 +1,7 @@
 #include "server.h"
 
 gint mx_sign_up_quary(cJSON *root, sqlite3 *db) {
-    gchar *quary = "INSERT INTO users_credential(login, passwd_hash) \
+    gchar *quary = "INSERT INTO users_credential(login, passwd) \
                     VALUES(?, ?);";
     sqlite3_stmt *stmt = NULL;
     gchar *login = cJSON_GetObjectItem(root, "login")->valuestring;

@@ -22,8 +22,8 @@ gint get_user_id_run(sqlite3_stmt *stmt, t_client *client) {
 
 gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt) {
     sqlite3 *db = *(mx_get_db());
-    gchar *quary = "SELECT user_id, login, passwd_hash FROM users_credential \
-                    WHERE login = ? AND passwd_hash = ?;";
+    gchar *quary = "SELECT user_id, login, passwd FROM users_credential \
+                    WHERE login = ? AND passwd = ?;";
     gchar *login = cJSON_GetObjectItem(root, "login")->valuestring;
     gchar *passwd = cJSON_GetObjectItem(root, "password")->valuestring;
     gint rc = 0;
