@@ -25,9 +25,11 @@ typedef struct s_client {
                                                   struct s_client *client);
 }              t_client;
 
+
 // screens
 void mx_login_window(t_client *client);
 void mx_main_window(t_client *client);
+int chat_window();
 
 // requests
 gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);

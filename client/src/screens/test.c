@@ -1,4 +1,4 @@
-#include "client.h"
+ #include "client.h"
 
 #define MX_TITLE "uChat"
 #define MX_WELCOME "Welcome to the macOS application"

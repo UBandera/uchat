@@ -66,8 +66,9 @@ int main(int argc, char **argv) {
 
     // ui (for testing)
     // mx_application_run(argc, argv, mx_application_init(client_st));
-    login(argc, argv, client_st);
-    g_object_unref(connection);
+    chat_window();
+    // login(argc, argv, client_st);
+    // g_object_unref(connection);
     g_free(client_st);
     return 0;
 }
