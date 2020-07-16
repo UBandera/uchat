@@ -17,7 +17,8 @@ typedef struct s_client {
     GOutputStream *ostream;
     GDataInputStream *data_in;
     GDataOutputStream *data_out;
-    gint64 uid;
+    gint32 uid;
+
     void (*request_handler[RQ_RECOVERY_PASSWD + 1])();
 }              t_client;
 
