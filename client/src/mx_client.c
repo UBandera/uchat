@@ -43,20 +43,20 @@ t_client *init_client(GSocketConnection *connection) {
 
 
 int main(int argc, char **argv) {
-    GSocketClient *client = NULL;
+    GSocketClient *socket = NULL;
     GSocketConnection *connection = NULL;
     GError *error = NULL;
     t_client *client_st = NULL;
 
-    client = g_socket_client_new();
+    socket = g_socket_client_new();
 
     // some settings
-    g_socket_client_set_protocol(client, G_SOCKET_PROTOCOL_TCP);
-    g_socket_client_set_socket_type(client, G_SOCKET_TYPE_STREAM);
-    // g_socket_client_set_enable_proxy(client, TRUE); // Future release
+    g_socket_client_set_protocol(socket, G_SOCKET_PROTOCOL_TCP);
+    g_socket_client_set_socket_type(socket, G_SOCKET_TYPE_STREAM);
+    // g_socket_client_set_enable_proxy(socket, TRUE); // Future release
 
-    connection = g_socket_client_connect_to_host(client, (gchar *)"0.0.0.0", 5050, NULL, &error);
-    g_socket_client_set_timeout(client, 10);
+    connection = g_socket_client_connect_to_host(socket, (gchar *)"0.0.0.0", 5050, NULL, &error);
+    g_socket_client_set_timeout(socket, 10);
 
     if (error) {
         g_error("%s\n", error->message);
@@ -66,7 +66,13 @@ int main(int argc, char **argv) {
 
     // ui (for testing)
     // mx_application_run(argc, argv, mx_application_init(client_st));
-    login(argc, argv, client_st);
+    // login(argc, argv, client_st);
+
+    client_st->app = gtk_application_new("org.gnome.chat.desktop", G_APPLICATION_FLAGS_NONE);
+    mx_application_init(client_st->app, client_st);
+    mx_application_run(argc, argv, client_st->app);
+
+    // mx_routing(argc, argv, client_st);
     g_object_unref(connection);
     g_free(client_st);
     return 0;
