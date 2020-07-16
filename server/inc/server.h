@@ -7,6 +7,9 @@
 #include "mx_json.h"
 #include <sqlite3.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <curl/curl.h>
+#include <time.h>
 
 typedef struct s_client {
     GSocketConnection *connection;
@@ -15,6 +18,8 @@ typedef struct s_client {
     GDataInputStream *data_in;
     GDataOutputStream *data_out;
     gint32 uid;
+
+    void (*request_handler[RQ_RECOVERY_PASSWD + 1])();
 }              t_client;
 
 /*
@@ -28,7 +33,7 @@ typedef struct s_new_client {
 
 
 GHashTable **mx_get_online_users(void);
-sqlite3 **mx_get_db(void); 
+sqlite3 **mx_get_db(void);
 
 GDataOutputStream *mx_get_socket_by_user_id(gint64 user_id);
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
@@ -46,5 +51,9 @@ gint get_user_id_run(sqlite3_stmt *stmt, t_client *client);
 gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt);
 void mx_sign_in(cJSON *root, t_client *client);
 
+void mx_recovery_password(cJSON *root, t_client *client);
+char *mx_recovery_body(char *user_name);
+int mx_send_mail(char *receiver, char *body);
+char *mx_generate_password(void);
 
 #endif /* end of include guard: SERVER_H */
