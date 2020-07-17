@@ -4,10 +4,12 @@
     GtkWidget *sendEntry, *sendButton;
     GtkWidget *statusLabel;
     GtkWidget *messagesTreeView;
+    GtkWidget *TextView;
     GtkAdjustment *vAdjust;
     GtkScrolledWindow *scrolledWindow;
     GtkListStore *messagesListStore;
     pthread_t watcher;
+    GtkListStore *liststore = gtk_list_store_new(1, G_TYPE_STRING);
 
 static GtkBuilder *mx_init_window() {
     GtkBuilder *builder;
@@ -20,11 +22,14 @@ static GtkBuilder *mx_init_window() {
 }
 
 static void send_messege() {
+    GtkTextIter start, end;
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer (TextView);
+    gchar *text;
+
+    gtk_text_buffer_get_bounds (buffer, &start, &end);
+    text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+    printf("%s", text);
     exit(0);
-    // gchar *mess;
-    // if(!gtk_widget_get_sensitive(sendButton))
-    //     return;
-    // mess = gtk_entry_get_text(GTK_ENTRY(sendEntry));
 }
 
 // void *watcher_thread(void *param)
@@ -37,16 +42,17 @@ int chat_window() {
     GtkBuilder *builder = mx_init_window();
 
     chatWindow = GTK_WIDGET(gtk_builder_get_object(builder,"chatWindow"));
-    gtk_main();
 
     sendButton = GTK_WIDGET(gtk_builder_get_object(builder,"sendButton"));
     sendEntry = GTK_WIDGET(gtk_builder_get_object(builder,"sendEntry"));
     g_signal_connect(G_OBJECT(sendEntry),"activate", G_CALLBACK(send_messege) ,NULL);
     g_signal_connect(G_OBJECT(sendButton),"clicked", G_CALLBACK(send_messege) ,NULL);
+    TextView = GTK_WIDGET(gtk_builder_get_object(builder,"msg_entry"));
     messagesTreeView = GTK_WIDGET(gtk_builder_get_object(builder,"messagesTreeView"));
     messagesListStore = GTK_LIST_STORE(gtk_builder_get_object(builder,"messagesListStore"));
     scrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder,"scrolledWindow"));
     vAdjust = gtk_scrolled_window_get_vadjustment(scrolledWindow);
+    gtk_main();
     // pthread_create(&watcher, 0, watcher_thread, 0);
     // mx_widget_set_visibility(GTK_WIDGET(dialog_auth), TRUE);
     // gtk_widget_show_all("dialog_auth");
