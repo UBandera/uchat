@@ -130,7 +130,6 @@ void mx_db_init(void) {
                     NULL, NULL, &errmsg)) != SQLITE_OK) {
         g_error("Failed to enable foreign_keys, %s", errmsg);
         sqlite3_close(*db);
-
     }
     create_users_credential(db);
     create_chats(db);
