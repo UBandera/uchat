@@ -10,9 +10,9 @@
  */
 void mx_auth_validated(cJSON *json, t_client *client) {
     gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
-    gchar *token = cJSON_GetObjectItem(json, "token")->valuestring;
+    // gchar *token = cJSON_GetObjectItem(json, "token")->valuestring;
 
     g_print("message is %s\n", message);
-    client->token = token;
+    // client->token = token;
     mx_window_switcher(client->profile_setuping, client->phone_entering); // client->phone_entering change to main window
 }

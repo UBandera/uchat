@@ -6,9 +6,9 @@
 #include "cJSON.h"
 
 enum e_request_types {
-    RQ_GENERATE_PASS,
-    RQ_AUTH,
-    RQ_SET_UP_PROFILE,
+    RQ_GENERATE_PASS = 0,
+    RQ_AUTH = 1,
+    RQ_SET_UP_PROFILE = 2,
     //
     RQ_SIGN_IN,
     RQ_SIGN_UP,
@@ -48,6 +48,5 @@ enum e_response_errors {
 };
 
 
-GHashTable *mx_json_parser(gchar *data);
 
 #endif /* end of include guard: JSON_H */

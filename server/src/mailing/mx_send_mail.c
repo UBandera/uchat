@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include <curl/curl.h>
+#include "server.h"
 
 #define USERNAME "uchat.llc@gmail.com"
 #define PASSWORD "Qwerty1357"
@@ -84,5 +82,6 @@ int mx_send_mail(char *receiver, char *body) {
         curl_easy_cleanup(curl);
         curl_mime_free(mime);
     }
+    g_print("mail_status = %d\n", (int)res);
     return (int)res;
 }

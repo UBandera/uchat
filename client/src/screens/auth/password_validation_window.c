@@ -17,8 +17,8 @@ static void verify_user(GtkButton *button, t_client *client) {
                               gtk_entry_get_text(password));
     mx_send_data(client->data_out, request);
     buffer = GTK_ENTRY_BUFFER(gtk_builder_get_object(builder, "phone_buff"));
-    gtk_entry_buffer_set_text(buffer, "\0", -1);
-    gtk_entry_set_text(phone, "");
+    // gtk_entry_buffer_set_text(buffer, "\0", -1);
+    // gtk_entry_set_text(phone, "");
     gtk_entry_set_text(password, "");
     g_free(request);
     (void)button;

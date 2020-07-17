@@ -5,23 +5,16 @@
 
 #define MX_ACCOUNT_SID "AC6cf27775aa0531c6c4f1460b571e1475"
 #define MX_AUTH_TOKEN "54129a35ab9e3af9cfc8df8efe8f4ebf"
-#define MX_FROM_NUMBER "+12019285337"
-#define MX_MESSAGE "Your Uchat verification code is: "
 
-static void form_message(CURL *curl, char *to_number, char *password) {
-    char url[MX_TEMPLATE_SIZE];
-    char parameters[MX_TEMPLATE_SIZE];
-    char message[MX_MESSAGE_SIZE];
+static void form_message(CURL *curl, char *body) {
+    gchar url[MX_TEMPLATE_SIZE];
 
-    snprintf(url, sizeof(url), "%s%s%s",
-             "https://api.twilio.com/2010-04-01/Accounts/",
-             MX_ACCOUNT_SID, "/Messages");
-    snprintf(message, sizeof(message), "%s%s", MX_MESSAGE, password);
-    snprintf(parameters, sizeof(parameters), "%s%s%s%s%s%s", "To=",
-             to_number, "&From=", MX_FROM_NUMBER, "&Body=", message);
+    g_snprintf(url, sizeof(url), "%s%s%s",
+               "https://api.twilio.com/2010-04-01/Accounts/",
+               MX_ACCOUNT_SID, "/Messages");
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_URL, url);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, parameters);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body);
     curl_easy_setopt(curl, CURLOPT_USERNAME, MX_ACCOUNT_SID);
     curl_easy_setopt(curl, CURLOPT_PASSWORD, MX_AUTH_TOKEN);
 }
@@ -30,6 +23,7 @@ static int error_handling(CURL *curl, CURLcode res) {
     long http = 0;
 
     curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http);
+    curl_easy_cleanup(curl);
     if (res != CURLE_OK) {
         fprintf(stderr, "SMS send failed: %s.\n", curl_easy_strerror(res));
         return -1;
@@ -41,15 +35,14 @@ static int error_handling(CURL *curl, CURLcode res) {
     return 0;
 }
 
-int mx_send_sms(char *to_number, char *password) {
+gint mx_send_sms(gchar *body) {
     CURL *curl;
     CURLcode res;
 
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
-    form_message(curl, to_number, password);
+    form_message(curl, body);
     res = curl_easy_perform(curl);
-    curl_easy_cleanup(curl);
 
     if (error_handling(curl, res)) {
         return -1;

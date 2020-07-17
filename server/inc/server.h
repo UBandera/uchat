@@ -18,8 +18,8 @@ typedef struct s_client {
     GDataInputStream *data_in;
     GDataOutputStream *data_out;
     gint32 uid;
-
-    void (*request_handler[RQ_RECOVERY_PASSWD + 1])();
+    gchar *password;
+    void (*request_handler[15])();
 }              t_client;
 
 /*
@@ -42,8 +42,8 @@ gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 void mx_db_init(void);
 
 //Sign_up_rq
-gint mx_sign_up_quary(cJSON *root, sqlite3 *db);
-gboolean mx_check_if_user_excist(cJSON *root, sqlite3 *db);
+// gint mx_sign_up_quary(cJSON *root, sqlite3 *db);
+gboolean mx_check_if_user_excist(const gchar *phone, sqlite3 *db);
 void mx_sign_up(cJSON *root, t_client *client);
 
 //Sign_up_rq
@@ -52,8 +52,15 @@ gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt);
 void mx_sign_in(cJSON *root, t_client *client);
 
 void mx_recovery_password(cJSON *root, t_client *client);
-char *mx_recovery_body(char *user_name);
+char *mx_recovery_body(gchar *user_name, gchar *password);
 int mx_send_mail(char *receiver, char *body);
 char *mx_generate_password(void);
+
+gint mx_send_sms(gchar *body);
+gchar *mx_create_sms_body(gchar *to_number, gchar *password);
+
+void mx_password_request_handler(cJSON *root, t_client *client);
+void mx_auth_request_handler(cJSON *root, t_client *client);
+void mx_sign_up_request_handler(cJSON *root, t_client *client);
 
 #endif /* end of include guard: SERVER_H */

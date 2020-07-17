@@ -16,9 +16,16 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer user_data) {
         g_clear_error(&error);
     }
     if (data) {
-        g_print("response = %s [from serv]\n", data);
-        g_free(data);
-        // return;
+        cJSON *root = cJSON_Parse(data);
+        cJSON *res_type = cJSON_GetObjectItem(root, "response_type");
+
+        if (root != NULL && res_type != NULL) {
+            client->response_handler[res_type->valueint](root, client);
+            g_free(data);
+            cJSON_Delete(root);
+        }
+        else
+            g_warning("Invalid request\n");
     }
     g_data_input_stream_read_line_async(client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, client);
     (void)source_object;
