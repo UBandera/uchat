@@ -64,4 +64,10 @@ void mx_password_request_handler(cJSON *root, t_client *client);
 void mx_auth_request_handler(cJSON *root, t_client *client);
 void mx_sign_up_request_handler(cJSON *root, t_client *client);
 
+gchar *mx_add_user_to_bd(cJSON *root, t_client *client, sqlite3 *db);
+gchar *mx_auth_send_response(gchar *token);
+
+gchar *mx_create_token(gchar *login, gchar *pass);
+gchar *mx_send_error_response(gint type, gchar *message);
+
 #endif /* end of include guard: SERVER_H */

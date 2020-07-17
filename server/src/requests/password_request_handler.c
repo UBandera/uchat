@@ -39,52 +39,40 @@ static gchar *password_send_response(void) {
     return response;
 }
 
-static gchar *error_send_response(void) {
-    cJSON *json = cJSON_CreateObject();
-    gchar *message = "Sending password error";
-    gchar *error_res = NULL;
-
-    cJSON_AddItemToObject(json,
-                          "error_type",
-                          cJSON_CreateNumber(ER_SENT_PASS));
-    cJSON_AddItemToObject(json, "message", cJSON_CreateString(message));
-    error_res = cJSON_PrintUnformatted(json);
-    if (!error_res){
-        g_warning("Failed to print make request.\n");
-    }
-    cJSON_Delete(json);
-    return error_res;
-}
-
 static void send_response(gint status, t_client *client) {
     gchar *response = NULL;
 
     if (!status)
         response = password_send_response();
     else
-        response = error_send_response();
+        response = mx_send_error_response(ER_SENT_PASS,
+                                          "Sending password error");
     mx_send_data(client->data_out, response);
     g_free(response);
 }
 
 void mx_password_request_handler(cJSON *root, t_client *client) {
     if (cJSON_GetObjectItem(root, "phone")) {
-        sqlite3 *db = *(mx_get_db());
+        // sqlite3 *db = *(mx_get_db());
         gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
         gint status = 0;
         gchar *body = NULL;
+        gchar *password = mx_generate_password();
 
-        client->password = mx_generate_password();
+        client->password = g_compute_checksum_for_string(
+                         G_CHECKSUM_SHA256, password, strlen(password));
         // if (!mx_check_if_user_excist(phone, db)) {
-            body = mx_recovery_body("ARTEM", client->password);
-            status = mx_send_mail(phone, body);
+            body = mx_recovery_body("ARTEM", password);
+            g_print("body = %s\n", body);
+            status = mx_send_mail("shemedvedd@gmail.com", body);
         // }
         // else {
-        //     body = mx_create_sms_body(phone, client->password);
-        //     status = mx_send_sms(body);
+            // body = mx_create_sms_body(phone, password);
+            // status = mx_send_sms(body);
         // }
         send_response(status, client);
         g_free(body);
+        g_free(password);
         return;
     }
     g_warning("Not valid request\n");

@@ -10,7 +10,7 @@ static void form_message(CURL *curl, char *body) {
     gchar url[MX_TEMPLATE_SIZE];
 
     g_snprintf(url, sizeof(url), "%s%s%s",
-               "https://api.twilio.com/2010-04-01/Accounts/",
+               "http://api.twilio.com/2010-04-01/Accounts/",
                MX_ACCOUNT_SID, "/Messages");
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_URL, url);

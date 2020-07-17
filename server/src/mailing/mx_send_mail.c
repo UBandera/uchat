@@ -10,7 +10,7 @@
 static void smtp_registation(CURL *curl) {
     curl_easy_setopt(curl, CURLOPT_USERNAME, USERNAME);
     curl_easy_setopt(curl, CURLOPT_PASSWORD, PASSWORD);
-    curl_easy_setopt(curl, CURLOPT_URL, "smtps://smtp.gmail.com:465");
+    curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:465");
 }
 
 static void setup_email_header(CURL *curl, char *to) {
@@ -82,6 +82,15 @@ int mx_send_mail(char *receiver, char *body) {
         curl_easy_cleanup(curl);
         curl_mime_free(mime);
     }
-    g_print("mail_status = %d\n", (int)res);
     return (int)res;
 }
+
+// int main() {
+//     gchar *password = mx_generate_password();
+//     gchar *body = mx_recovery_body("ARTEM", password);
+//
+//     mx_send_mail("shemedvedd@gmail.com", body);
+//     g_free(body);
+//     g_free(password);
+//     return 0;
+// }
