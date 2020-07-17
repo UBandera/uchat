@@ -5,11 +5,11 @@
     GtkWidget *statusLabel;
     GtkWidget *messagesTreeView;
     GtkWidget *TextView;
+    GtkWidget *Contacts;
     GtkAdjustment *vAdjust;
     GtkScrolledWindow *scrolledWindow;
     GtkListStore *messagesListStore;
     pthread_t watcher;
-    GtkListStore *liststore = gtk_list_store_new(1, G_TYPE_STRING);
 
 static GtkBuilder *mx_init_window() {
     GtkBuilder *builder;
@@ -29,6 +29,7 @@ static void send_messege() {
     gtk_text_buffer_get_bounds (buffer, &start, &end);
     text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
     printf("%s", text);
+    // gtk_widget_hide(Contacts);
     exit(0);
 }
 
@@ -45,6 +46,7 @@ int chat_window() {
 
     sendButton = GTK_WIDGET(gtk_builder_get_object(builder,"sendButton"));
     sendEntry = GTK_WIDGET(gtk_builder_get_object(builder,"sendEntry"));
+    Contacts = GTK_WIDGET(gtk_builder_get_object(builder,"listbox_rooms"));
     g_signal_connect(G_OBJECT(sendEntry),"activate", G_CALLBACK(send_messege) ,NULL);
     g_signal_connect(G_OBJECT(sendButton),"clicked", G_CALLBACK(send_messege) ,NULL);
     TextView = GTK_WIDGET(gtk_builder_get_object(builder,"msg_entry"));
@@ -52,6 +54,7 @@ int chat_window() {
     messagesListStore = GTK_LIST_STORE(gtk_builder_get_object(builder,"messagesListStore"));
     scrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder,"scrolledWindow"));
     vAdjust = gtk_scrolled_window_get_vadjustment(scrolledWindow);
+
     gtk_main();
     // pthread_create(&watcher, 0, watcher_thread, 0);
     // mx_widget_set_visibility(GTK_WIDGET(dialog_auth), TRUE);
