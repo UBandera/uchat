@@ -8,8 +8,9 @@
 #include <sqlite3.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <curl/curl.h>
+#include "curl/curl.h"
 #include <time.h>
+#include <ldap.h>
 
 typedef struct s_client {
     GSocketConnection *connection;
