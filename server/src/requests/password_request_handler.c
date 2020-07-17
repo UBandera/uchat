@@ -75,14 +75,14 @@ void mx_password_request_handler(cJSON *root, t_client *client) {
         gchar *body = NULL;
 
         client->password = mx_generate_password();
-        if (!mx_check_if_user_excist(phone, db)) {
+        // if (!mx_check_if_user_excist(phone, db)) {
             body = mx_recovery_body("ARTEM", client->password);
-            status = mx_send_mail("shemedvedd@gmail.com", body);
-        }
-        else {
-            body = mx_create_sms_body(phone, client->password);
-            status = mx_send_sms(body);
-        }
+            status = mx_send_mail(phone, body);
+        // }
+        // else {
+        //     body = mx_create_sms_body(phone, client->password);
+        //     status = mx_send_sms(body);
+        // }
         send_response(status, client);
         g_free(body);
         return;
