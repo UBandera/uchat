@@ -1,0 +1,48 @@
+// Run this code on https://dbdiagram.io/d
+
+Table users_credential {
+  user_id int [pk, increment] // auto-increment
+  login text
+  passwd text
+  temp_passwd text
+  token_auth text
+}
+
+Table user_profile {
+  user_id int
+  name text
+  photo object
+}
+
+Table chats {
+  chat_id int
+  name text
+}
+
+Table massages {
+  id int [pk, increment]
+  text text
+  user_id int
+  chat_id int
+  date timestamp
+}
+
+Table users_in_chat {
+  chat_id int 
+  user_id int
+}
+
+Table user_contact_list {
+  user_id int 
+  contact int
+}
+
+Ref: "massages"."chat_id" < "chats"."chat_id"
+
+Ref: "users_credential"."user_id" < "user_profile"."user_id"
+
+Ref: "massages"."user_id" < "users_credential"."user_id"
+
+Ref: "chats"."chat_id" < "users_in_chat"."chat_id"
+
+Ref: "user_contact_list"."user_id" < "users_credential"."user_id"
