@@ -9,7 +9,8 @@
     GtkAdjustment *vAdjust;
     GtkScrolledWindow *scrolledWindow;
     GtkListStore *messagesListStore;
-    pthread_t watcher;
+    GtkWidget *mess_row;
+        pthread_t watcher;
 
 static GtkBuilder *mx_init_window() {
     GtkBuilder *builder;
@@ -31,15 +32,14 @@ static void send_messege() {
     printf("%s", text);
 
     GtkWidget *button;
-    // GtkWidget *row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
-    // GtkWidget *row1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
-    
-    // GtkWidget *new_button = gtk_button_new_with_label(text);
-    // gtk_widget_set_hexpand(new_button, TRUE);
-    // gtk_widget_set_halign(new_button, GTK_ALIGN_END);
-    // gtk_widget_set_valign(new_button, GTK_ALIGN_CENTER);
-    // gtk_widget_set_size_request(new_button, 300, 5);
-    // gtk_container_add(GTK_CONTAINER(row), new_button);
+    mess_row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_widget_set_halign(mess_row, GTK_ALIGN_END);
+    button = gtk_button_new_with_label(text);
+    gtk_widget_set_hexpand(button, TRUE);
+    gtk_widget_set_halign(button, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
+    gtk_container_add(GTK_CONTAINER(mess_row), button);
+
 
     // gtk_widget_hide(messagesTreeView);
     // exit(0);
@@ -68,6 +68,7 @@ int chat_window() {
     vAdjust = gtk_scrolled_window_get_vadjustment(scrolledWindow);
 
     gtk_main();
+    printf("after gtk_main\n");
     // pthread_create(&watcher, 0, watcher_thread, 0);
     // mx_widget_set_visibility(GTK_WIDGET(dialog_auth), TRUE);
     // gtk_widget_show_all("dialog_auth");
