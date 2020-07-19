@@ -20,6 +20,25 @@
     <property name="pixel_size">30</property>
     <property name="icon_name">contact-new</property>
   </object>
+  <object class="GtkListStore" id="liststore1"/>
+  <object class="GtkListStore" id="messagesListStore">
+    <columns>
+      <!-- column-name time -->
+      <column type="gchararray"/>
+      <!-- column-name message -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">05.06.1996</col>
+        <col id="1" translatable="yes">Предвижу всё: вас оскорбит Печальной тайны объясненье. Какое горькое презренье Ваш гордый взгляд изобразит! Чего хочу? с какою целью Открою душу вам свою? Какому злобному веселью, Быть может, повод подаю! Случайно вас когда-то встретя, В вас искру нежности заметя, Я ей поверить не посмел: Привычке милой не дал ходу; Свою постылую свободу Я потерять не захотел. Ещё одно нас разлучило... Несчастной жертвой Ленской пал... Ото всего, что сердцу мило, Тогда я сердце оторвал; Чужой для всех, ничем не связан, Я думал: вольность и покой Замена счастью. Боже мой! Как я ошибся, как наказан! Нет, поминутно видеть вас, Повсюду следовать за вами, Улыбку уст, движенье глаз Ловить влюблёнными глазами, Внимать вам долго, понимать Душой всё ваше совершенство, Пред вами в муках замирать, Бледнеть и гаснуть... вот блаженство! И я лишён того: для вас Тащусь повсюду наудачу; Мне дорог день, мне дорог час: А я в напрасной скуке трачу Судьбой отсчитанные дни. И так уж тягостны они. Я знаю: век уж мой измерен; Но чтоб продлилась жизнь моя, Я утром должен быть уверен, Что с вами днём увижусь я... Боюсь: в мольбе моей смиренной Увидит ваш суровый взор Затеи хитрости презренной — И слышу гневный ваш укор. Когда б вы знали, как ужасно Томиться жаждою любви, Пылать — и разумом всечасно Смирять волнение в крови; Желать обнять у вас колени, И, зарыдав, у ваших ног Излить мольбы, признанья, пени, Всё, всё, что выразить бы мог, А между тем притворным хладом Вооружать и речь и взор, Вести спокойный разговор, Глядеть на вас весёлым взглядом!.. Но так и быть: я сам себе Противиться не в силах боле; Всё решено: я в вашей вол</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes"/>
+        <col id="1" translatable="yes">Боюсь: в мольбе моей смиренной Увидит ваш суровый взор Затеи хитрости презренной — И слышу гневный ваш укор. Когда б вы знали, как ужасно Томиться жаждою любви, Пылать — и разумом всечасно Смирять волнение в крови; Желать обнять у вас колени, И, зарыдав, у ваших ног Излить мольбы, признанья, пени, Всё, всё, что выразить бы мог, А между тем притворным хладом Вооружать и речь и взор, Вести спокойный разговор, Глядеть на вас весёлым взглядом!.. Но так и быть: я сам себе Противиться не в силах боле; Всё решено: я в вашей воле, И предаюсь моей судьбе.</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkApplicationWindow" id="chatWindow">
     <property name="width_request">640</property>
     <property name="height_request">420</property>
@@ -163,15 +182,14 @@
                     <property name="height_request">490</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="border_width">10</property>
                     <property name="vscroll_policy">natural</property>
+                    <property name="model">messagesListStore</property>
                     <property name="headers_visible">False</property>
-                    <property name="enable_search">False</property>
                     <property name="search_column">0</property>
                     <property name="show_expanders">False</property>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection">
-                        <property name="mode">none</property>
-                      </object>
+                      <object class="GtkTreeSelection"/>
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="timeColumn">
@@ -180,27 +198,9 @@
                         <property name="sort_indicator">True</property>
                         <property name="sort_column_id">0</property>
                         <child>
-                          <object class="GtkCellRendererText" id="timeCellRendererText">
-                            <property name="foreground_gdk">#bababdbdb6b6</property>
-                          </object>
+                          <object class="GtkCellRendererText" id="timeCellRendererText"/>
                           <attributes>
                             <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="authorColumn">
-                        <property name="title">ID</property>
-                        <property name="clickable">True</property>
-                        <property name="sort_indicator">True</property>
-                        <property name="sort_column_id">0</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="authorCellRendererText">
-                            <property name="underline">single</property>
-                          </object>
-                          <attributes>
-                            <attribute name="text">1</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -213,11 +213,13 @@
                         <property name="sort_column_id">0</property>
                         <child>
                           <object class="GtkCellRendererText" id="messageCellRendererText">
-                            <property name="wrap_mode">word-char</property>
+                            <property name="background_gdk">#fcfce9e94f4f</property>
+                            <property name="wrap_mode">word</property>
                             <property name="wrap_width">440</property>
                           </object>
                           <attributes>
-                            <attribute name="text">2</attribute>
+                            <attribute name="visible">2</attribute>
+                            <attribute name="text">1</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -240,15 +242,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkListStore" id="messagesListStore">
-    <columns>
-      <!-- column-name time -->
-      <column type="gchararray"/>
-      <!-- column-name author -->
-      <column type="gchararray"/>
-      <!-- column-name message -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>
