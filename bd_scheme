@@ -24,7 +24,7 @@ Table massages {
   message text
   user_id int
   chat_id int
-  date timestamp
+  send_time timestamp
 }
 
 Table users_in_chat {
