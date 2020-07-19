@@ -35,3 +35,4 @@ void mx_login_window(t_client *client) {
    g_signal_connect(login_btn, "clicked", G_CALLBACK(get_data_from_input), NULL);
    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }
+
