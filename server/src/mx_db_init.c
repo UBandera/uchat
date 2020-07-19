@@ -68,7 +68,7 @@ static void create_messages(sqlite3 **db) {
                                user_id INTEGER,\
                                chat_id INTEGER,\
                                message TEXT,\
-                               data INTEGER,\
+                               send_time INTEGER,\
                                FOREIGN KEY(user_id)\
                                REFERENCES users_credential(user_id),\
                                FOREIGN KEY(chat_id)\

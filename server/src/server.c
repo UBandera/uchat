@@ -1,4 +1,5 @@
 #include "server.h"
+#define REQUEST_HANDLER_SIZE 3
 
 const gboolean NEW_USER = 0;
 
@@ -17,10 +18,10 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
-void (*const request_handler[])() = {
+void (*const request_handler[3])() = {
     mx_sign_in,
-    mx_sign_up
-    // mx_send_message
+    mx_sign_up,
+    mx_send_message
 };
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
@@ -35,7 +36,8 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
         cJSON *root = cJSON_Parse(data);
         cJSON *req_type = cJSON_GetObjectItem(root, "request_type");
 
-        if (root != NULL && req_type != NULL) {
+        if (root != NULL && req_type != NULL &&
+            req_type->valueint < REQUEST_HANDLER_SIZE) {
             request_handler[req_type->valueint](root, new_client);
             g_free(data);
             cJSON_Delete(root);
@@ -45,10 +47,12 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     }
     else if (error) {
         g_error("%s\n", error->message);
+        //TODO add free client
         g_clear_error(&error);
     }
     else {
         g_print("Client logout!\n");
+        //TODO add free client
         return;
     }
     g_data_input_stream_read_line_async(new_client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, new_client);

@@ -47,4 +47,5 @@ gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt);
 void mx_sign_in(cJSON *root, t_client *client);
 
 
+void mx_send_message(cJSON *root, t_client *client);
 #endif /* end of include guard: SERVER_H */
