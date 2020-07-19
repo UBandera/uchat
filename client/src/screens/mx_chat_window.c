@@ -29,8 +29,20 @@ static void send_messege() {
     gtk_text_buffer_get_bounds (buffer, &start, &end);
     text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
     printf("%s", text);
-    // gtk_widget_hide(Contacts);
-    exit(0);
+
+    GtkWidget *button;
+    // GtkWidget *row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+    // GtkWidget *row1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+    
+    // GtkWidget *new_button = gtk_button_new_with_label(text);
+    // gtk_widget_set_hexpand(new_button, TRUE);
+    // gtk_widget_set_halign(new_button, GTK_ALIGN_END);
+    // gtk_widget_set_valign(new_button, GTK_ALIGN_CENTER);
+    // gtk_widget_set_size_request(new_button, 300, 5);
+    // gtk_container_add(GTK_CONTAINER(row), new_button);
+
+    // gtk_widget_hide(messagesTreeView);
+    // exit(0);
 }
 
 // void *watcher_thread(void *param)
