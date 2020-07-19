@@ -21,7 +21,7 @@ Table chats {
 
 Table massages {
   id int [pk, increment]
-  text text
+  message text
   user_id int
   chat_id int
   date timestamp
