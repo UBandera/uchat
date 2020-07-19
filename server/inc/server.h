@@ -37,7 +37,7 @@ gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 void mx_db_init(void);
 
 //Sign_up_rq
-gint mx_sign_up_quary(cJSON *root, sqlite3 *db);
+gint mx_sign_up_query(cJSON *root, sqlite3 *db);
 gboolean mx_check_if_user_excist(cJSON *root, sqlite3 *db);
 void mx_sign_up(cJSON *root, t_client *client);
 

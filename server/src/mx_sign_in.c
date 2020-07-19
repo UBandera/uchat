@@ -22,13 +22,13 @@ gint get_user_id_run(sqlite3_stmt *stmt, t_client *client) {
 
 gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt) {
     sqlite3 *db = *(mx_get_db());
-    gchar *quary = "SELECT user_id, login, passwd FROM users_credential \
+    gchar *query = "SELECT user_id, login, passwd FROM users_credential \
                     WHERE login = ? AND passwd = ?;";
     gchar *login = cJSON_GetObjectItem(root, "login")->valuestring;
     gchar *passwd = cJSON_GetObjectItem(root, "password")->valuestring;
     gint rc = 0;
 
-    if ((rc = sqlite3_prepare_v2(db, quary, -1, stmt, NULL)) != SQLITE_OK)
+    if ((rc = sqlite3_prepare_v2(db, query, -1, stmt, NULL)) != SQLITE_OK)
         g_warning("get_user_id_prepare prepare: %d\n", rc);
     if ((rc = sqlite3_bind_text(*stmt, 1, login, -1, NULL)) != SQLITE_OK)
         g_warning("get_user_id_prepare bind: login:%s %d\n", login, rc);
