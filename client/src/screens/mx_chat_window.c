@@ -1,7 +1,8 @@
 #include "client.h"
 
     GtkWidget *chatWindow;
-    GtkWidget *sendEntry, *sendButton;
+    GtkWidget *sendButton;
+    GtkWidget *sendEntry;
     GtkWidget *ContactButton;
     GtkWidget *messagesTreeView;
     GtkWidget *TextView;
@@ -28,7 +29,7 @@ void sleep_ms(int milliseconds)
     nanosleep(&ts, NULL);
 }
 
-void add_list_entry(const char *t, const char *a, const char *m, int sleep)
+void add_list_entry(const char *t, const char *a, const char *m, int sleep) // заносит сообщения в окно
 {
     GtkTreeIter iter;
     gtk_list_store_append(GTK_LIST_STORE(messagesListStore), &iter);
@@ -36,25 +37,23 @@ void add_list_entry(const char *t, const char *a, const char *m, int sleep)
     if(sleep)
         sleep_ms(100);
     gtk_adjustment_set_value(vAdjust, gtk_adjustment_get_upper(vAdjust) - gtk_adjustment_get_page_size(vAdjust));
-    printf("Hello\n");
 }
 
 void clear_list_entry() {
     gtk_list_store_clear (messagesListStore);
 }
 
-static void send_messege() {
+static void send_messege() { // отправляет сообщения
     GtkTextIter start, end;
     GtkTextBuffer *buffer = gtk_text_view_get_buffer (TextView);
     gchar *text;
 
     gtk_text_buffer_get_bounds (buffer, &start, &end);
     text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-
+    if (strlen(text) == 0)
+        return;
     add_list_entry("10.01.20", "Bohdan", text, 100);
-    text = "";
-    gtk_text_view_get_buffer (TextView);
-    // gtk_text_view_set_buffer(GTK_WIDGET(TextView), text);
+    gtk_text_buffer_delete(buffer, &start, &end);
 }
 
 int chat_window() {
