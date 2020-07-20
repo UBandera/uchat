@@ -5,7 +5,7 @@ gchar *mx_send_error_response(gint type, gchar *message) {
     gchar *error_res = NULL;
 
     cJSON_AddItemToObject(json,
-                          "error_type",
+                          "response_type",
                           cJSON_CreateNumber(type));
     cJSON_AddItemToObject(json, "message", cJSON_CreateString(message));
     error_res = cJSON_PrintUnformatted(json);

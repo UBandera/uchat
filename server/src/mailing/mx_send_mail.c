@@ -3,14 +3,14 @@
 #define USERNAME "uchat.llc@gmail.com"
 #define PASSWORD "Qwerty1357"
 
-#define FROM    "uchat.llc@gmail.com"
-#define CC      "uchat.llc@gmail.com"
+#define FROM     "uchat.llc@gmail.com"
+#define CC       "uchat.llc@gmail.com"
 
 
 static void smtp_registation(CURL *curl) {
     curl_easy_setopt(curl, CURLOPT_USERNAME, USERNAME);
     curl_easy_setopt(curl, CURLOPT_PASSWORD, PASSWORD);
-    curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:465");
+    curl_easy_setopt(curl, CURLOPT_URL, "smtps://smtp.gmail.com:465");
 }
 
 static void setup_email_header(CURL *curl, char *to) {

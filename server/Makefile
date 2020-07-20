@@ -9,12 +9,18 @@ cJSON = -I ../json/inc ../json/src/*.c
 SRCS = -I inc src/*.c src/mailing/*.c src/requests/*.c
 
 ZLIB = -I ../zlib/include/ ../zlib/lib/libz.a
-CURL = $(ZLIB) -lldap -I ../curl/include/ ../curl/lib/.libs/libcurl.a
+OPENSSL = -I /usr/local/opt/openssl/include /usr/local/opt/openssl/lib/libcrypto.a /usr/local/opt/openssl/lib/libssl.a
+NGHTTP = -I /usr/local/opt/nghttp2/include/ /usr/local/Cellar/nghttp2/1.41.0/lib/libnghttp2.a
+RTMDUMP = -I /usr/local/Cellar/rtmpdump/2.4+20151223_1/include /usr/local/Cellar/rtmpdump/2.4+20151223_1/lib/librtmp.a
+BROTLI = -I /usr/local/Cellar/brotli/1.0.7/include /usr/local/Cellar/brotli/1.0.7/lib/libbrotlicommon-static.a /usr/local/Cellar/brotli/1.0.7/lib/libbrotlidec-static.a /usr/local/Cellar/brotli/1.0.7/lib/libbrotlienc-static.a
+CURL = $(ZLIB) $(OPENSSL) $(NGHTTP) $(RTMDUMP) $(BROTLI) -lldap -I ../curl/include/ ../curl/lib/.libs/libcurl.a
 
-all: curl_install zlib_install
+
+all:
 		@$(CC) $(CFLAGS) $(DFLAGS) $(GLIB) $(cJSON) $(CURL) -lsqlite3 $(SRCS) -o  $(APP)
 
 curl_install:
+	../curl/configure --with-ssl
 	make -C ../curl
 
 curl_uninstall:

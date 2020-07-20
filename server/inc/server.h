@@ -12,6 +12,7 @@
 #include <time.h>
 #include <ldap.h>
 
+
 typedef struct s_client {
     GSocketConnection *connection;
     GInputStream *istream;
@@ -44,7 +45,7 @@ void mx_db_init(void);
 
 //Sign_up_rq
 // gint mx_sign_up_quary(cJSON *root, sqlite3 *db);
-gboolean mx_check_if_user_excist(const gchar *phone, sqlite3 *db);
+gboolean mx_check_user_excist(const gchar *phone, sqlite3 *db);
 void mx_sign_up(cJSON *root, t_client *client);
 
 //Sign_up_rq
@@ -53,19 +54,22 @@ gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt);
 void mx_sign_in(cJSON *root, t_client *client);
 
 void mx_recovery_password(cJSON *root, t_client *client);
-char *mx_recovery_body(gchar *user_name, gchar *password);
 int mx_send_mail(char *receiver, char *body);
 char *mx_generate_password(void);
 
 gint mx_send_sms(gchar *body);
+
 gchar *mx_create_sms_body(gchar *to_number, gchar *password);
+char *mx_recovery_body(gchar *user_name, gchar *password);
+gchar *mx_notify_body(gchar *user_name);
 
 void mx_password_request_handler(cJSON *root, t_client *client);
 void mx_auth_request_handler(cJSON *root, t_client *client);
 void mx_sign_up_request_handler(cJSON *root, t_client *client);
 
 gchar *mx_add_user_to_bd(cJSON *root, t_client *client, sqlite3 *db);
-gchar *mx_auth_send_response(gchar *token);
+gint mx_get_user_id_by_phone(gchar *phone, sqlite3 *db);
+gchar *mx_auth_send_response(t_client *client, gchar *token, gchar *phone);
 
 gchar *mx_create_token(gchar *login, gchar *pass);
 gchar *mx_send_error_response(gint type, gchar *message);

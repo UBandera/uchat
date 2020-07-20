@@ -19,7 +19,8 @@
 }
 
 #info_text {
-    font-size: 14px;
+    transition: all 1s ease-out;
+    font: 11px sans-serif;
 }
 
 #back_button, #back_button:focus,

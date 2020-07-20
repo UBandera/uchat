@@ -11,14 +11,14 @@ static void verify_user(GtkButton *button, t_client *client) {
     GtkEntry *password = NULL;
     GtkEntryBuffer *buffer = NULL;
 
+    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(builder,
+                                                      "pass_info_mess")));
     phone = GTK_ENTRY(gtk_builder_get_object(builder, "phone_edit"));
     password = GTK_ENTRY(gtk_builder_get_object(builder, "password"));
     request = mx_auth_request(gtk_entry_get_text(phone),
                               gtk_entry_get_text(password));
     mx_send_data(client->data_out, request);
     buffer = GTK_ENTRY_BUFFER(gtk_builder_get_object(builder, "phone_buff"));
-    // gtk_entry_buffer_set_text(buffer, "\0", -1);
-    // gtk_entry_set_text(phone, "");
     gtk_entry_set_text(password, "");
     g_free(request);
     (void)button;

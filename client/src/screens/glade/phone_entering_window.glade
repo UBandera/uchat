@@ -33,9 +33,9 @@
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="margin_left">40</property>
-        <property name="margin_right">20</property>
+        <property name="margin_right">10</property>
         <property name="margin_top">40</property>
-        <property name="margin_bottom">40</property>
+        <property name="margin_bottom">50</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
@@ -113,9 +113,10 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
-            <property name="homogeneous">True</property>
+            <!-- <property name="homogeneous">True</property> -->
             <child>
               <object class="GtkEntry" id="phone">
                 <property name="name">login_entry</property>

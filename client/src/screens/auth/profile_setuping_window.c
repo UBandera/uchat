@@ -6,14 +6,17 @@
 static void add_info(GtkButton *button, t_client *client) {
     GtkBuilder *builder = client->builder;
     gchar *request = NULL;
+    GtkEntry *phone = NULL;
     GtkEntry *first_name = NULL;
     GtkEntry *last_name = NULL;
     GtkEntry *email = NULL;
 
+    phone = GTK_ENTRY(gtk_builder_get_object(builder, "phone_not_edit"));
     first_name = GTK_ENTRY(gtk_builder_get_object(builder, "first_name"));
     last_name = GTK_ENTRY(gtk_builder_get_object(builder, "last_name"));
     email = GTK_ENTRY(gtk_builder_get_object(builder, "email"));
-    request = mx_set_up_profile_request(gtk_entry_get_text(first_name),
+    request = mx_set_up_profile_request(gtk_entry_get_text(phone),
+                                        gtk_entry_get_text(first_name),
                                         gtk_entry_get_text(last_name),
                                         gtk_entry_get_text(email));
     mx_send_data(client->data_out, request);

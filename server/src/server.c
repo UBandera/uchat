@@ -53,7 +53,7 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
             cJSON_Delete(root);
         }
         else
-            g_warning("Invalid request\n");
+            g_warning("Invalid request, try again!\n");
     }
     else if (error) {
         g_error("%s\n", error->message);

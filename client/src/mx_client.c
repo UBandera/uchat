@@ -18,6 +18,7 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer user_data) {
     if (data) {
         cJSON *root = cJSON_Parse(data);
         cJSON *res_type = cJSON_GetObjectItem(root, "response_type");
+        g_print("data = %s\n", data);
 
         if (root != NULL && res_type != NULL) {
             client->response_handler[res_type->valueint](root, client);
@@ -43,8 +44,11 @@ t_client *init_client(GSocketConnection *connection) {
     client->data_in = g_data_input_stream_new(istream);
     client->data_out = g_data_output_stream_new(ostream);
     client->builder = gtk_builder_new();
+    mx_application_init(client);
     mx_init_handlers(client);
-    g_data_input_stream_read_line_async(client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, client);
+    g_data_input_stream_read_line_async(client->data_in,
+                                        G_PRIORITY_DEFAULT, NULL,
+                                        get_data, client);
     return client;
 }
 
@@ -53,34 +57,21 @@ int main(int argc, char **argv) {
     GSocketClient *socket = NULL;
     GSocketConnection *connection = NULL;
     GError *error = NULL;
-    t_client *client_st = NULL;
+    t_client *client = NULL;
 
     socket = g_socket_client_new();
-
-    // some settings
     g_socket_client_set_protocol(socket, G_SOCKET_PROTOCOL_TCP);
     g_socket_client_set_socket_type(socket, G_SOCKET_TYPE_STREAM);
-    // g_socket_client_set_enable_proxy(socket, TRUE); // Future release
-
-    connection = g_socket_client_connect_to_host(socket, (gchar *)"0.0.0.0", 5050, NULL, &error);
-    g_socket_client_set_timeout(socket, 10);
-
+    connection = g_socket_client_connect_to_host(socket, (gchar *)"0.0.0.0",
+                                                 5050, NULL, &error);
     if (error) {
         g_error("%s\n", error->message);
         g_clear_error(&error);
     }
-    client_st = init_client(connection);
+    client = init_client(connection);
+    mx_application_run(argc, argv, client->app);
 
-    // ui (for testing)
-    // mx_application_run(argc, argv, mx_application_init(client_st));
-    // login(argc, argv, client_st);
-
-    client_st->app = gtk_application_new("org.gnome.chat.desktop", G_APPLICATION_FLAGS_NONE);
-    mx_application_init(client_st->app, client_st);
-    mx_application_run(argc, argv, client_st->app);
-
-    // mx_routing(argc, argv, client_st);
     g_object_unref(connection);
-    g_free(client_st);
+    g_free(client);
     return 0;
 }

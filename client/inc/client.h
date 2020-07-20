@@ -29,9 +29,10 @@ typedef struct s_client {
     GtkWindow *profile_setuping;
     GtkWindow *main_window;
 
-    void (*response_handler[RQ_SEND_MESSAGE + 1])(cJSON *json,
+    void (*response_handler[30])(cJSON *json,
                                                   struct s_client *client);
 }              t_client;
+
 
 // screens
 void mx_apply_styles(const gchar *path_to_css);
@@ -49,7 +50,8 @@ void mx_edit_login(GtkEntry *entry, GtkEntryIconPosition icon_pos,
 // requests
 gchar *mx_password_request(const gchar *phone);
 gchar *mx_auth_request(const gchar *phone, const gchar *password);
-gchar *mx_set_up_profile_request(const gchar *first_name,
+gchar *mx_set_up_profile_request(const gchar *phone,
+                                 const gchar *first_name,
                                  const gchar *last_name,
                                  const gchar *email);
 
@@ -69,19 +71,17 @@ void mx_init_handlers(t_client *client);
 void mx_handle_password(cJSON *json, t_client *client);
 void mx_sign_up_user(cJSON *json, t_client *client);
 void mx_auth_validated(cJSON *json, t_client *client);
+void mx_invalid_password_handler(cJSON *json, t_client *client);
+void mx_sms_error_handler(cJSON *json, t_client *client);
 
 
-void mx_sign_up_response(cJSON *json, t_client *client);
-void mx_sign_in_response(cJSON *json, t_client *client);
 void mx_sign_out_response(cJSON *json, t_client *client);
 void mx_chat_data_response(cJSON *json, t_client *client);
 void mx_contact_list_response(cJSON *json, t_client *client);
 void mx_profile_data_response(cJSON *json, t_client *client);
 void mx_send_message_response(cJSON *json, t_client *client);
 
-
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
-
 
 // validation
 gint mx_auth_confirming(gchar *login, gchar *password,
@@ -93,9 +93,8 @@ gboolean mx_match(const gchar *str, const gchar *pattern,
 void get_message_data_from_json(cJSON *json, t_client *client);
 
 // Trash
-int login(int argc, char **argv, gpointer user_data); // for testing
 int mx_application_run(int argc, char **argv, GtkApplication *app);
-void mx_application_init(GtkApplication *app, gpointer user_data);
+void mx_application_init(t_client *client);
 // void mx_notify(GApplication *application);
 
 #endif /* end of include guard: CLIENT_H */

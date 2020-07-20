@@ -8,12 +8,12 @@
  * RETURNS : void
  *   NOTES : -
  */
-void mx_auth_validated(cJSON *json, t_client *client) {
+void mx_invalid_password_handler(cJSON *json, t_client *client) {
+    GtkBuilder *builder = client->builder;
+    GtkLabel *info = GTK_LABEL(gtk_builder_get_object(builder,
+                                                      "pass_info_mess"));
     gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
-    gchar *token = cJSON_GetObjectItem(json, "token")->valuestring;
-    GtkWindow *current = gtk_application_get_active_window(client->app);
 
-    client->token = g_strdup(token);
-    g_print("message = %s\n", message);
-    mx_window_switcher(current, client->phone_entering); // client->phone_entering change to main window
+    gtk_label_set_text(info, message);
+    gtk_widget_show(GTK_WIDGET(info));
 }
