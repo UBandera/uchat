@@ -1,0 +1,15 @@
+[submodule "rtmpdump"]
+	path = rtmpdump
+	url = https://github.com/mstorsjo/rtmpdump
+[submodule "zlib"]
+	path = zlib
+	url = https://github.com/madler/zlib.git
+[submodule "nghttp2"]
+	path = nghttp2
+	url = https://github.com/nghttp2/nghttp2
+[submodule "brotli"]
+	path = brotli
+	url = https://github.com/google/brotli.git
+[submodule "curl"]
+	path = curl
+	url = https://github.com/curl/curl.git
