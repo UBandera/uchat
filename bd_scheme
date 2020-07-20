@@ -15,7 +15,7 @@ Table user_profile {
 }
 
 Table chats {
-  chat_id int
+  chat_id int [pk, increment]
   name text
 }
 
@@ -24,7 +24,7 @@ Table massages {
   message text
   user_id int
   chat_id int
-  send_time timestamp
+  date timestamp
 }
 
 Table users_in_chat {
@@ -37,12 +37,12 @@ Table user_contact_list {
   contact int
 }
 
-Ref: "massages"."chat_id" < "chats"."chat_id"
+Ref: "massages"."chat_id" > "chats"."chat_id"
 
 Ref: "users_credential"."user_id" < "user_profile"."user_id"
 
-Ref: "massages"."user_id" < "users_credential"."user_id"
+Ref: "massages"."user_id" > "users_credential"."user_id"
 
 Ref: "chats"."chat_id" < "users_in_chat"."chat_id"
 
-Ref: "user_contact_list"."user_id" < "users_credential"."user_id"
+Ref: "user_contact_list"."user_id" > "users_credential"."user_id"
