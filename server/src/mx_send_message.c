@@ -2,11 +2,13 @@
 
 gint mx_put_message_in_db_run(sqlite3_stmt *stmt, t_client *client) {
     gint rc = 0;
+    sqlite3 *db = *(mx_get_db());
 
     if ((rc = sqlite3_step(stmt)) == SQLITE_OK)
         g_message("mx_put_message_in_db_run SUCCESS\n");
     else
-        g_warning("mx_put_message_in_db_run step rc:%d\n", rc);
+        g_warning("mx_put_message_in_db_run step rc:%d, %s\n", rc,
+                  sqlite3_errmsg(db));
     if ((rc = sqlite3_finalize(stmt)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_run finalize rc:%d\n", rc);
     return rc;
@@ -16,11 +18,11 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt) { //auditor
     sqlite3 *db = *(mx_get_db());
     gchar *query = "INSERT INTO messages(message, user_id, chat_id,\
                     send_time) VALUES(?, ?, ?, ?);";
-    gchar *message = cJSON_GetObjectItem(root, "message")->string;
-    gchar *user_id = cJSON_GetObjectItem(root, "user_id")->string;
-    gchar *chat_id = cJSON_GetObjectItem(root, "chat_id")->string;
-    gchar *send_time = cJSON_GetObjectItem(root, "send_time")->string;
-    g_print("%s %s %s %s\n", message, user_id, chat_id, send_time);
+    gchar *message = cJSON_GetObjectItem(root, "message")->valuestring;
+    gint user_id = cJSON_GetObjectItem(root, "user_id")->valueint;
+    gint chat_id = cJSON_GetObjectItem(root, "chat_id")->valueint;
+    gint send_time = cJSON_GetObjectItem(root, "send_time")->valueint;
+    g_print("%s %d %d %d\n", message, user_id, chat_id, send_time);
     gint rc = 0;
 
     if ((rc = sqlite3_prepare_v2(db, query, -1, stmt, NULL)) != SQLITE_OK)
@@ -29,14 +31,14 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt) { //auditor
     if ((rc = sqlite3_bind_text(*stmt, 1, message, -1, NULL)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_prepare bind: message:%s %d\n",
                   message, rc);
-    if ((rc = sqlite3_bind_text(*stmt, 2, user_id, -1, NULL)) != SQLITE_OK)
-        g_warning("mx_put_message_in_db_prepare bind: user_id:%s %d\n",
+    if ((rc = sqlite3_bind_int(*stmt, 2, user_id)) != SQLITE_OK)
+        g_warning("mx_put_message_in_db_prepare bind: user_id:%d %d\n",
                   user_id, rc);
-    if ((rc = sqlite3_bind_text(*stmt, 3, chat_id, -1, NULL)) != SQLITE_OK)
-        g_warning("mx_put_message_in_db_prepare bind: chat_id:%s %d\n",
+    if ((rc = sqlite3_bind_int(*stmt, 3, chat_id)) != SQLITE_OK)
+        g_warning("mx_put_message_in_db_prepare bind: chat_id:%d %d\n",
                   chat_id, rc);
-    if ((rc = sqlite3_bind_text(*stmt, 4, send_time, -1, NULL)) != SQLITE_OK)
-        g_warning("mx_put_message_in_db_prepare bind: send_time:%s %d\n",
+    if ((rc = sqlite3_bind_int(*stmt, 4, send_time)) != SQLITE_OK)
+        g_warning("mx_put_message_in_db_prepare bind: send_time:%d %d\n",
                   send_time, rc);
     return rc;
 }
