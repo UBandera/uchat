@@ -2,15 +2,13 @@
 
     GtkWidget *chatWindow;
     GtkWidget *sendEntry, *sendButton;
-    GtkWidget *statusLabel;
+    GtkWidget *ContactButton;
     GtkWidget *messagesTreeView;
     GtkWidget *TextView;
     GtkWidget *Contacts;
     GtkAdjustment *vAdjust;
     GtkScrolledWindow *scrolledWindow;
     GtkListStore *messagesListStore;
-    GtkWidget *mess_row;
-        pthread_t watcher;
 
 static GtkBuilder *mx_init_window() {
     GtkBuilder *builder;
@@ -22,6 +20,29 @@ static GtkBuilder *mx_init_window() {
     return builder;
 }
 
+void sleep_ms(int milliseconds)
+{
+    struct timespec ts;
+    ts.tv_sec = milliseconds / 1000;
+    ts.tv_nsec = (milliseconds % 1000) * 1000000;
+    nanosleep(&ts, NULL);
+}
+
+void add_list_entry(const char *t, const char *a, const char *m, int sleep)
+{
+    GtkTreeIter iter;
+    gtk_list_store_append(GTK_LIST_STORE(messagesListStore), &iter);
+    gtk_list_store_set(GTK_LIST_STORE(messagesListStore), &iter, 0, t, 1, a, 2, m, -1);
+    if(sleep)
+        sleep_ms(100);
+    gtk_adjustment_set_value(vAdjust, gtk_adjustment_get_upper(vAdjust) - gtk_adjustment_get_page_size(vAdjust));
+    printf("Hello\n");
+}
+
+void clear_list_entry() {
+    gtk_list_store_clear (messagesListStore);
+}
+
 static void send_messege() {
     GtkTextIter start, end;
     GtkTextBuffer *buffer = gtk_text_view_get_buffer (TextView);
@@ -29,27 +50,12 @@ static void send_messege() {
 
     gtk_text_buffer_get_bounds (buffer, &start, &end);
     text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-    printf("%s", text);
 
-    GtkWidget *button;
-    mess_row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_widget_set_halign(mess_row, GTK_ALIGN_END);
-    button = gtk_button_new_with_label(text);
-    gtk_widget_set_hexpand(button, TRUE);
-    gtk_widget_set_halign(button, GTK_ALIGN_CENTER);
-    gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
-    gtk_container_add(GTK_CONTAINER(mess_row), button);
-
-
-    // gtk_widget_hide(messagesTreeView);
-    // exit(0);
+    add_list_entry("10.01.20", "Bohdan", text, 100);
+    text = "";
+    gtk_text_view_get_buffer (TextView);
+    // gtk_text_view_set_buffer(GTK_WIDGET(TextView), text);
 }
-
-// void *watcher_thread(void *param)
-// {
-//     (void) param;
-//     return param;
-// }
 
 int chat_window() {
     GtkBuilder *builder = mx_init_window();
@@ -57,8 +63,11 @@ int chat_window() {
     chatWindow = GTK_WIDGET(gtk_builder_get_object(builder,"chatWindow"));
 
     sendButton = GTK_WIDGET(gtk_builder_get_object(builder,"sendButton"));
+    ContactButton = GTK_WIDGET(gtk_builder_get_object(builder,"btn_add_room"));
+    g_signal_connect(G_OBJECT(ContactButton),"clicked", G_CALLBACK(clear_list_entry) ,NULL);
     sendEntry = GTK_WIDGET(gtk_builder_get_object(builder,"sendEntry"));
     Contacts = GTK_WIDGET(gtk_builder_get_object(builder,"listbox_rooms"));
+    scrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder,"scrolledWindow"));
     g_signal_connect(G_OBJECT(sendEntry),"activate", G_CALLBACK(send_messege) ,NULL);
     g_signal_connect(G_OBJECT(sendButton),"clicked", G_CALLBACK(send_messege) ,NULL);
     TextView = GTK_WIDGET(gtk_builder_get_object(builder,"msg_entry"));
@@ -66,11 +75,6 @@ int chat_window() {
     messagesListStore = GTK_LIST_STORE(gtk_builder_get_object(builder,"messagesListStore"));
     scrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder,"scrolledWindow"));
     vAdjust = gtk_scrolled_window_get_vadjustment(scrolledWindow);
-
     gtk_main();
     printf("after gtk_main\n");
-    // pthread_create(&watcher, 0, watcher_thread, 0);
-    // mx_widget_set_visibility(GTK_WIDGET(dialog_auth), TRUE);
-    // gtk_widget_show_all("dialog_auth");
-    
 }
