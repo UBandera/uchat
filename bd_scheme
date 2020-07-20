@@ -20,8 +20,7 @@ Table massages {
   id int [pk, increment]
   message text
   sender_id int
-  receiver_id int
-  chat_id int
+  chat_id int 
   date timestamp
 }
 
