@@ -14,22 +14,14 @@ Table user_profile {
   photo object
 }
 
-Table chats {
-  chat_id int [pk, increment]
-  name text
-}
+
 
 Table massages {
   id int [pk, increment]
   message text
-  user_id int
-  chat_id int
+  sender_id int
+  receiver_id int
   date timestamp
-}
-
-Table users_in_chat {
-  chat_id int 
-  user_id int
 }
 
 Table user_contact_list {
@@ -37,12 +29,25 @@ Table user_contact_list {
   contact int
 }
 
-Ref: "massages"."chat_id" > "chats"."chat_id"
-
 Ref: "users_credential"."user_id" < "user_profile"."user_id"
 
-Ref: "massages"."user_id" > "users_credential"."user_id"
-
-Ref: "chats"."chat_id" < "users_in_chat"."chat_id"
+Ref: "massages"."sender_id" > "users_credential"."user_id"
 
 Ref: "user_contact_list"."user_id" > "users_credential"."user_id"
+
+
+//Tables for group chats, group chats does not fit uchat concept
+
+//Table chats {
+//  chat_id int [pk, increment]
+//  name text
+//}
+
+//Table users_in_chat {
+//  chat_id int 
+//  user_id int
+//}
+
+//Ref: "massages"."chat_id" > "chats"."chat_id"
+
+//Ref: "chats"."chat_id" < "users_in_chat"."chat_id"
