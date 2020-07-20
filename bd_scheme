@@ -14,8 +14,6 @@ Table user_profile {
   photo object
 }
 
-
-
 Table massages {
   id int [pk, increment]
   message text
