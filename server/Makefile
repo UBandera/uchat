@@ -10,9 +10,9 @@ SRCS = -I inc src/*.c src/mailing/*.c src/requests/*.c
 
 ZLIB = -I ../zlib/include/ ../zlib/lib/libz.a
 OPENSSL = -I /usr/local/opt/openssl/include /usr/local/opt/openssl/lib/libcrypto.a /usr/local/opt/openssl/lib/libssl.a
-NGHTTP = -I /usr/local/opt/nghttp2/include/ /usr/local/Cellar/nghttp2/1.41.0/lib/libnghttp2.a
+NGHTTP = -I ../nghttp2/include/ ../nghttp2/lib/libnghttp2.a
 RTMDUMP = -I /usr/local/Cellar/rtmpdump/2.4+20151223_1/include /usr/local/Cellar/rtmpdump/2.4+20151223_1/lib/librtmp.a
-BROTLI = -I /usr/local/Cellar/brotli/1.0.7/include /usr/local/Cellar/brotli/1.0.7/lib/libbrotlicommon-static.a /usr/local/Cellar/brotli/1.0.7/lib/libbrotlidec-static.a /usr/local/Cellar/brotli/1.0.7/lib/libbrotlienc-static.a
+BROTLI = -I ../brotli/c/include/ ../brotli/libbrotli.a
 CURL = $(ZLIB) $(OPENSSL) $(NGHTTP) $(RTMDUMP) $(BROTLI) -lldap -I ../curl/include/ ../curl/lib/.libs/libcurl.a
 
 
@@ -22,6 +22,13 @@ all:
 curl_install:
 	../curl/configure --with-ssl
 	make -C ../curl
+
+brotli_install:
+	make lib -C ../brotli
+
+nghttp_install:
+	./configure ../nghttp2
+	make -C ../nghttp2
 
 curl_uninstall:
 	make uninstall -C ../curl
