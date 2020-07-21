@@ -15,8 +15,6 @@ Table user_profile {
   letter_delay int
 }
 
-
-
 Table massages {
   id int [pk, increment]
   message text
