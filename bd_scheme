@@ -12,6 +12,7 @@ Table user_profile {
   user_id int
   name text
   photo object
+  letter_delay int
 }
 
 
@@ -20,7 +21,10 @@ Table massages {
   id int [pk, increment]
   message text
   sender_id int
-  chat_id int 
+  receiver_id int
+  chat_id int
+  is_sent int
+  delivery_date timestamp
   date timestamp
 }
 
