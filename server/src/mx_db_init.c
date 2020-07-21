@@ -84,14 +84,16 @@ static void create_messages(sqlite3 **db) {
                     NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE messages (\
                                msg_id INTEGER,\
-                               user_id INTEGER,\
+                               sender_id INTEGER,\
+                               receiver_id INTEGER,\
                                chat_id INTEGER,\
                                message TEXT,\
-                               send_time INTEGER,\
-                               FOREIGN KEY(user_id)\
+                               date INTEGER,\
+                               delivery_date INTEGER,\
+                               FOREIGN KEY(sender_id)\
                                REFERENCES users_credential(user_id),\
-                               FOREIGN KEY(chat_id)\
-                               REFERENCES chats(chat_id),\
+                               FOREIGN KEY(receiver_id)\
+                               REFERENCES users_credential(user_id),\
                                PRIMARY KEY(msg_id));", NULL, NULL, &errmsg))
                                != SQLITE_OK) {
                 sqlite3_close(*db);
