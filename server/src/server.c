@@ -1,11 +1,6 @@
 #include "server.h"
 #define REQUEST_HANDLER_SIZE 3
 
-const gboolean NEW_USER = 0;
-
-gint64 gui = 1;
-gint request_count = 0;
-
 void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
     g_print("Connected user id is %lld\n", *(gint64 *)key);
     (void)user_data;
@@ -18,7 +13,7 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
-void (*const request_handler[3])() = {
+void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_sign_in,
     mx_sign_up,
     mx_send_message
@@ -77,7 +72,7 @@ gboolean incoming_callback(GSocketService *service,
     socket->data_in = g_object_ref(data_in);
     socket->data_out = g_object_ref(data_out);
     socket->connection = g_object_ref(connection);
-    socket->uid = gui++;
+    socket->uid = 0;
 
     g_data_input_stream_read_line_async(socket->data_in, G_PRIORITY_DEFAULT, NULL, get_data, socket);
     (void)service;

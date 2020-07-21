@@ -34,9 +34,8 @@ gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);
 gchar *mx_form_contact_list_request(void);
 gchar *mx_form_chat_data_request(gint user_id);
 gchar *mx_form_profile_data_request(void);
-gchar *mx_form_send_message_request(gint user_id,
-                                    gchar *message,
-                                    gint chat_id);
+gchar *mx_form_send_message_request(gint receiver_id,
+                                    gchar *message);
 gchar *mx_form_signout_request(void);
 
 void mx_receive_data(gchar *response, t_client *client);

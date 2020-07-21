@@ -112,7 +112,7 @@ static void create_user_contact_list(sqlite3 **db) {
                                user_id INTEGER,\
                                contact INTEGER,\
                                FOREIGN KEY(user_id)\
-                               REFERENCES chats(user_id));",
+                               REFERENCES users_credential(user_id));",
                                NULL, NULL, &errmsg))
                                != SQLITE_OK) {
                 sqlite3_close(*db);
@@ -136,9 +136,7 @@ void mx_db_init(void) {
         sqlite3_close(*db);
     }
     create_users_credential(db);
-    create_chats(db);
-    create_messages(db);
     create_user_contact_list(db);
     create_user_profile(db);
-    create_user_in_chats(db);
+    create_messages(db);
 }
