@@ -47,6 +47,8 @@ void mx_main_window(t_client *client);
 void mx_edit_login(GtkEntry *entry, GtkEntryIconPosition icon_pos,
                    GdkEvent *event, t_client *client);
 
+int chat_window();
+
 // requests
 gchar *mx_password_request(const gchar *phone);
 gchar *mx_auth_request(const gchar *phone, const gchar *password);
