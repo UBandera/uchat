@@ -192,7 +192,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="info_label">
             <property name="name">info_text</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>

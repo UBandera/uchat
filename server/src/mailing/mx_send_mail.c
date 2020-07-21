@@ -84,13 +84,3 @@ int mx_send_mail(char *receiver, char *body) {
     }
     return (int)res;
 }
-
-// int main() {
-//     gchar *password = mx_generate_password();
-//     gchar *body = mx_recovery_body("ARTEM", password);
-//
-//     mx_send_mail("shemedvedd@gmail.com", body);
-//     g_free(body);
-//     g_free(password);
-//     return 0;
-// }

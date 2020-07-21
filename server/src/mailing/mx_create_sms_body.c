@@ -1,7 +1,7 @@
 #include "server.h"
 
 #define MX_TEMPLATE_SIZE 10000
-#define MX_MESSAGE_SIZE 42
+#define MX_MESSAGE_SIZE 100
 
 #define MX_FROM_NUMBER "+12019285337"
 #define MX_MESSAGE "Your Uchat verification code is: "
