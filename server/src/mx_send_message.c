@@ -14,14 +14,32 @@ gint mx_put_message_in_db_run(sqlite3_stmt *stmt, t_client *client) {
     return rc;
 }
 
+gint64 mx_get_chat_id(gint32 uid1, gint32 uid2) {
+    gint64 chat_id = 0;
+    if (uid1 > uid2) {
+        chat_id = uid2;
+        uid2 = uid1;
+    }
+    else
+        chat_id = uid1;
+    chat_id = chat_id << 32;
+    chat_id += (gint64)uid2;
+    return chat_id;
+}
+
 gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_id) { //auditor
+    if (sender_id == 0) {
+        g_message("Please log_in\n");
+        return -1;
+    }
     sqlite3 *db = *(mx_get_db());
     gchar *query = "INSERT INTO messages(message, sender_id, receiver_id,\
                     chat_id, date) VALUES(?, ?, ?, ?, ?);";
     gchar *message = cJSON_GetObjectItem(root, "message")->valuestring;
-    gint receiver_id_id = cJSON_GetObjectItem(root, "receiver_id")->valueint;
-    gint date = 
-    g_print("%s %d %d\n", message, user_id, send_time);
+    gint receiver_id = cJSON_GetObjectItem(root, "receiver_id")->valueint;
+    gint64 chat_id = mx_get_chat_id(sender_id, receiver_id);
+    gint date = g_get_real_time() / 1000000;
+    g_print("%s %d %d\n", message, receiver_id, date);
     gint rc = 0;
 
     if ((rc = sqlite3_prepare_v2(db, query, -1, stmt, NULL)) != SQLITE_OK)
@@ -36,8 +54,8 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_
     if ((rc = sqlite3_bind_int(*stmt, 3, receiver_id)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_prepare bind: receiver_id:%d %d\n",
                   receiver_id, rc);
-    if ((rc = sqlite3_bind_int(*stmt, 4, chat_id)) != SQLITE_OK)
-        g_warning("mx_put_message_in_db_prepare bind: chat_id:%d %d\n",
+    if ((rc = sqlite3_bind_int64(*stmt, 4, chat_id)) != SQLITE_OK)
+        g_warning("mx_put_message_in_db_prepare bind: chat_id:%lld %d\n",
                   chat_id, rc);
     if ((rc = sqlite3_bind_int(*stmt, 5, date)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_prepare bind: date:%d %d\n",
@@ -55,16 +73,17 @@ static gboolean is_valid(cJSON *root) {
 
 void mx_send_message(cJSON *root, t_client *client) {
     sqlite3_stmt *stmt = NULL;
+    gint rc = 0;
 
     if (is_valid(root) == FALSE) {
         g_warning("Invalid send_message request\n");
         return;
     }
-    if (mx_put_message_in_db_prepare(root, &stmt) != SQLITE_OK)
-        g_warning("mx_put_message_in_db_prepare failed\n");
+    if ((rc = mx_put_message_in_db_prepare(root, &stmt, client->uid)) != SQLITE_OK)
+        g_warning("mx_put_message_in_db_prepare failed: %d\n", rc);
         // TODO: send error?;
-    if (mx_put_message_in_db_run(stmt, client) != SQLITE_OK)
-        g_warning("mx_put_message_in_db_run failed\n");
+    if ((rc = mx_put_message_in_db_run(stmt, client)) != SQLITE_OK)
+        g_warning("mx_put_message_in_db_run failed: %d\n", rc);
         // TODO: send error?;
     else
         mx_send_data(client->data_out, "message sent\n");

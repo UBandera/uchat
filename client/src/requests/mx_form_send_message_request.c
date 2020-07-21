@@ -3,7 +3,6 @@
 gchar *mx_form_send_message_request(gint receiver_id,
                                     gchar *message) {
     cJSON *json = cJSON_CreateObject();
-    gint64 send_time = g_get_real_time() / 1000000;
     gchar *request = NULL;
 
     cJSON_AddItemToObject(json,
