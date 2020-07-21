@@ -35,18 +35,6 @@ Ref: "users_credential"."user_id" < "user_profile"."user_id"
 
 Ref: "massages"."sender_id" > "users_credential"."user_id"
 
+Ref: "massages"."receiver_id" > "users_credential"."user_id"
+
 Ref: "user_contact_list"."user_id" > "users_credential"."user_id"
-
-//Table chats {
-//  chat_id int [pk, increment]
-//  name text
-//}
-
-//Table users_in_chat {
-//  chat_id int 
-//  user_id int
-//}
-
-//Ref: "massages"."chat_id" > "chats"."chat_id"
-
-//Ref: "chats"."chat_id" < "users_in_chat"."chat_id"
