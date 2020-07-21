@@ -4,32 +4,18 @@ APP = uchat_server
 CC = clang
 CFLAGS = -g -std=c11 $(addprefix -W, all extra pedantic) #Add error
 DFLAGS = -fsanitize=address -fsanitize=undefined
-GLIB = `pkg-config --cflags --libs glib-2.0  --libs gio-2.0 --libs gtk+-3.0`
-cJSON = -I ../json/inc ../json/src/*.c
-SRCS = -I inc src/*.c src/mailing/*.c src/requests/*.c
+GLIB = `pkg-config --cflags --libs glib-2.0  --libs gio-2.0 --libs gtk+-3.0 --libs json-glib-1.0`
+cJSON = -I ../json/inc $(wildcard ../json/src/*.c)
+SQLITE3 = -lsqlite3
+INC = -I inc $(SQLITE3) $(cJSON) $(GLIB)
 
-ZLIB = -I ../zlib/include/ ../zlib/lib/libz.a
-OPENSSL = -I /usr/local/opt/openssl/include /usr/local/opt/openssl/lib/libcrypto.a /usr/local/opt/openssl/lib/libssl.a
-NGHTTP = -I /usr/local/opt/nghttp2/include/ /usr/local/Cellar/nghttp2/1.41.0/lib/libnghttp2.a
-RTMDUMP = -I /usr/local/Cellar/rtmpdump/2.4+20151223_1/include /usr/local/Cellar/rtmpdump/2.4+20151223_1/lib/librtmp.a
-BROTLI = -I /usr/local/Cellar/brotli/1.0.7/include /usr/local/Cellar/brotli/1.0.7/lib/libbrotlicommon-static.a /usr/local/Cellar/brotli/1.0.7/lib/libbrotlidec-static.a /usr/local/Cellar/brotli/1.0.7/lib/libbrotlienc-static.a
-CURL = $(ZLIB) $(OPENSSL) $(NGHTTP) $(RTMDUMP) $(BROTLI) -lldap -I ../curl/include/ ../curl/lib/.libs/libcurl.a
+SRCS = $(wildcard src/*.c)
+# OBJS = $(subst src/, , $(SRCS:.c=.o))
 
+OBJD = obj
 
-all:
-		@$(CC) $(CFLAGS) $(DFLAGS) $(GLIB) $(cJSON) $(CURL) -lsqlite3 $(SRCS) -o  $(APP)
+all: $(APP)
 
-curl_install:
-	../curl/configure --with-ssl
-	make -C ../curl
-
-curl_uninstall:
-	make uninstall -C ../curl
-
-zlib_install:
-	make -C ../zlib
-	make install prefix="." -C ../zlib
-
-zlib_uninstall:
-	make uninstall -C ../zlib
-	make uninstall prefix="." -C ../zlib
+$(APP): $(SRCS)
+	$(CC) $(INC) $^ -o $@
+	@printf "\033[32;1m$@ created\033[0m\n"

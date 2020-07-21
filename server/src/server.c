@@ -17,23 +17,11 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
-void mx_init_handlers(t_client *client) {
-    client->request_handler[RQ_GENERATE_PASS] = mx_password_request_handler;
-    client->request_handler[RQ_AUTH] = mx_auth_request_handler;
-    client->request_handler[RQ_SET_UP_PROFILE] = mx_sign_up_request_handler;
-    // client->request_handler[RQ_SIGN_OUT] = ;
-    // client->request_handler[RQ_CONTACT_LIST] = ;
-    // client->request_handler[RQ_CHAT_DATA] = ;
-    // client->request_handler[RQ_PROFILE_DATA] = ;
-    // client->request_handler[RQ_SEND_MESSAGE] = ;
-    // client->request_handler[RQ_RECOVERY_PASSWD] = mx_recovery_password;
-}
-
-// void (*const request_handler[])() = {
-//     mx_sign_in,
-//     mx_sign_up
-//     // mx_send_message
-// };
+void (*const request_handler[])() = {
+    mx_sign_in,
+    mx_sign_up
+    // mx_send_message
+};
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     t_client *new_client = (t_client*)socket;
@@ -48,12 +36,12 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
         cJSON *req_type = cJSON_GetObjectItem(root, "request_type");
 
         if (root != NULL && req_type != NULL) {
-            new_client->request_handler[req_type->valueint](root, new_client);
+            request_handler[req_type->valueint](root, new_client);
             g_free(data);
             cJSON_Delete(root);
         }
         else
-            g_warning("Invalid request, try again!\n");
+            g_warning("Invalid request\n");
     }
     else if (error) {
         g_error("%s\n", error->message);
