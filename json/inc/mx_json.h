@@ -17,6 +17,7 @@ enum e_request_types {
     RQ_CHAT_DATA,
     RQ_PROFILE_DATA,
     RQ_SEND_MESSAGE,
+    RQ_RECOVERY_PASSWD,
 };
 
 enum e_response_types {

@@ -85,6 +85,7 @@ gboolean incoming_callback(GSocketService *service,
     socket->data_in = g_object_ref(data_in);
     socket->data_out = g_object_ref(data_out);
     socket->connection = g_object_ref(connection);
+    mx_init_handlers(socket);
     socket->uid = gui++;
 
     g_data_input_stream_read_line_async(socket->data_in, G_PRIORITY_DEFAULT, NULL, get_data, socket);
