@@ -10,6 +10,7 @@
     GtkAdjustment *vAdjust;
     GtkScrolledWindow *scrolledWindow;
     GtkListStore *messagesListStore;
+    GtkListBox *Clients;
 
 static GtkBuilder *mx_init_window() {
     GtkBuilder *builder;
@@ -39,8 +40,23 @@ void add_list_entry(const char *t, const char *a, const char *m, int sleep) // �
     gtk_adjustment_set_value(vAdjust, gtk_adjustment_get_upper(vAdjust) - gtk_adjustment_get_page_size(vAdjust));
 }
 
-void clear_list_entry() {
-    gtk_list_store_clear (messagesListStore);
+static void nothing() {
+
+}
+// static void nothing() {
+//     printf("Hello\n");
+// }
+
+static void clear_list_entry() {
+    GtkWidget *button;
+    
+    button = gtk_button_new_with_label("Hello");
+    gtk_widget_set_hexpand(button, TRUE);
+    gtk_widget_set_halign(button, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
+    gtk_container_add(GTK_CONTAINER(Contacts), button);
+    g_signal_connect(button, "clicked", G_CALLBACK(nothing), NULL;
+    // gtk_list_store_clear (messagesListStore);
 }
 
 static void send_messege() { // отправляет сообщения
@@ -74,6 +90,7 @@ int chat_window() {
     messagesListStore = GTK_LIST_STORE(gtk_builder_get_object(builder,"messagesListStore"));
     scrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder,"scrolledWindow"));
     vAdjust = gtk_scrolled_window_get_vadjustment(scrolledWindow);
+    Clients = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder,"scrolledWindow"));
     gtk_main();
     printf("after gtk_main\n");
 }
