@@ -11,13 +11,14 @@ gchar *mx_auth_send_response(t_client *client, gchar *phone) {
     cJSON_AddItemToObject(json,
                           "response_type",
                           cJSON_CreateNumber(RS_VALID));
-    cJSON_AddItemToObject(json, "token", cJSON_CreateString(client->token));
+    cJSON_AddItemToObject(json, "token", cJSON_CreateString(token));
     cJSON_AddItemToObject(json, "message", cJSON_CreateString(message));
     response = cJSON_PrintUnformatted(json);
     if (!response){
         g_warning("Failed to print make request.\n");
     }
     cJSON_Delete(json);
+    g_free(token);
     return response;
 }
 
@@ -38,14 +39,13 @@ static gchar *user_not_exist_response(void) {
     return response;
 }
 
-static void send_response(int status, t_client *client,
-                          gchar *token, gchar *phone) {
+static void send_response(int status, t_client *client, gchar *phone) {
     gchar *response = NULL;
 
     if (!status)
         response = mx_send_error_response(ER_PASS, "Invalid password");
     else if (status == 1) {
-        response = mx_auth_send_response(client, token, phone);
+        response = mx_auth_send_response(client, phone);
     }
     else
         response = user_not_exist_response();
@@ -73,14 +73,13 @@ static gchar *setup_token(sqlite3 *db, gchar *phone, gchar *password) {
     return token;
 }
 
-void mx_auth_request_handler(cJSON *root, t_client *client) {
-    if (cJSON_GetObjectItem(root, "password")) {
+void mx_contacts_request_handler(cJSON *root, t_client *client) {
+    if (cJSON_GetObjectItem(root, "token")) {
         sqlite3 *db = *(mx_get_db());
-        gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
-        gchar *password = cJSON_GetObjectItem(root, "password")->valuestring;
+        gchar *token = cJSON_GetObjectItem(root, "token")->valuestring;
         int status = 0;
 
-        if (!g_strcmp0(password, client->password)) {
+        if (!g_strcmp0(client->token, token)) {
             if (mx_check_user_excist(phone, db)) {
                 client->token = setup_token(db, phone, password);
                 status = 1;

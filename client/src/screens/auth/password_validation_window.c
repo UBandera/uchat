@@ -1,6 +1,5 @@
 #include "client.h"
 
-
 #define MX_PASSWORD_VALIDATION_WINDOW "./src/screens/glade/password_validation.glade"
 #define MX_STYLES "./src/screens/auth/auth.css"
 

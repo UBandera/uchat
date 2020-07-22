@@ -40,14 +40,12 @@ void mx_window_switcher(GtkWindow *hide, GtkWindow *show);
 GtkWindow *mx_phone_entering_window(t_client *client);
 GtkWindow *mx_password_validate_window(t_client *client);
 GtkWindow *mx_profile_setuping_window(t_client *client);
+GtkWindow *mx_main_window(t_client *client);
 
-void mx_routing(int argc, char **argv, t_client *client);
 
-void mx_main_window(t_client *client);
 void mx_edit_login(GtkEntry *entry, GtkEntryIconPosition icon_pos,
                    GdkEvent *event, t_client *client);
 
-int chat_window();
 
 // requests
 gchar *mx_password_request(const gchar *phone);
@@ -56,7 +54,7 @@ gchar *mx_set_up_profile_request(const gchar *phone,
                                  const gchar *first_name,
                                  const gchar *last_name,
                                  const gchar *email);
-
+gchar *mx_contacts_request(const gchar *token);
 
 gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);
 gchar *mx_form_contact_list_request(void);

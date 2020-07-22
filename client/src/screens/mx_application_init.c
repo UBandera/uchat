@@ -12,10 +12,12 @@ static void activate(GtkApplication *app, t_client *client) {
     client->phone_entering = mx_phone_entering_window(client);
     client->password_validation = mx_password_validate_window(client);
     client->profile_setuping = mx_profile_setuping_window(client);
+    client->main_window = mx_main_window(client);
 
     gtk_application_add_window(app, client->phone_entering);
     gtk_application_add_window(app, client->password_validation);
     gtk_application_add_window(app, client->profile_setuping);
+    gtk_application_add_window(app, client->main_window);
     gtk_widget_show(GTK_WIDGET(client->phone_entering));
 }
 

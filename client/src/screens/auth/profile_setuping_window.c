@@ -3,7 +3,7 @@
 #define MX_PROFILE_SETUP_WINDOW "./src/screens/glade/profile_setup.glade"
 #define MX_STYLES "./src/screens/auth/auth.css"
 #define MX_PATTERN "[^-^A-Za-z]"
-#define MX_EMAILPATTERN "[^.^0-9^a-z]"
+#define MX_EMAILPATTERN "[^.^@^0-9^a-z]"
 
 static gboolean validate(GtkBuilder *builder, GtkEntry *first_name,
                          GtkEntry *last_name, GtkEntry *email) {

@@ -9,6 +9,7 @@ enum e_request_types {
     RQ_GENERATE_PASS = 0,
     RQ_AUTH = 1,
     RQ_SET_UP_PROFILE = 2,
+    RQ_CONTACTS_LIST = 3,
     //
     RQ_SIGN_IN,
     RQ_SIGN_UP,
