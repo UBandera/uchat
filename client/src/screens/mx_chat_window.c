@@ -55,7 +55,7 @@ static void clear_list_entry() {
     gtk_widget_set_halign(button, GTK_ALIGN_CENTER);
     gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
     gtk_container_add(GTK_CONTAINER(Contacts), button);
-    g_signal_connect(button, "clicked", G_CALLBACK(nothing), NULL;
+    g_signal_connect(button, "clicked", G_CALLBACK(nothing), NULL);
     // gtk_list_store_clear (messagesListStore);
 }
 
