@@ -1,5 +1,5 @@
 #include "server.h"
-#define REQUEST_HANDLER_SIZE 3
+#define REQUEST_HANDLER_SIZE 4
 
 void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
     g_print("Connected user id is %lld\n", *(gint64 *)key);
@@ -13,10 +13,15 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
+// void mx_get_message_history(cJSON *root, t_client *client) {
+    // return;
+// }
+
 void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_sign_in,
     mx_sign_up,
-    mx_send_message
+    mx_send_message,
+    // mx_get_message_history 
 };
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
