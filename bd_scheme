@@ -1,16 +1,14 @@
-// Run this code on https://dbdiagram.io/d
-
 Table users_credential {
   user_id int [pk, increment] // auto-increment
-  login text
-  passwd text
-  temp_passwd text
+  phone text pk
   token_auth text
 }
 
 Table user_profile {
   user_id int
   name text
+  last_name text 
+  email text
   photo object
 }
 

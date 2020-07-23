@@ -16,7 +16,7 @@ JSON_SRC = $(JSOND)/$(SRCD)
 
 REQD = $(SRCD)/requests
 RESD = $(SRCD)/responses
-SCREENSD = $(SRCD)/screens
+SCREENSD = $(SRCD)/screens $(SRCD)/screens/auth
 
 SRCSD = $(SRCD) $(REQD) $(RESD) $(SCREENSD) $(JSON_SRC)
 
