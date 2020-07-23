@@ -17,5 +17,5 @@ OBJD = obj
 all: $(APP)
 
 $(APP): $(SRCS)
-	$(CC) $(INC) $^ -o $@
+	$(CC) $(DFLAGS) $(INC) $^ -o $@
 	@printf "\033[32;1m$@ created\033[0m\n"
