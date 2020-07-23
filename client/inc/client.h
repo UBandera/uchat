@@ -21,7 +21,7 @@ typedef struct s_client {
     GDataInputStream *data_in;
     GDataOutputStream *data_out;
     GtkBuilder *builder;
-    void (*response_handler[RQ_SEND_MESSAGE + 1])(cJSON *json,
+    void (*response_handler[RQ_SIZE])(cJSON *json,
                                                   struct s_client *client);
 }              t_client;
 
@@ -36,6 +36,7 @@ gchar *mx_form_chat_data_request(gint user_id);
 gchar *mx_form_profile_data_request(void);
 gchar *mx_form_send_message_request(gint receiver_id,
                                     gchar *message);
+gchar *mx_chat_history_request(gint receiver_id);
 gchar *mx_form_signout_request(void);
 
 void mx_receive_data(gchar *response, t_client *client);

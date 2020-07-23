@@ -58,9 +58,11 @@ void send_message_req(GtkButton *button, t_form *data) {
     gchar *chat_id = (gchar *)gtk_entry_get_text(GTK_ENTRY(((t_form *)data)->chat_id));
     t_client *client = data->client;
     // change this request
-    gchar *request = mx_form_send_message_request(g_ascii_strtoll(user_id,
-                                                                  NULL, 10),
-                                                  message);
+    gchar *request = mx_form_chat_data_request(g_ascii_strtoll(chat_id,
+                                                               NULL, 10));
+    // gchar *request = mx_form_send_message_request(g_ascii_strtoll(user_id,
+                                                                  // NULL, 10),
+                                                  // message);
     mx_send_data(client->data_out, request);
     (void)button;
 }

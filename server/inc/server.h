@@ -47,6 +47,7 @@ gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt);
 void mx_sign_in(cJSON *root, t_client *client);
 
 // Messages requests
+gint64 mx_get_chat_id(gint32 uid1, gint32 uid2);
 void mx_send_message(cJSON *root, t_client *client);
-void mx_get_message_history(cJSON *root, t_client *client);
+void mx_get_chat_history(cJSON *root, t_client *client);
 #endif /* end of include guard: SERVER_H */

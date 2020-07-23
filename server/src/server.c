@@ -13,15 +13,11 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
-// void mx_get_message_history(cJSON *root, t_client *client) {
-    // return;
-// }
-
 void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_sign_in,
     mx_sign_up,
     mx_send_message,
-    // mx_get_message_history 
+    mx_get_chat_history 
 };
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
