@@ -64,9 +64,12 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_
 }
 
 static gboolean is_valid(cJSON *root) {
-    if (!cJSON_GetObjectItem(root, "receiver_id"))
+    cJSON *receiver_id = cJSON_GetObjectItemCaseSensitive(root, "receiver_id");
+    cJSON *message = cJSON_GetObjectItemCaseSensitive(root, "message");
+
+    if (message->valuestring == NULL)
         return FALSE;
-    if (!cJSON_GetObjectItem(root, "message"))
+    if (!cJSON_IsNumber(receiver_id))
         return FALSE;
     return TRUE;
 }
