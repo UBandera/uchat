@@ -1,9 +1,5 @@
 #include "server.h"
-
-const gboolean NEW_USER = 0;
-
-gint64 gui = 1;
-gint request_count = 0;
+#define REQUEST_HANDLER_SIZE 5
 
 void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
     g_print("Connected user id is %lld\n", *(gint64 *)key);
@@ -17,23 +13,12 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
-void mx_init_handlers(t_client *client) {
-    client->request_handler[RQ_GENERATE_PASS] = mx_password_request_handler;
-    client->request_handler[RQ_AUTH] = mx_auth_request_handler;
-    client->request_handler[RQ_SET_UP_PROFILE] = mx_sign_up_request_handler;
-    // client->request_handler[RQ_SIGN_OUT] = ;
-    // client->request_handler[RQ_CONTACT_LIST] = ;
-    // client->request_handler[RQ_CHAT_DATA] = ;
-    // client->request_handler[RQ_PROFILE_DATA] = ;
-    // client->request_handler[RQ_SEND_MESSAGE] = ;
-    // client->request_handler[RQ_RECOVERY_PASSWD] = mx_recovery_password;
-}
-
-// void (*const request_handler[])() = {
-//     mx_sign_in,
-//     mx_sign_up
-//     // mx_send_message
-// };
+void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
+    mx_password_request_handler,
+    mx_auth_request_handler,
+    mx_sign_up_request_handler,
+    mx_send_message
+};
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     t_client *new_client = (t_client*)socket;

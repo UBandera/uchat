@@ -39,22 +39,41 @@ static void create_user_profile(sqlite3 **db) {
     }
 }
 
-static void create_chats(sqlite3 **db) {
-    gchar *errmsg = NULL;
-    int rc = 0;
+// static void create_chats(sqlite3 **db) {
+    // gchar *errmsg = NULL;
+    // int rc = 0;
+    // if ((rc = sqlite3_exec(*db, "SELECT * FROM chats LIMIT 1;",
+                    // NULL, NULL, &errmsg)) != SQLITE_OK) {
+        // if ((rc = sqlite3_exec(*db, "CREATE TABLE chats (\
+                               // chat_id INTEGER,\
+                               // name TEXT,\
+                               // PRIMARY KEY(chat_id));", NULL, NULL, &errmsg))
+                               // != SQLITE_OK) {
+                // sqlite3_close(*db);
+                // g_error("Failed to create \"chats\": %s\n", errmsg);
+        // }
+    // }
+// }
 
-    if ((rc = sqlite3_exec(*db, "SELECT * FROM chats LIMIT 1;",
-                           NULL, NULL, &errmsg)) != SQLITE_OK) {
-        if ((rc = sqlite3_exec(*db, "CREATE TABLE chats (\
-                               chat_id INTEGER,\
-                               name TEXT,\
-                               PRIMARY KEY(chat_id));",
-                               NULL, NULL, &errmsg)) != SQLITE_OK) {
-                sqlite3_close(*db);
-                g_error("Failed to create \"chats\": %s\n", errmsg);
-        }
-    }
-}
+// static void create_user_in_chats(sqlite3 **db) {
+    // gchar *errmsg = NULL;
+    // int rc = 0;
+
+    // if ((rc = sqlite3_exec(*db, "SELECT * FROM user_in_chat LIMIT 1;",
+                    // NULL, NULL, &errmsg)) != SQLITE_OK) {
+        // if ((rc = sqlite3_exec(*db, "CREATE TABLE user_in_chat (\
+                               // chat_id INTEGER,\
+                               // user_id INTEGER,\
+                               // FOREIGN KEY(chat_id)\
+                               // REFERENCES chats(chat_id));",
+                               // NULL, NULL, &errmsg))
+                               // != SQLITE_OK) {
+                // sqlite3_close(*db);
+                // g_error("Failed to create \"user_in_chat\": %s\n", errmsg);
+        // }
+    // }
+// }
+
 
 static void create_messages(sqlite3 **db) {
     gchar *errmsg = NULL;
@@ -64,39 +83,24 @@ static void create_messages(sqlite3 **db) {
                            NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE messages (\
                                msg_id INTEGER,\
-                               user_id INTEGER,\
+                               sender_id INTEGER,\
+                               receiver_id INTEGER,\
                                chat_id INTEGER,\
                                message TEXT,\
-                               data INTEGER,\
-                               FOREIGN KEY(user_id)\
+                               date INTEGER,\
+                               delivery_date INTEGER,\
+                               FOREIGN KEY(sender_id)\
                                REFERENCES users_credential(user_id),\
-                               FOREIGN KEY(chat_id)\
-                               REFERENCES chats(chat_id),\
-                               PRIMARY KEY(msg_id));",
-                               NULL, NULL, &errmsg)) != SQLITE_OK) {
+                               FOREIGN KEY(receiver_id)\
+                               REFERENCES users_credential(user_id),\
+                               PRIMARY KEY(msg_id));", NULL, NULL, &errmsg))
+                               != SQLITE_OK) {
                 sqlite3_close(*db);
                 g_error("Failed to create \"messages\": %s\n", errmsg);
         }
     }
 }
 
-static void create_user_in_chats(sqlite3 **db) {
-    gchar *errmsg = NULL;
-    int rc = 0;
-
-    if ((rc = sqlite3_exec(*db, "SELECT * FROM user_in_chat LIMIT 1;",
-                           NULL, NULL, &errmsg)) != SQLITE_OK) {
-        if ((rc = sqlite3_exec(*db, "CREATE TABLE user_in_chat (\
-                               chat_id INTEGER,\
-                               user_id INTEGER,\
-                               FOREIGN KEY(chat_id)\
-                               REFERENCES chats(chat_id));",
-                               NULL, NULL, &errmsg)) != SQLITE_OK) {
-                sqlite3_close(*db);
-                g_error("Failed to create \"user_in_chat\": %s\n", errmsg);
-        }
-    }
-}
 
 static void create_user_contact_list(sqlite3 **db) {
     gchar *errmsg = NULL;
@@ -108,8 +112,9 @@ static void create_user_contact_list(sqlite3 **db) {
                                user_id INTEGER,\
                                contact INTEGER,\
                                FOREIGN KEY(user_id)\
-                               REFERENCES chats(user_id));",
-                               NULL, NULL, &errmsg)) != SQLITE_OK) {
+                               REFERENCES users_credential(user_id));",
+                               NULL, NULL, &errmsg))
+                               != SQLITE_OK) {
                 sqlite3_close(*db);
                 g_error("Failed to create \"user_contact_list\": %s\n", errmsg);
         }
@@ -132,9 +137,7 @@ void mx_db_init(void) {
 
     }
     create_users_credential(db);
-    create_chats(db);
-    create_messages(db);
     create_user_contact_list(db);
     create_user_profile(db);
-    create_user_in_chats(db);
+    create_messages(db);
 }

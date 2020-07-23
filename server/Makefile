@@ -15,6 +15,10 @@ CURL = $(OPENSSL) -lldap -I ../curl/include/ ../curl/lib/.libs/libcurl.a
 all:
 		@$(CC) $(CFLAGS) $(DFLAGS) $(GLIB) $(cJSON) $(CURL) -lsqlite3 $(SRCS) -o  $(APP)
 
+$(APP): $(SRCS)
+	$(CC) $(DFLAGS) $(INC) $^ -o $@
+	@printf "\033[32;1m$@ created\033[0m\n"
+	
 curl_install:
 	mv ../Makefile ../curl
 	make -C ../curl

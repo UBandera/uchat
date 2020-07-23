@@ -3,6 +3,7 @@ NAME = uchat_client
 CC = clang
 CFLAGS = -g -std=c11 $(addprefix -W, all extra pedantic) #Add error
 DFLAGS = -fsanitize=address -fsanitize=undefined
+UNUSED = -Wno-unused-parameter -Wno-unused-variable
 GLIB = `pkg-config --cflags --libs glib-2.0 gio-2.0 --libs gtk+-3.0`
 
 SRCD = src
@@ -25,7 +26,7 @@ OBJS = $(addprefix $(OBJD)/, $(notdir $(SRCS:%.c=%.o)))
 INCS = -I $(JSON_INC) -I $(INCD)
 
 all:
-	@$(CC) $(CFLAGS) $(DFLAGS) $(GLIB) $(SRCS) $(INCS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(DFLAGS) $(GLIB) $(UNUSED) $(SRCS) $(INCS) -o $(NAME)
 
 # all: $(NAME)
 
