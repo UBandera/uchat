@@ -7,13 +7,11 @@ static void create_users_credential(sqlite3 **db) {
     if ((rc = sqlite3_exec(*db, "SELECT * FROM users_credential LIMIT 1;",
                     NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE users_credential (\
-                               user_id INTEGER,\
-                               login TEXT NOT NULL,\
-                               passwd TEXT NOT NULL,\
-                               temp_passwd TEXT,\
-                               auth_token TEXT,\
-                               PRIMARY KEY(user_id));", NULL, NULL, &errmsg))
-                               != SQLITE_OK) {
+                               user_id INTEGER primary key,\
+                               phone TEXT NOT NULL,\
+                               auth_token TEXT);",
+                               // PRIMARY KEY(user_id, phone));",
+                               NULL, NULL, &errmsg)) != SQLITE_OK) {
                 sqlite3_close(*db);
                 g_error("Failed to create \"users_credential\": %s\n", errmsg);
         }
@@ -25,15 +23,16 @@ static void create_user_profile(sqlite3 **db) {
     int rc = 0;
 
     if ((rc = sqlite3_exec(*db, "SELECT * FROM user_profile LIMIT 1;",
-                    NULL, NULL, &errmsg)) != SQLITE_OK) {
+                           NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE user_profile (\
                                user_id INTEGER,\
-                               name TEXT,\
+                               name TEXT NOT NULL,\
+                               last_name TEXT NOT NULL, \
+                               email TEXT, \
                                photo BLOB,\
                                FOREIGN KEY(user_id)\
                                REFERENCES users_credential(user_id));",
-                               NULL, NULL, &errmsg))
-                               != SQLITE_OK) {
+                               NULL, NULL, &errmsg)) != SQLITE_OK) {
                 sqlite3_close(*db);
                 g_error("Failed to create \"user_profile\": %s\n", errmsg);
         }
@@ -43,7 +42,6 @@ static void create_user_profile(sqlite3 **db) {
 // static void create_chats(sqlite3 **db) {
     // gchar *errmsg = NULL;
     // int rc = 0;
-
     // if ((rc = sqlite3_exec(*db, "SELECT * FROM chats LIMIT 1;",
                     // NULL, NULL, &errmsg)) != SQLITE_OK) {
         // if ((rc = sqlite3_exec(*db, "CREATE TABLE chats (\
@@ -76,12 +74,13 @@ static void create_user_profile(sqlite3 **db) {
     // }
 // }
 
+
 static void create_messages(sqlite3 **db) {
     gchar *errmsg = NULL;
     int rc = 0;
 
     if ((rc = sqlite3_exec(*db, "SELECT * FROM messages LIMIT 1;",
-                    NULL, NULL, &errmsg)) != SQLITE_OK) {
+                           NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE messages (\
                                msg_id INTEGER,\
                                sender_id INTEGER,\
@@ -102,12 +101,13 @@ static void create_messages(sqlite3 **db) {
     }
 }
 
+
 static void create_user_contact_list(sqlite3 **db) {
     gchar *errmsg = NULL;
     int rc = 0;
 
     if ((rc = sqlite3_exec(*db, "SELECT * FROM user_contact_list LIMIT 1;",
-                    NULL, NULL, &errmsg)) != SQLITE_OK) {
+                           NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE user_contact_list (\
                                user_id INTEGER,\
                                contact INTEGER,\
@@ -131,9 +131,10 @@ void mx_db_init(void) {
             sqlite3_close(*db);
     }
     if ((rc = sqlite3_exec(*db, "PRAGMA foreign_keys = ON;",
-                    NULL, NULL, &errmsg)) != SQLITE_OK) {
+                           NULL, NULL, &errmsg)) != SQLITE_OK) {
         g_error("Failed to enable foreign_keys, %s", errmsg);
         sqlite3_close(*db);
+
     }
     create_users_credential(db);
     create_user_contact_list(db);

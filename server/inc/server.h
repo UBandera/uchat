@@ -7,7 +7,12 @@
 #include "mx_json.h"
 #include <sqlite3.h>
 #include <stdbool.h>
-    
+#include <stdlib.h>
+#include "curl/curl.h"
+#include <time.h>
+#include <ldap.h>
+
+
 typedef struct s_client {
     GSocketConnection *connection;
     GInputStream *istream;
@@ -15,6 +20,8 @@ typedef struct s_client {
     GDataInputStream *data_in;
     GDataOutputStream *data_out;
     gint32 uid;
+    gchar *password;
+    void (*request_handler[15])();
 }              t_client;
 
 /*
@@ -28,7 +35,7 @@ typedef struct s_new_client {
 
 
 GHashTable **mx_get_online_users(void);
-sqlite3 **mx_get_db(void); 
+sqlite3 **mx_get_db(void);
 
 GDataOutputStream *mx_get_socket_by_user_id(gint64 user_id);
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
@@ -37,8 +44,8 @@ gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 void mx_db_init(void);
 
 //Sign_up_rq
-gint mx_sign_up_query(cJSON *root, sqlite3 *db);
-gboolean mx_check_if_user_excist(cJSON *root, sqlite3 *db);
+// gint mx_sign_up_quary(cJSON *root, sqlite3 *db);
+gboolean mx_check_user_excist(const gchar *phone, sqlite3 *db);
 void mx_sign_up(cJSON *root, t_client *client);
 
 //Sign_up_rq
@@ -48,6 +55,27 @@ void mx_sign_in(cJSON *root, t_client *client);
 
 // Messages requests
 gint64 mx_get_chat_id(gint32 uid1, gint32 uid2);
+void mx_recovery_password(cJSON *root, t_client *client);
+int mx_send_mail(char *receiver, char *body);
+char *mx_generate_password(void);
+
+gint mx_send_sms(gchar *body);
+
+gchar *mx_create_sms_body(gchar *to_number, gchar *password);
+char *mx_recovery_body(gchar *user_name, gchar *password);
+gchar *mx_notify_body(gchar *user_name);
+
+void mx_password_request_handler(cJSON *root, t_client *client);
+void mx_auth_request_handler(cJSON *root, t_client *client);
+void mx_sign_up_request_handler(cJSON *root, t_client *client);
+
+gchar *mx_add_user_to_bd(cJSON *root, t_client *client, sqlite3 *db);
+gint mx_get_user_id_by_phone(gchar *phone, sqlite3 *db);
+gchar *mx_auth_send_response(t_client *client, gchar *token, gchar *phone);
+
+gchar *mx_create_token(gchar *login, gchar *pass);
+gchar *mx_send_error_response(gint type, gchar *message);
+
 void mx_send_message(cJSON *root, t_client *client);
 void mx_get_chat_history(cJSON *root, t_client *client);
 #endif /* end of include guard: SERVER_H */
