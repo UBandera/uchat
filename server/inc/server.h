@@ -11,7 +11,7 @@
 #include "curl/curl.h"
 #include <time.h>
 #include <ldap.h>
-
+#include "glib/gprintf.h"
 
 typedef struct s_client {
     GSocketConnection *connection;
@@ -19,7 +19,9 @@ typedef struct s_client {
     GOutputStream *ostream;
     GDataInputStream *data_in;
     GDataOutputStream *data_out;
+
     gint32 uid;
+    gchar *token;
     gchar *password;
     void (*request_handler[15])();
 }              t_client;
@@ -67,9 +69,9 @@ void mx_password_request_handler(cJSON *root, t_client *client);
 void mx_auth_request_handler(cJSON *root, t_client *client);
 void mx_sign_up_request_handler(cJSON *root, t_client *client);
 
-gchar *mx_add_user_to_bd(cJSON *root, t_client *client, sqlite3 *db);
+void mx_add_user_to_bd(cJSON *root, t_client *client, sqlite3 *db);
 gint mx_get_user_id_by_phone(gchar *phone, sqlite3 *db);
-gchar *mx_auth_send_response(t_client *client, gchar *token, gchar *phone);
+gchar *mx_auth_send_response(t_client *client, gchar *phone);
 
 gchar *mx_create_token(gchar *login, gchar *pass);
 gchar *mx_send_error_response(gint type, gchar *message);

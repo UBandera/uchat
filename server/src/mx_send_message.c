@@ -1,6 +1,6 @@
 #include "server.h"
 
-gint mx_put_message_in_db_run(sqlite3_stmt *stmt, t_client *client) {
+gint mx_put_message_in_db_run(sqlite3_stmt *stmt) {
     gint rc = 0;
     sqlite3 *db = *(mx_get_db());
 
@@ -82,11 +82,10 @@ void mx_send_message(cJSON *root, t_client *client) {
     if ((rc = mx_put_message_in_db_prepare(root, &stmt, client->uid)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_prepare failed: %d\n", rc);
         // TODO: send error?;
-    if ((rc = mx_put_message_in_db_run(stmt, client)) != SQLITE_OK)
+    if ((rc = mx_put_message_in_db_run(stmt)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_run failed: %d\n", rc);
         // TODO: send error?;
     else
         mx_send_data(client->data_out, "message sent\n");
     return;
 }
-
