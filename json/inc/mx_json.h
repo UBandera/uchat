@@ -12,6 +12,7 @@ enum e_request_types {
     RQ_SEND_MESSAGE,
     RQ_CHAT_DATA,
     //
+    RQ_RECOVERY_PASSWD,
     RQ_SIGN_IN,
     RQ_SIGN_UP,
     RQ_SIGN_OUT,
