@@ -1,25 +1,32 @@
 #include "server.h"
 
 gint mx_get_chat_history_prepare(cJSON *root,
-                                    sqlite3_stmt **stmt,
-                                    gint sender_id) {
+                                 sqlite3_stmt **stmt,
+                                 gint sender_id) {
     if (sender_id == 0) {
         g_message("Please login\n");
         return -1;
     }
     sqlite3 *db = *(mx_get_db());
     gchar *query = "SELECT message, sender_id, receiver_id, date FROM messages\
-                    WHERE chat_id = ?;";
+                    WHERE chat_id = ? LIMIT ?, ?;";
     gint receiver_id = cJSON_GetObjectItem(root, "receiver_id")->valueint;
+    gint from = cJSON_GetObjectItem(root, "from")->valueint;
+    gint to = cJSON_GetObjectItem(root, "to")->valueint;
     gint64 chat_id = mx_get_chat_id(sender_id, receiver_id);
     gint rc = 0;
 
     if ((rc = sqlite3_prepare_v2(db, query, -1, stmt, NULL)) != SQLITE_OK)
-        g_warning("mx_get_chat_history_prepare prepare: %d, %s\n", rc,
-                  sqlite3_errmsg(db));
+        g_warning("mx_get_chat_history_prepare prepare: %d\n", rc);
     if ((rc = sqlite3_bind_int64(*stmt, 1, chat_id)) != SQLITE_OK)
         g_warning("mx_get_chat_history_prepare  bind: chat_id:%d %d\n",
                   receiver_id, rc);
+    if ((rc = sqlite3_bind_int(*stmt, 2, from)) != SQLITE_OK)
+        g_warning("mx_get_chat_history_prepare  bind: from:%d %d\n",
+                  from, rc);
+    if ((rc = sqlite3_bind_int(*stmt, 3, to)) != SQLITE_OK)
+        g_warning("mx_get_chat_history_prepare  bind: to:%d %d\n",
+                  to, rc);
     return rc;
 }
 
@@ -42,7 +49,10 @@ gchar *mx_form_chat_history_response(sqlite3_stmt *stmt) {
         cJSON_AddItemToArray(message_arr, message);
         rc = sqlite3_step(stmt);
     }
-    response = cJSON_PrintUnformatted(message_arr);
+    cJSON_AddNumberToObject(chat_history, "response_type",
+                            RS_GET_CHAT_HISTORY);
+    cJSON_AddItemToObject(chat_history, "messages", message_arr);
+    response = cJSON_PrintUnformatted(chat_history);
     return response;
 }
 

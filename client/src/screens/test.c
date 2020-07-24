@@ -59,7 +59,8 @@ void send_message_req(GtkButton *button, t_form *data) {
     t_client *client = data->client;
     // change this request
     gchar *request = mx_form_chat_data_request(g_ascii_strtoll(chat_id,
-                                                               NULL, 10));
+                                                               NULL, 10),
+                                               0, 20);
     // gchar *request = mx_form_send_message_request(g_ascii_strtoll(user_id,
                                                                   // NULL, 10),
                                                   // message);

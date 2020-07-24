@@ -32,7 +32,9 @@ void mx_main_window(t_client *client);
 // requests
 gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);
 gchar *mx_form_contact_list_request(void);
-gchar *mx_form_chat_data_request(gint user_id);
+gchar *mx_form_chat_data_request(gint receiver_id,
+                                 gint from,
+                                 gint to);
 gchar *mx_form_profile_data_request(void);
 gchar *mx_form_send_message_request(gint receiver_id,
                                     gchar *message);

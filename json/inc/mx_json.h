@@ -19,11 +19,12 @@ enum e_request_types {
 enum e_response_types {
     RS_SIGN_IN,
     RS_SIGN_UP,
+    RS_SEND_MESSAGE,
+    RS_GET_CHAT_HISTORY,
+    RS_CHAT_DATA,
     RS_SIGN_OUT,
     RS_CONTACT_LIST,
-    RS_CHAT_DATA,
     RS_PROFILE_DATA,
-    RS_SEND_MESSAGE,
 };
 
 enum e_response_errors {
