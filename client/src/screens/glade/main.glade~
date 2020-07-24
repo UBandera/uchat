@@ -111,7 +111,6 @@
                         <property name="name">contacts_box</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
                       </object>
                     </child>
                   </object>

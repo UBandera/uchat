@@ -28,6 +28,7 @@ typedef struct s_client {
     GtkWindow *password_validation;
     GtkWindow *profile_setuping;
     GtkWindow *main_window;
+    GtkWindow *add_contact_dialog;
 
     void (*response_handler[30])(cJSON *json,
                                                   struct s_client *client);
@@ -43,7 +44,13 @@ GtkWindow *mx_phone_entering_window(t_client *client);
 GtkWindow *mx_password_validate_window(t_client *client);
 GtkWindow *mx_profile_setuping_window(t_client *client);
 GtkWindow *mx_main_window(t_client *client);
+GtkWindow *mx_add_contact_dialog(t_client *client);
 
+
+
+void mx_show_contact_in_ui(t_client *client, gchar *label, gint user_id);
+gboolean mx_close_window_by_esc(GtkWidget *widget, GdkEventKey *event,
+                                gpointer data);
 
 void mx_routing(int argc, char **argv, t_client *client);
 
@@ -55,6 +62,8 @@ gchar *mx_password_request(const gchar *phone);
 gchar *mx_auth_request(const gchar *phone, const gchar *password);
 gchar *mx_sign_up_request(const gchar *phone, const gchar *first_name,
                           const gchar *last_name, const gchar *email);
+gchar *mx_find_contact_request(gchar *phone, gchar *token);
+gchar *mx_add_contact_to_friend_request(gint user_id, gchar *token);
 
 
 gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);
@@ -75,6 +84,8 @@ void mx_sign_up_user(cJSON *json, t_client *client);
 void mx_auth_validated(cJSON *json, t_client *client);
 void mx_invalid_password_handler(cJSON *json, t_client *client);
 void mx_sms_error_handler(cJSON *json, t_client *client);
+void mx_get_contact(cJSON *json, t_client *client);
+void mx_contact_list(cJSON *json, t_client *client);
 
 
 void mx_sign_out_response(cJSON *json, t_client *client);
