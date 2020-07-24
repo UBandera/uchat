@@ -7,9 +7,10 @@ static void create_users_credential(sqlite3 **db) {
     if ((rc = sqlite3_exec(*db, "SELECT * FROM users_credential LIMIT 1;",
                     NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE users_credential (\
-                               user_id INTEGER primary key,\
+                               user_id INTEGER key,\
                                phone TEXT NOT NULL primary key,\
-                               auth_token TEXT);",
+                               auth_token TEXT,\
+                               PRIMARY KEY(user_id));",
                                NULL, NULL, &errmsg)) != SQLITE_OK) {
                 sqlite3_close(*db);
                 g_error("Failed to create \"users_credential\": %s\n", errmsg);
@@ -26,7 +27,7 @@ static void create_user_profile(sqlite3 **db) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE user_profile (\
                                user_id INTEGER,\
                                name TEXT NOT NULL,\
-                               last_name TEXT NOT NULL, \
+                               last_name TEXT NOT NULL,\
                                email TEXT, \
                                photo BLOB,\
                                FOREIGN KEY(user_id)\

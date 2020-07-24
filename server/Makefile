@@ -10,6 +10,7 @@ SRCS = -I inc src/*.c src/mailing/*.c src/requests/*.c
 
 OPENSSL = -I /usr/local/opt/openssl/include /usr/local/opt/openssl/lib/libcrypto.a /usr/local/opt/openssl/lib/libssl.a
 CURL = $(OPENSSL) -lldap -I ../curl/include/ ../curl/lib/.libs/libcurl.a
+CURL1 = $(OPENSSL) -lldap -I ../curl1/curl/include/ ../curl1/curl/lib/.libs/libcurl.a
 
 
 all:
@@ -19,6 +20,12 @@ $(APP): $(SRCS)
 	$(CC) $(DFLAGS) $(INC) $^ -o $@
 	@printf "\033[32;1m$@ created\033[0m\n"
 	
+archive:
+		@$(CC) $(CFLAGS) $(DFLAGS) $(GLIB) $(cJSON) $(CURL1) -lsqlite3 $(SRCS) -o  $(APP)
+
+curl_archive_install:
+	make -C ../curl1/curl
+
 curl_install:
 	mv ../Makefile ../curl
 	make -C ../curl
