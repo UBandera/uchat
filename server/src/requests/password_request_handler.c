@@ -31,22 +31,17 @@ static void send_response(gint status, t_client *client) {
 
 void mx_password_request_handler(cJSON *root, t_client *client) {
     if (cJSON_GetObjectItem(root, "phone")) {
-        // sqlite3 *db = *(mx_get_db());
-        gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
+        // gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
         gint status = 0;
         gchar *body = NULL;
         gchar *password = mx_generate_password();
 
         client->password = g_compute_checksum_for_string(
                          G_CHECKSUM_SHA256, password, strlen(password));
-        // if (!mx_check_user_excist(phone, db)) {
-            // body = mx_recovery_body("ARTEM", password);
-            // status = mx_send_mail(phone, body);
-        // }
-        // else {
-            body = mx_create_sms_body(phone, password);
-            status = mx_send_sms(body);
-        // }
+        body = mx_recovery_body("ARTEM", password);
+        status = mx_send_mail("shemedvedd@gmail.com", body);
+        // body = mx_create_sms_body(phone, password);
+        // status = mx_send_sms(body);
         send_response(status, client);
         g_free(body);
         g_free(password);

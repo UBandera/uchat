@@ -1,10 +1,8 @@
 #include "client.h"
 
-gchar *mx_set_up_profile_request(const gchar *phone,
-                                 const gchar *first_name,
-                                 const gchar *last_name,
-                                 const gchar *email) {
-    gint type = RQ_SET_UP_PROFILE;
+gchar *mx_sign_up_request(const gchar *phone, const gchar *first_name,
+                          const gchar *last_name, const gchar *email) {
+    gint type = RQ_SIGN_UP;
     cJSON *json = cJSON_CreateObject();
     gchar *request = NULL;
 

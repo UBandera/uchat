@@ -1,4 +1,4 @@
-#include "server.h"
+#include "mx_json.h"
 
 gchar *mx_create_token(gchar *login, gchar *pass) {
     gchar *token = NULL;

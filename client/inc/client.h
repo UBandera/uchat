@@ -34,26 +34,27 @@ typedef struct s_client {
 }              t_client;
 
 
+t_client **mx_get_client(void);
+
 // screens
 void mx_apply_styles(const gchar *path_to_css);
 void mx_window_switcher(GtkWindow *hide, GtkWindow *show);
 GtkWindow *mx_phone_entering_window(t_client *client);
 GtkWindow *mx_password_validate_window(t_client *client);
 GtkWindow *mx_profile_setuping_window(t_client *client);
+GtkWindow *mx_main_window(t_client *client);
+
 
 void mx_routing(int argc, char **argv, t_client *client);
 
-void mx_main_window(t_client *client);
 void mx_edit_login(GtkEntry *entry, GtkEntryIconPosition icon_pos,
                    GdkEvent *event, t_client *client);
 
 // requests
 gchar *mx_password_request(const gchar *phone);
 gchar *mx_auth_request(const gchar *phone, const gchar *password);
-gchar *mx_set_up_profile_request(const gchar *phone,
-                                 const gchar *first_name,
-                                 const gchar *last_name,
-                                 const gchar *email);
+gchar *mx_sign_up_request(const gchar *phone, const gchar *first_name,
+                          const gchar *last_name, const gchar *email);
 
 
 gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);

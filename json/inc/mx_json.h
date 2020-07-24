@@ -8,13 +8,12 @@
 enum e_request_types {
     RQ_GENERATE_PASS = 0,
     RQ_AUTH = 1,
-    RQ_SET_UP_PROFILE = 2,
+    RQ_SIGN_UP = 2,
     RQ_SEND_MESSAGE,
     RQ_CHAT_DATA,
     //
     RQ_RECOVERY_PASSWD,
     RQ_SIGN_IN,
-    RQ_SIGN_UP,
     RQ_SIGN_OUT,
     RQ_CONTACT_LIST,
     RQ_PROFILE_DATA,
@@ -51,6 +50,6 @@ enum e_response_errors {
     // ER_SEND_MESSAGE = -7,
 };
 
-
+gchar *mx_create_token(gchar *login, gchar *pass);
 
 #endif /* end of include guard: JSON_H */

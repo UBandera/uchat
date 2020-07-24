@@ -3,7 +3,7 @@
 #define MX_PROFILE_SETUP_WINDOW "./src/screens/glade/profile_setup.glade"
 #define MX_STYLES "./src/screens/auth/auth.css"
 #define MX_PATTERN "[^-^A-Za-z]"
-#define MX_EMAILPATTERN "[^.^0-9^a-z]"
+#define MX_EMAILPATTERN "[^.^@^0-9^a-z]"
 
 static gboolean validate(GtkBuilder *builder, GtkEntry *first_name,
                          GtkEntry *last_name, GtkEntry *email) {
@@ -38,7 +38,7 @@ static void add_info(GtkButton *button, t_client *client) {
     GtkEntry *email = GTK_ENTRY(gtk_builder_get_object(client->builder, "email"));
 
     if (validate(client->builder, first_name, last_name, email)) {
-        gchar *request = mx_set_up_profile_request(
+        gchar *request = mx_sign_up_request(
                         gtk_entry_get_text(phone),
                         gtk_entry_get_text(first_name),
                         gtk_entry_get_text(last_name),

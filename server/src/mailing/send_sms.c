@@ -4,7 +4,7 @@
 #define MX_MESSAGE_SIZE 42
 
 #define MX_ACCOUNT_SID "AC6cf27775aa0531c6c4f1460b571e1475"
-#define MX_AUTH_TOKEN "cce2fc7a79248a411925b50a286e9cec"
+#define MX_AUTH_TOKEN "4eaee03389421b670096e30da0e717ba"
 
 static void form_message(CURL *curl, char *body) {
   gchar url[MX_TEMPLATE_SIZE];
