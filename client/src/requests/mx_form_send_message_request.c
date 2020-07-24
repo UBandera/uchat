@@ -7,7 +7,7 @@ gchar *mx_form_send_message_request(gint receiver_id,
 
     cJSON_AddItemToObject(json,
                           "request_type",
-                          cJSON_CreateNumber(2)); // temp change 
+                          cJSON_CreateNumber(RQ_SEND_MESSAGE)); // temp change 
     cJSON_AddItemToObject(json, "receiver_id", cJSON_CreateNumber(receiver_id));
     cJSON_AddItemToObject(json, "message", cJSON_CreateString(message));
     request = cJSON_PrintUnformatted(json);

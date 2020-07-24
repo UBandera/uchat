@@ -52,12 +52,11 @@ t_client *init_client(GSocketConnection *connection) {
     return client;
 }
 
-
 int main(int argc, char **argv) {
     GSocketClient *socket = NULL;
     GSocketConnection *connection = NULL;
     GError *error = NULL;
-    t_client *client = NULL;
+    t_client **client = mx_get_client();
 
     socket = g_socket_client_new();
     g_socket_client_set_protocol(socket, G_SOCKET_PROTOCOL_TCP);
@@ -68,10 +67,10 @@ int main(int argc, char **argv) {
         g_error("%s\n", error->message);
         g_clear_error(&error);
     }
-    client = init_client(connection);
-    mx_application_run(argc, argv, client->app);
+    *client = init_client(connection);
+    mx_application_run(argc, argv, (*client)->app);
 
     g_object_unref(connection);
-    g_free(client);
+    g_free(*client);
     return 0;
 }

@@ -8,9 +8,8 @@ static void create_users_credential(sqlite3 **db) {
                     NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE users_credential (\
                                user_id INTEGER primary key,\
-                               phone TEXT NOT NULL,\
+                               phone TEXT NOT NULL primary key,\
                                auth_token TEXT);",
-                               // PRIMARY KEY(user_id, phone));",
                                NULL, NULL, &errmsg)) != SQLITE_OK) {
                 sqlite3_close(*db);
                 g_error("Failed to create \"users_credential\": %s\n", errmsg);

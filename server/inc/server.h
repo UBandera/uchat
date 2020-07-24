@@ -11,7 +11,7 @@
 #include "curl/curl.h"
 #include <time.h>
 #include <ldap.h>
-
+#include "glib/gprintf.h"
 
 typedef struct s_client {
     GSocketConnection *connection;
@@ -19,7 +19,9 @@ typedef struct s_client {
     GOutputStream *ostream;
     GDataInputStream *data_in;
     GDataOutputStream *data_out;
+
     gint32 uid;
+    gchar *token;
     gchar *password;
     void (*request_handler[15])();
 }              t_client;
@@ -53,6 +55,8 @@ gint get_user_id_run(sqlite3_stmt *stmt, t_client *client);
 gint get_user_id_prepare(cJSON *root, sqlite3_stmt **stmt);
 void mx_sign_in(cJSON *root, t_client *client);
 
+// Messages requests
+gint64 mx_get_chat_id(gint32 uid1, gint32 uid2);
 void mx_recovery_password(cJSON *root, t_client *client);
 int mx_send_mail(char *receiver, char *body);
 char *mx_generate_password(void);
@@ -67,12 +71,13 @@ void mx_password_request_handler(cJSON *root, t_client *client);
 void mx_auth_request_handler(cJSON *root, t_client *client);
 void mx_sign_up_request_handler(cJSON *root, t_client *client);
 
-gchar *mx_add_user_to_bd(cJSON *root, t_client *client, sqlite3 *db);
+void mx_add_user_to_bd(cJSON *root, t_client *client, sqlite3 *db);
 gint mx_get_user_id_by_phone(gchar *phone, sqlite3 *db);
-gchar *mx_auth_send_response(t_client *client, gchar *token, gchar *phone);
+gchar *mx_auth_send_response(t_client *client, gchar *phone);
 
 gchar *mx_create_token(gchar *login, gchar *pass);
 gchar *mx_send_error_response(gint type, gchar *message);
 
 void mx_send_message(cJSON *root, t_client *client);
+void mx_get_chat_history(cJSON *root, t_client *client);
 #endif /* end of include guard: SERVER_H */

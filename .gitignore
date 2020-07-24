@@ -1,3 +1,6 @@
+# Vim files
+*.sw?
+
 # IDE utils
 *.tags*
 

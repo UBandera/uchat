@@ -17,7 +17,8 @@ void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_password_request_handler,
     mx_auth_request_handler,
     mx_sign_up_request_handler,
-    mx_send_message
+    mx_send_message,
+    mx_get_chat_history
 };
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
@@ -33,7 +34,7 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
         cJSON *req_type = cJSON_GetObjectItem(root, "request_type");
 
         if (root != NULL && req_type != NULL) {
-            new_client->request_handler[req_type->valueint](root, new_client);
+            request_handler[req_type->valueint](root, new_client);
             g_free(data);
             cJSON_Delete(root);
         }
@@ -70,8 +71,7 @@ gboolean incoming_callback(GSocketService *service,
     socket->data_in = g_object_ref(data_in);
     socket->data_out = g_object_ref(data_out);
     socket->connection = g_object_ref(connection);
-    mx_init_handlers(socket);
-    socket->uid = gui++;
+    socket->uid = 0;
 
     g_data_input_stream_read_line_async(socket->data_in, G_PRIORITY_DEFAULT, NULL, get_data, socket);
     (void)service;

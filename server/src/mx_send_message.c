@@ -1,6 +1,6 @@
 #include "server.h"
 
-gint mx_put_message_in_db_run(sqlite3_stmt *stmt, t_client *client) {
+gint mx_put_message_in_db_run(sqlite3_stmt *stmt) {
     gint rc = 0;
     sqlite3 *db = *(mx_get_db());
 
@@ -39,7 +39,6 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_
     gint receiver_id = cJSON_GetObjectItem(root, "receiver_id")->valueint;
     gint64 chat_id = mx_get_chat_id(sender_id, receiver_id);
     gint date = g_get_real_time() / 1000000;
-    g_print("%s %d %d\n", message, receiver_id, date);
     gint rc = 0;
 
     if ((rc = sqlite3_prepare_v2(db, query, -1, stmt, NULL)) != SQLITE_OK)
@@ -64,9 +63,12 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_
 }
 
 static gboolean is_valid(cJSON *root) {
-    if (!cJSON_GetObjectItem(root, "receiver_id"))
+    cJSON *receiver_id = cJSON_GetObjectItemCaseSensitive(root, "receiver_id");
+    cJSON *message = cJSON_GetObjectItemCaseSensitive(root, "message");
+
+    if (message->valuestring == NULL)
         return FALSE;
-    if (!cJSON_GetObjectItem(root, "message"))
+    if (!cJSON_IsNumber(receiver_id))
         return FALSE;
     return TRUE;
 }
@@ -82,11 +84,10 @@ void mx_send_message(cJSON *root, t_client *client) {
     if ((rc = mx_put_message_in_db_prepare(root, &stmt, client->uid)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_prepare failed: %d\n", rc);
         // TODO: send error?;
-    if ((rc = mx_put_message_in_db_run(stmt, client)) != SQLITE_OK)
+    if ((rc = mx_put_message_in_db_run(stmt)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_run failed: %d\n", rc);
         // TODO: send error?;
     else
         mx_send_data(client->data_out, "message sent\n");
     return;
 }
-
