@@ -11,7 +11,11 @@
 void mx_auth_validated(cJSON *json, t_client *client) {
     gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
     GtkWindow *current = gtk_application_get_active_window(client->app);
+    gchar *request = NULL;
 
     g_print("message = %s\n", message);
     mx_window_switcher(current, client->main_window);
+    request = mx_contact_list_request(client->token);
+    mx_send_data(client->data_out, request);
+    g_free(request);
 }
