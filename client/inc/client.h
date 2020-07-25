@@ -30,6 +30,12 @@ typedef struct s_client {
     GtkWindow *main_window;
     GtkWindow *add_contact_dialog;
 
+    GtkListBox *contacts;
+    GtkListBox *chat;
+    GtkWidget *chat_box;
+    GtkWidget *contact_view;
+    GtkWidget *contact_info;
+
     void (*response_handler[30])(cJSON *json,
                                                   struct s_client *client);
 }              t_client;
@@ -48,7 +54,7 @@ GtkWindow *mx_add_contact_dialog(t_client *client);
 
 
 
-void mx_show_contact_in_ui(t_client *client, gchar *label, gint user_id);
+void mx_show_contact_in_ui(t_client *client, gchar *label, gint user_id, GtkListBox *box);
 gboolean mx_close_window_by_esc(GtkWidget *widget, GdkEventKey *event,
                                 gpointer data);
 
@@ -86,7 +92,7 @@ void mx_invalid_password_handler(cJSON *json, t_client *client);
 void mx_sms_error_handler(cJSON *json, t_client *client);
 void mx_get_contact(cJSON *json, t_client *client);
 void mx_contact_list(cJSON *json, t_client *client);
-
+void mx_contact_not_found(cJSON *json, t_client *client);
 
 void mx_sign_out_response(cJSON *json, t_client *client);
 void mx_chat_data_response(cJSON *json, t_client *client);

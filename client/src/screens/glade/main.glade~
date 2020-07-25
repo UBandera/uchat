@@ -62,8 +62,9 @@
                     <property name="can_focus">True</property>
                     <property name="events">GDK_KEY_PRESS_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="buffer">search_buffer</property>
-                    <property name="max_length">13</property>
-                    <property name="xalign">0.029999999329447746</property>
+                    <property name="max_length">36</property>
+                    <property name="xalign">0.05000000074505806</property>
+                    <property name="progress_pulse_step">0</property>
                     <property name="primary_icon_name">edit-find-symbolic</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">False</property>
@@ -111,6 +112,7 @@
                         <property name="name">contacts_box</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
                       </object>
                     </child>
                   </object>
@@ -130,7 +132,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="chat_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -264,6 +266,7 @@
     </child>
   </object>
   <object class="GtkApplicationWindow" id="contact_dialog">
+    <property name="name">contact_dialog</property>
     <property name="height_request">100</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Add contact</property>
@@ -271,11 +274,12 @@
     <property name="modal">True</property>
     <property name="window_position">center-always</property>
     <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
     <property name="transient_for">window</property>
     <property name="attached_to">add_contact_dialog</property>
     <property name="show_menubar">False</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="add_dialog_box">
         <property name="name">add_dialog_box</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -289,7 +293,8 @@
             <property name="can_focus">True</property>
             <property name="buffer">search_buffer</property>
             <property name="max_length">13</property>
-            <property name="xalign">0.05000000074505806</property>
+            <property name="xalign">0.4699999988079071</property>
+            <property name="progress_pulse_step">0</property>
             <property name="placeholder_text" translatable="yes">Search</property>
           </object>
           <packing>

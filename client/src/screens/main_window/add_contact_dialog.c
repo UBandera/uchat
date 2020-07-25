@@ -1,21 +1,26 @@
 #include "client.h"
+
+#define MX_STYLES "./src/screens/main_window/dialog.css"
 #define MX_MAIN_WINDOW "./src/screens/glade/main.glade"
 #define MX_ALLOW_PATTERN "/^[+]{1}[0-9]{12}$"
 
+static gboolean clear_inputs(GtkWidget *widget, GdkEventKey *event,
+                             GtkEntry *search) {
+    if (event->keyval == GDK_KEY_Escape) {
+        t_client *client = *mx_get_client();
+        GtkBuilder *builder = client->builder;
+        GtkEntryBuffer* buf = gtk_entry_get_buffer(search);
+        GtkWidget *info = NULL;
 
-
-static void add_contact(GtkButton *button, t_client *client) {
-    GtkBuilder *builder = client->builder;
-    GtkEntry *search = NULL;
-    gchar *request = NULL;
-    gchar *contact = NULL;
-
-    search = GTK_ENTRY(gtk_builder_get_object(builder, "dialog_search"));
-    contact = (gchar *)gtk_entry_get_text(search);
-    // request = mx_add_contact_request(contact, contact_id);
-    // mx_send_data(client->data_out, request);
-    gtk_widget_hide(GTK_WIDGET(client->add_contact_dialog));
-    (void)button;
+        info = GTK_WIDGET(gtk_builder_get_object(builder, "info_label"));
+        gtk_entry_buffer_set_text(buf, "\0", -1 );
+        if (client->contact_view)
+            gtk_widget_hide(client->contact_view);
+        gtk_widget_hide(info);
+        gtk_widget_hide(widget);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 static void find_user(GtkEntry *entry, t_client *client) {
@@ -37,32 +42,27 @@ static void find_user(GtkEntry *entry, t_client *client) {
     }
     request = mx_find_contact_request((gchar *)input, "client->token");
     mx_send_data(client->data_out, request);
-}
-
-static void controling(GtkBuilder *builder, t_client *client) {
-    GtkButton *add_btn = NULL;
-    GtkEntry *search = NULL;
-
-    add_btn = GTK_BUTTON(gtk_builder_get_object(builder, "add_contact_btn"));
-    search = GTK_ENTRY(gtk_builder_get_object(builder, "dialog_search"));
-    g_signal_connect(search, "activate", G_CALLBACK(find_user), client);
-    g_signal_connect(add_btn, "clicked", G_CALLBACK(add_contact), client);
+    g_free(request);
 }
 
 GtkWindow *mx_add_contact_dialog(t_client *client) {
     GtkBuilder *builder = client->builder;
     GError *error = NULL;
     GtkWindow *window = NULL;
+    GtkEntry *search = NULL;
 
-    // mx_apply_styles(MX_STYLES);
+    mx_apply_styles(MX_STYLES);
     if (!gtk_builder_add_from_file(builder,
                                    MX_MAIN_WINDOW,
                                    &error))
         g_error("%s\n", error->message);
     window = GTK_WINDOW(gtk_builder_get_object(builder, "contact_dialog"));
+    search = GTK_ENTRY(gtk_builder_get_object(builder, "dialog_search"));
+    client->contact_view = NULL;
+    gtk_entry_set_text(search, "");
+    g_signal_connect(search, "activate", G_CALLBACK(find_user), client);
     gtk_window_set_decorated(window, FALSE);
-    controling(builder, client);
     g_signal_connect(window, "key_press_event",
-                     G_CALLBACK(mx_close_window_by_esc), window);
+                     G_CALLBACK(clear_inputs), search);
     return window;
 }

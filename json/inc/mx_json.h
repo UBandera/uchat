@@ -40,6 +40,7 @@ enum e_response_types {
 enum e_response_errors {
     ER_SENT_PASS = 25,
     ER_PASS = 26,
+    ER_CONTACT_NOT_FOUND = 27,
 //
     // ER_SIGN_IN = -1,
     // ER_SIGN_UP = -2,

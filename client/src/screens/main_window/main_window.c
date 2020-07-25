@@ -2,35 +2,63 @@
 
 #define MX_MAIN_WINDOW "./src/screens/glade/main.glade"
 
-static void add_contact_btn(GtkButton *button, t_client *client) {
+static void add_contact_btn(GtkButton *button, GtkListBox *box) {
+    t_client *client = *mx_get_client();
     GtkWindow *current = gtk_application_get_active_window(client->app);
 
-    gtk_window_set_accept_focus(current, FALSE);
     gtk_widget_show(GTK_WIDGET(client->add_contact_dialog));
-    (void)client;
+}
+
+static gboolean searching(gchar *label, gchar *search) {
+    for (int i = 0; label[i] && search[i]; i++) {
+        if (label[i] != search[i])
+            return FALSE;
+    }
+    return TRUE;
+}
+
+static void local_search(GtkEntry *entry, GtkListBox *box) {
+    gchar *search = (gchar *)gtk_entry_get_text(entry);
+    GtkListBoxRow *row = NULL;
+
+    for (int i = 0; ; i++) {
+        if (!(row = gtk_list_box_get_row_at_index(box, i))) {
+            break;
+        }
+        GtkButton *child = GTK_BUTTON(gtk_bin_get_child(GTK_BIN(row)));
+        gchar *label = (gchar *)gtk_button_get_label(child);
+        if (!searching(label, search))
+            gtk_widget_hide(GTK_WIDGET(row));
+        else
+            gtk_widget_show(GTK_WIDGET(row));
+    }
+}
+
+gboolean mx_close_chat(GtkWidget *widget, GdkEventKey *event, gpointer data) {
+    if (event->keyval == GDK_KEY_Escape) {
+        t_client *client = *mx_get_client();
+        // if (gtk_widget_get_visible(client->chat))
+            gtk_widget_set_visible(client->chat_box, FALSE);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 static void controling(GtkBuilder *builder, t_client *client) {
     // GtkWidget *chat = GTK_WIDGET(gtk_builder_get_object(builder, "chat"));
-    GtkButton *add_contact = GTK_BUTTON(gtk_builder_get_object(builder, "add_contact_dialog"));
-    GtkListBox *box = GTK_LIST_BOX(gtk_builder_get_object(client->builder, "contacts_box"));
+    GtkButton *add_contact = NULL;
+    GtkSearchEntry *search = NULL;
 
-    g_signal_connect(add_contact, "clicked", G_CALLBACK(add_contact_btn), client);
-
-    // mx_chat_contol(builder, client);
-    // GtkWidget *back = NULL;
-    // GtkWidget *phone_edit = NULL;
-
-    // next = GTK_BUTTON(gtk_builder_get_object(builder, "second_next_button"));
-    // back = GTK_BUTTON(gtk_builder_get_object(builder, "second_back_button"));
-    // phone_edit = GTK_ENTRY(gtk_builder_get_object(builder, "phone_edit"));
-    // g_signal_connect(phone_edit, "icon-press",
-    //                  G_CALLBACK(mx_edit_login), client);
-    // g_signal_connect(next, "clicked", G_CALLBACK(verify_user), client);
-    // g_signal_connect(back, "clicked", G_CALLBACK(go_back), client);
+    add_contact = GTK_BUTTON(gtk_builder_get_object(builder, "add_contact_dialog"));
+    search = GTK_SEARCH_ENTRY(gtk_builder_get_object(builder, "local_search"));
+    client->contacts = GTK_LIST_BOX(gtk_builder_get_object(builder,
+                                                           "contacts_box"));
+    client->chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
+    client->contact_info = GTK_WIDGET(gtk_builder_get_object(client->builder,
+                                                             "contact_info_btn"));
+    g_signal_connect(search, "activate", G_CALLBACK(local_search), client->contacts);
+    g_signal_connect(add_contact, "clicked", G_CALLBACK(add_contact_btn), client->contacts);
 }
-
-
 
 GtkWindow *mx_main_window(t_client *client) {
     GtkBuilder *builder = client->builder;
@@ -43,22 +71,8 @@ GtkWindow *mx_main_window(t_client *client) {
                                    &error))
         g_error("%s\n", error->message);
     window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
-
     controling(builder, client);
-
-
-    // sendButton = GTK_WIDGET(gtk_builder_get_object(builder,"sendButton"));
-    // ContactButton = GTK_WIDGET(gtk_builder_get_object(builder,"btn_add_room"));
-    // g_signal_connect(G_OBJECT(ContactButton),"clicked", G_CALLBACK(clear_list_entry) ,NULL);
-    // sendEntry = GTK_WIDGET(gtk_builder_get_object(builder,"sendEntry"));
-    // Contacts = GTK_WIDGET(gtk_builder_get_object(builder,"listbox_rooms"));
-    // g_signal_connect(G_OBJECT(sendEntry),"activate", G_CALLBACK(send_messege) ,NULL);
-    // g_signal_connect(G_OBJECT(sendButton),"clicked", G_CALLBACK(send_messege) ,NULL);
-    // TextView = GTK_WIDGET(gtk_builder_get_object(builder,"msg_entry"));
-    // messagesTreeView = GTK_WIDGET(gtk_builder_get_object(builder,"messagesTreeView"));
-    // messagesListStore = GTK_LIST_STORE(gtk_builder_get_object(builder,"messagesListStore"));
-    // scrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder,"scrolledWindow"));
-    // vAdjust = gtk_scrolled_window_get_vadjustment(scrolledWindow);
-
+    g_signal_connect(window, "key_press_event",
+                     G_CALLBACK(mx_close_chat), window);
     return window;
 }
