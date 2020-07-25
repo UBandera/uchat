@@ -1,6 +1,6 @@
 #include "client.h"
 
-gchar *mx_add_contact_to_friend_request(gint user_id, gchar *token) {
+gchar *mx_add_contact_request(gint user_id, const gchar *token) {
     cJSON *json = cJSON_CreateObject();
     gchar *request = NULL;
 

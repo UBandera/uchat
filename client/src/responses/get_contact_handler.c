@@ -21,9 +21,9 @@ static void add_contact(GtkWidget *widget, gpointer user_id) {
     gchar *request = NULL;
     gint new_contact = GPOINTER_TO_INT(user_id);
     gchar *label = (gchar *)gtk_button_get_label(GTK_BUTTON(widget));
-    
+
     clear_entry(client->builder, "dialog_search");
-    request = mx_add_contact_to_friend_request(new_contact, "client->token");
+    request = mx_add_contact_request(new_contact, "client->token");
     mx_show_contact_in_ui(client, label, new_contact, client->contacts);
     gtk_widget_set_visible(client->chat_box, TRUE);
     g_print("open_chat with user_id = %d\n", GPOINTER_TO_INT(user_id));
