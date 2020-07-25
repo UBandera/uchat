@@ -1,6 +1,9 @@
 #include "client.h"
 
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data) {
+    if (data == NULL) {
+        g_warning("): Something went wrong :(\n");
+    }
     GError *error = NULL;
     gsize size = 0;
 

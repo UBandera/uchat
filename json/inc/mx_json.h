@@ -27,6 +27,7 @@ enum e_response_types {
     RS_VALID,
     RS_CONTACT,
     RS_CONTACT_LIST,
+    RS_ADD_CONTACT,
     RS_SEND_MESSAGE,
     RS_GET_CHAT_HISTORY,
     //
