@@ -20,7 +20,7 @@ static void activate(GtkApplication *app, t_client *client) {
     gtk_application_add_window(app, client->profile_setuping);
     gtk_application_add_window(app, client->main_window);
     gtk_application_add_window(app, client->add_contact_dialog);
-    gtk_widget_show(GTK_WIDGET(client->main_window));
+    gtk_widget_show(GTK_WIDGET(client->phone_entering));
 }
 
 void mx_application_init(t_client *client) {

@@ -14,19 +14,75 @@ static gboolean json_validator(cJSON *root) {
         return FALSE;
 }
 
+gint mx_get_contact_handler_prepare(sqlite3_stmt **stmt,
+                                    gint user_id,
+                                    sqlite3 *db) {
+    if (user_id == -1) {
+        g_message("User not excist\n");
+        return -1;
+    }
+    gchar *query = "SELECT name, last_name FROM user_profile\
+                    WHERE user_id = ?;";
+    gint rc = 0;
+
+    if ((rc = sqlite3_prepare_v2(db, query, -1, stmt, NULL)) != SQLITE_OK)
+        g_warning("mx_get_contact_handler_prepare prepare: %d\n", rc);
+    if ((rc = sqlite3_bind_int64(*stmt, 1, user_id)) != SQLITE_OK)
+        g_warning("mx_get_contact_handler_prepare  bind: user_id:%d %d\n",
+                  user_id, rc);
+    return rc;
+}
+
+gchar *mx_get_contact_handler_response(sqlite3_stmt *stmt, gint user_id) {
+    cJSON *user_contact = cJSON_CreateObject();
+    gchar *response = NULL;
+
+    cJSON_AddNumberToObject(user_contact, "response_type", RS_CONTACT);
+    cJSON_AddNumberToObject(user_contact, "user_id", user_id);
+    cJSON_AddStringToObject(user_contact, "name",
+                            (gchar*)sqlite3_column_text(stmt, 0));
+    cJSON_AddStringToObject(user_contact, "last_name",
+                            (gchar*)sqlite3_column_text(stmt, 1));
+    response = cJSON_PrintUnformatted(user_contact);
+    return response;
+}
+
+gchar *mx_get_contact_handler_run(sqlite3_stmt *stmt, gint user_id) {
+    gint rc = 0;
+    sqlite3 *db = *(mx_get_db());
+    gchar *response = NULL;
+
+    if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        response = mx_get_contact_handler_response(stmt, user_id);
+    }
+    else if (rc == SQLITE_DONE)
+            g_warning("mx_get_contact_handler_run step: user_profile empty\
+                       user_id:%d\n", user_id);
+    else
+        g_warning("mx_get_contact_handler_run step rc:%d, %s\n",
+                  rc, sqlite3_errmsg(db));
+    if ((rc = sqlite3_finalize(stmt)) != SQLITE_OK)
+        g_warning("mx_get_contact_handler_run finalize rc:%d\n", rc);
+    return response;
+}
+
 void mx_get_contact_handler(cJSON *root, t_client *client) {
     // if (json_validator(root)) {
         gchar *token = cJSON_GetObjectItem(root, "token")->valuestring;
         gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
         sqlite3 *db = *(mx_get_db());
+        sqlite3_stmt *stmt = NULL;
+        gchar *response = NULL;
 
         // if (!g_strcmp0(client->token, token)) {
             gint user_id = mx_get_user_id_by_phone(phone, db);
 
-            g_print("USER_ID = %d\n", user_id);
+            mx_get_contact_handler_prepare(&stmt, user_id, db);
+            g_message("user_id = %d\n", user_id);
+            response = mx_get_contact_handler_run(stmt, user_id);
             // mx_get_profile_by_user_id(user_id, db);
             // gchar *response = mx_get_contacts_list();
-            gchar *response = "{\"response_type\":4,\"user_id\":1,\"name\":\"Artem\",\"last_name\":\"Shemidko\"}";
+            // gchar *response = "{\"response_type\":3,\"user_id\":1,\"name\":\"Artem\",\"last_name\":\"Shemidko\"}";
             mx_send_data(client->data_out, response);
             // mx_send_data(client->data_out, response);
             // g_free(response);
