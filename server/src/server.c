@@ -19,7 +19,7 @@ void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_sign_up_request_handler,
     mx_send_message,
     mx_get_contact_handler,
-    mx_add_contact_handler,
+    mx_get_chat_history
 };
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {

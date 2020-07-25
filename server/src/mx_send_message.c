@@ -39,7 +39,6 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_
     gint receiver_id = cJSON_GetObjectItem(root, "receiver_id")->valueint;
     gint64 chat_id = mx_get_chat_id(sender_id, receiver_id);
     gint date = g_get_real_time() / 1000000;
-    g_print("%s %d %d\n", message, receiver_id, date);
     gint rc = 0;
 
     if ((rc = sqlite3_prepare_v2(db, query, -1, stmt, NULL)) != SQLITE_OK)
@@ -64,9 +63,12 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_
 }
 
 static gboolean is_valid(cJSON *root) {
-    if (!cJSON_GetObjectItem(root, "receiver_id"))
+    cJSON *receiver_id = cJSON_GetObjectItemCaseSensitive(root, "receiver_id");
+    cJSON *message = cJSON_GetObjectItemCaseSensitive(root, "message");
+
+    if (message->valuestring == NULL)
         return FALSE;
-    if (!cJSON_GetObjectItem(root, "message"))
+    if (!cJSON_IsNumber(receiver_id))
         return FALSE;
     return TRUE;
 }

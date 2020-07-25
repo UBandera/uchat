@@ -3,17 +3,17 @@
 static gchar *push_login(sqlite3 *db, cJSON *root, gchar *password) {
     gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
     gchar *query = "INSERT INTO users_credential(phone, auth_token) \
-                   VALUES(?, ?);";
+                    VALUES(?, ?);";
     sqlite3_stmt *stmt = NULL;
     gchar *token = mx_create_token(phone, password);
     gint rc = 0;
 
     if ((rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0)) != SQLITE_OK)
-        g_warning("sign_up_query prepare: %s\n", sqlite3_errmsg(db));
+        g_warning("sign_up_query prepare: %d\n", rc);
     if ((sqlite3_bind_text(stmt, 1, phone, -1, NULL)) != SQLITE_OK)
-        g_warning("phone bind: %s\n", sqlite3_errmsg(db));
+        g_warning("phone bind: %d\n", rc);
     if ((sqlite3_bind_text(stmt, 2, token, -1, NULL)) != SQLITE_OK)
-        g_warning("auth_token bind: %s\n", sqlite3_errmsg(db));
+        g_warning("auth_token bind: %d\n", rc);
     if ((rc = sqlite3_step(stmt)) != SQLITE_DONE)
         g_warning("push_login step: %s\n", sqlite3_errmsg(db));
     if ((rc = sqlite3_finalize(stmt)) != SQLITE_OK)
@@ -25,25 +25,25 @@ static gint push_profile_info(gint user_id, gchar *name,
                               gchar *last_name, gchar *email) {
     sqlite3 *db = *mx_get_db();
     gchar *query = "INSERT INTO user_profile(user_id, name, last_name, email) \
-                   VALUES(?, ?, ?, ?);";
+                    VALUES(?, ?, ?, ?);";
     sqlite3_stmt *stmt = NULL;
     gint rc = 0;
 
     g_print("user_id = %d\n", user_id);
     if ((rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0)) != SQLITE_OK)
-        g_warning("profile_setup prepare: %s\n", sqlite3_errmsg(db));
+        g_warning("profile_setup prepare: %d\n", rc);
     if ((sqlite3_bind_int64(stmt, 1, user_id)) != SQLITE_OK)
-        g_warning("profile_setup bind: %s\n", sqlite3_errmsg(db));
+        g_warning("profile_setup bind: %d\n", rc);
     if ((sqlite3_bind_text(stmt, 2, name, -1, NULL)) != SQLITE_OK)
-        g_warning("profile_setup bind: %s\n", sqlite3_errmsg(db));
+        g_warning("profile_setup bind: %d\n", rc);
     if ((sqlite3_bind_text(stmt, 3, last_name, -1, NULL)) != SQLITE_OK)
-        g_warning("profile_setup bind: %s\n", sqlite3_errmsg(db));
+        g_warning("profile_setup bind: %d\n", rc);
     if ((sqlite3_bind_text(stmt, 4, email, -1, NULL)) != SQLITE_OK)
-        g_warning("profile_setup bind: %s\n", sqlite3_errmsg(db));
+        g_warning("profile_setup bind: %d\n", rc);
     if ((rc = sqlite3_step(stmt)) != SQLITE_DONE)
-        g_warning("profile_setup bind: %s\n", sqlite3_errmsg(db));
+        g_warning("profile_setup bind: %d\n", rc);
     if ((rc = sqlite3_finalize(stmt)) != SQLITE_OK)
-        g_warning("profile_setup finalize: %s\n", sqlite3_errmsg(db));
+        g_warning("profile_setup finalize: %d\n", rc);
     return rc;
 }
 
