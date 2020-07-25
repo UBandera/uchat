@@ -30,12 +30,17 @@ gchar *mx_get_contacts_list(void) {
     cJSON_AddItemToObject(contact_item, "last_name", cJSON_CreateString("Ivanov"));
     cJSON_AddItemToObject(contact_item, "user_id", cJSON_CreateNumber(2));
 
-    // contact_item = cJSON_CreateObject();
-    // cJSON_AddItemToArray(chat_list, contact_item);
-    // cJSON_AddItemToObject(contact_item, "first_name", cJSON_CreateString("Jora"));
-    // cJSON_AddItemToObject(contact_item, "last_name", cJSON_CreateString("JORAH"));
-    // cJSON_AddItemToObject(contact_item, "user_id", cJSON_CreateNumber(3));
+    contact_item = cJSON_CreateObject();
+    cJSON_AddItemToArray(chat_list, contact_item);
+    cJSON_AddItemToObject(contact_item, "name", cJSON_CreateString("Jora"));
+    cJSON_AddItemToObject(contact_item, "last_name", cJSON_CreateString("JORAH"));
+    cJSON_AddItemToObject(contact_item, "user_id", cJSON_CreateNumber(3));
 
+    contact_item = cJSON_CreateObject();
+    cJSON_AddItemToArray(chat_list, contact_item);
+    cJSON_AddItemToObject(contact_item, "name", cJSON_CreateString("Jo"));
+    cJSON_AddItemToObject(contact_item, "last_name", cJSON_CreateString("JORAH"));
+    cJSON_AddItemToObject(contact_item, "user_id", cJSON_CreateNumber(4));
     response = cJSON_PrintUnformatted(json);
     if (!response){
         g_warning("Failed to print make request.\n");

@@ -34,17 +34,16 @@ static void local_search(GtkEntry *entry, GtkListBox *box) {
     }
 }
 
-gboolean mx_close_chat(GtkWidget *widget, GdkEventKey *event, gpointer data) {
+static gboolean mx_close_chat(GtkWidget *widget, GdkEventKey *event,
+                              gpointer data) {
     if (event->keyval == GDK_KEY_Escape) {
         t_client *client = *mx_get_client();
-        // if (gtk_widget_get_visible(client->chat))
-            gtk_widget_set_visible(client->chat_box, FALSE);
+
+        gtk_widget_set_visible(client->chat_box, FALSE);
         return TRUE;
     }
     return FALSE;
 }
-
-
 
 static void controling(GtkBuilder *builder, t_client *client) {
     GtkButton *add_contact = NULL;

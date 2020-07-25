@@ -9,9 +9,9 @@ enum e_request_types {
     RQ_GENERATE_PASS = 0,
     RQ_AUTH = 1,
     RQ_SIGN_UP = 2,
-    RQ_SEND_MESSAGE = 3,
-    RQ_GET_CONTACT = 4,
-    RQ_ADD_CONTACT = 5,
+    RQ_GET_CONTACT = 3,
+    RQ_ADD_CONTACT = 4,
+    RQ_SEND_MESSAGE = 5,
     //
     RQ_RECOVERY_PASSWD,
     RQ_SIGN_IN,
@@ -25,8 +25,8 @@ enum e_response_types {
     RS_PASSWORD_SENT,
     RS_SIGN_UP,
     RS_VALID,
-    RS_CONTACT,
     RS_CONTACT_LIST,
+    RS_CONTACT,
     RS_SEND_MESSAGE,
     RS_GET_CHAT_HISTORY,
     //

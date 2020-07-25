@@ -16,9 +16,11 @@ enum e_auth_data_validation {
 #define MX_FORBIDEN_PATTERN "[^A-Z&^a-z&^0-9&^(!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)]"
 #define MX_ALLOWED_PATTERN "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~]).{6,48}$"
 
-// typedef struct s_contact_list {
-//
-// }              t_contact_list;
+typedef struct s_contact_data {
+    GtkWidget *row;
+    gchar *first_name;
+    gchar *last_name;
+}              t_contact_data;
 
 
 typedef struct s_client {
@@ -41,8 +43,9 @@ typedef struct s_client {
     GtkWidget *contact_view;
     GtkWidget *contact_info;
 
-    void (*response_handler[30])(cJSON *json,
-                                                  struct s_client *client);
+    GHashTable *contacts_table;
+
+    void (*response_handler[30])(cJSON *json, struct s_client *client);
 }              t_client;
 
 
@@ -61,7 +64,8 @@ GtkWindow *mx_main_window(t_client *client);
 GtkWindow *mx_add_contact_dialog(t_client *client);
 
 
-void mx_show_contact_in_ui(t_client *client, gchar *label, gint user_id, GtkListBox *box);
+void mx_show_contact_in_ui(t_client *client, gchar *first_name,
+                           gchar *last_name, gint user_id);
 gboolean mx_close_window_by_esc(GtkWidget *widget, GdkEventKey *event,
                                 gpointer data);
 

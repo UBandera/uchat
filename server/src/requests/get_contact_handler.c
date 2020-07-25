@@ -26,7 +26,7 @@ void mx_get_contact_handler(cJSON *root, t_client *client) {
             g_print("USER_ID = %d\n", user_id);
             // mx_get_profile_by_user_id(user_id, db);
             // gchar *response = mx_get_contacts_list();
-            gchar *response = "{\"response_type\":3,\"user_id\":1,\"name\":\"Artem\",\"last_name\":\"Shemidko\"}";
+            gchar *response = "{\"response_type\":4,\"user_id\":1,\"name\":\"Artem\",\"last_name\":\"Shemidko\"}";
             mx_send_data(client->data_out, response);
             // mx_send_data(client->data_out, response);
             // g_free(response);
