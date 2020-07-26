@@ -21,8 +21,8 @@ void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_add_contact_handler,
     mx_get_contacts_list,
     mx_send_message,
-    mx_sign_out_request_handler,
     mx_get_chat_history,
+    mx_sign_out_request_handler,
 };
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {

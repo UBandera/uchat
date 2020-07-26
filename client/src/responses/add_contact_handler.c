@@ -11,7 +11,7 @@
 void mx_add_contact(cJSON *json, t_client *client) {
     gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
     gint contact = cJSON_GetObjectItem(json, "contact")->valueint;
-    gchar *label = (gchar *)gtk_button_get_label(client->contact_view);
+    gchar *label = (gchar *)gtk_button_get_label(GTK_BUTTON(client->contact_view));
 
     mx_show_contact_in_ui(client, NULL, label, contact);
 

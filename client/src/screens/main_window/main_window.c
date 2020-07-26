@@ -62,15 +62,15 @@ static void controling(GtkBuilder *builder, t_client *client) {
     profile = GTK_BUTTON(gtk_builder_get_object(builder, "props"));
     add_contact = GTK_BUTTON(
                 gtk_builder_get_object(builder, "add_contact_dialog"));
+
     search = GTK_SEARCH_ENTRY(gtk_builder_get_object(builder, "local_search"));
     client->contacts_table = g_hash_table_new(NULL, NULL);
     client->contacts = GTK_LIST_BOX(gtk_builder_get_object(builder,
                                                            "contacts_box"));
-    client->chat = GTK_LIST_BOX(gtk_builder_get_object(builder,
-                                                           "message_box"));
-    client->chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
-    client->contact_info = GTK_WIDGET(gtk_builder_get_object(client->builder,
-                                                             "contact_info_btn"));
+    client->contact_info = GTK_WIDGET(
+                         gtk_builder_get_object(client->builder,
+                                                "contact_info_btn"));
+    mx_chat_control(builder, client);
     g_signal_connect(search, "activate",
                      G_CALLBACK(local_search), client->contacts);
     g_signal_connect(add_contact, "clicked",
@@ -90,7 +90,5 @@ GtkWindow *mx_main_window(t_client *client) {
         g_error("%s\n", error->message);
     window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
     controling(builder, client);
-    g_signal_connect(window, "key_press_event",
-                     G_CALLBACK(mx_close_chat), window);
     return window;
 }
