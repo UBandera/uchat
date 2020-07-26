@@ -44,7 +44,6 @@ t_client *init_client(GSocketConnection *connection) {
     client->data_in = g_data_input_stream_new(istream);
     client->data_out = g_data_output_stream_new(ostream);
     client->builder = gtk_builder_new();
-    client->contacts_table = g_hash_table_new(NULL, NULL);
     mx_application_init(client);
     mx_init_handlers(client);
     g_data_input_stream_read_line_async(client->data_in,

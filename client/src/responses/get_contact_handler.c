@@ -38,9 +38,6 @@ static void add_contact(GtkWidget *widget, gpointer user_id) {
     }
     else
         open_exist_chat(client, new_contact);
-    g_print("open_chat with user_id = %d\n", GPOINTER_TO_INT(user_id));
-    mx_window_switcher(client->add_contact_dialog, client->main_window);
-    gtk_widget_grab_focus(GTK_WIDGET(client->main_window));
 }
 
 /*

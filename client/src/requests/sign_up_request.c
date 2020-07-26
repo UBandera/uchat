@@ -12,7 +12,7 @@ gchar *mx_sign_up_request(const gchar *phone, const gchar *first_name,
     cJSON_AddItemToObject(json, "last_name", cJSON_CreateString(last_name));
     cJSON_AddItemToObject(json, "email", cJSON_CreateString(email));
     request = cJSON_PrintUnformatted(json);
-    if (!request){
+    if (!request) {
         g_warning("Failed to print make request.\n");
     }
     cJSON_Delete(json);

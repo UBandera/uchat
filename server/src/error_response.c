@@ -9,7 +9,7 @@ gchar *mx_send_error_response(gint type, gchar *message) {
                           cJSON_CreateNumber(type));
     cJSON_AddItemToObject(json, "message", cJSON_CreateString(message));
     error_res = cJSON_PrintUnformatted(json);
-    if (!error_res){
+    if (!error_res) {
         g_warning("Failed to print make request.\n");
     }
     cJSON_Delete(json);
