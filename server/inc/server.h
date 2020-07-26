@@ -67,11 +67,13 @@ gchar *mx_create_sms_body(gchar *to_number, gchar *password);
 char *mx_recovery_body(gchar *user_name, gchar *password);
 gchar *mx_notify_body(gchar *user_name);
 
+
 void mx_password_request_handler(cJSON *root, t_client *client);
 void mx_auth_request_handler(cJSON *root, t_client *client);
 void mx_sign_up_request_handler(cJSON *root, t_client *client);
 void mx_get_contact_handler(cJSON *root, t_client *client);
 void mx_add_contact_handler(cJSON *root, t_client *client);
+void mx_sign_out_request_handler(cJSON *root, t_client *client);
 
 
 void mx_add_user_to_bd(cJSON *root, t_client *client, sqlite3 *db);

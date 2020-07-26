@@ -45,23 +45,37 @@ static gboolean mx_close_chat(GtkWidget *widget, GdkEventKey *event,
     return FALSE;
 }
 
+static void log_out(GtkButton *button, gpointer data) {
+    t_client *client = *mx_get_client();
+    gchar *request = NULL;
+
+    request = mx_sign_out(client->token);
+    mx_send_data(client->data_out, request);
+    g_free(request);
+}
+
 static void controling(GtkBuilder *builder, t_client *client) {
     GtkButton *add_contact = NULL;
+    GtkButton *profile = NULL;
     GtkSearchEntry *search = NULL;
 
+    profile = GTK_BUTTON(gtk_builder_get_object(builder, "props"));
     add_contact = GTK_BUTTON(
                 gtk_builder_get_object(builder, "add_contact_dialog"));
     search = GTK_SEARCH_ENTRY(gtk_builder_get_object(builder, "local_search"));
+    client->contacts_table = g_hash_table_new(NULL, NULL);
     client->contacts = GTK_LIST_BOX(gtk_builder_get_object(builder,
                                                            "contacts_box"));
+    client->chat = GTK_LIST_BOX(gtk_builder_get_object(builder,
+                                                           "message_box"));
     client->chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
-    client->contact_info = GTK_WIDGET(
-                         gtk_builder_get_object(client->builder,
-                                                "contact_info_btn"));
+    client->contact_info = GTK_WIDGET(gtk_builder_get_object(client->builder,
+                                                             "contact_info_btn"));
     g_signal_connect(search, "activate",
                      G_CALLBACK(local_search), client->contacts);
     g_signal_connect(add_contact, "clicked",
                      G_CALLBACK(add_contact_btn), client->contacts);
+    g_signal_connect(profile, "clicked", G_CALLBACK(log_out), NULL);
 }
 
 GtkWindow *mx_main_window(t_client *client) {

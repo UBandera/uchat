@@ -9,7 +9,7 @@ gchar *mx_contact_list_request(const gchar *token) {
                           cJSON_CreateNumber(RQ_CONTACT_LIST));
     cJSON_AddItemToObject(json, "token", cJSON_CreateString(token));
     request = cJSON_PrintUnformatted(json);
-    if (!request){
+    if (!request) {
         g_warning("Failed to print make request.\n");
     }
     cJSON_Delete(json);
