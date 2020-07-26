@@ -32,8 +32,8 @@ static t_contact_data *setup_contact_struct(gchar *first_name,
     t_contact_data *contact = g_new(t_contact_data, 1);
 
     contact->row = GTK_WIDGET(gtk_list_box_row_new());
-    contact->first_name = first_name;
-    contact->last_name = last_name;
+    contact->first_name = g_strdup(first_name);
+    contact->last_name = g_strdup(last_name);
     return contact;
 }
 

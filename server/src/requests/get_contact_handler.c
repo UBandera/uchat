@@ -84,6 +84,14 @@ void mx_get_contact_handler(cJSON *root, t_client *client) {
             mx_get_contact_handler_prepare(&stmt, user_id, db);
             g_message("user_id = %d\n", user_id);
             response = mx_get_contact_handler_run(stmt, user_id);
+            if (!response) {
+                gchar *error = mx_send_error_response(ER_CONTACT_NOT_FOUND,
+                                                      "Contact not found");
+
+                mx_send_data(client->data_out, error);
+                g_free(error);
+                return ;
+            }
             cJSON_AddNumberToObject(response, "response_type", RS_CONTACT);
             // mx_get_profile_by_user_id(user_id, db);
             // gchar *response = mx_get_contacts_list();

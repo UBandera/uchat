@@ -89,7 +89,7 @@ void mx_invalid_password_handler(cJSON *json, t_client *client);
 void mx_handle_password(cJSON *json, t_client *client);
 void mx_sms_error_handler(cJSON *json, t_client *client);
 void mx_sign_up_user(cJSON *json, t_client *client);
-
+void mx_add_contact(cJSON *json, t_client *client);
 
 
 // validation
