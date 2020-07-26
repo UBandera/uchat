@@ -11,7 +11,7 @@ gchar *mx_auth_request(const gchar *phone, const gchar *password) {
     cJSON_AddItemToObject(json, "request_type", cJSON_CreateNumber(type));
     cJSON_AddItemToObject(json, "phone", cJSON_CreateString(phone));
     cJSON_AddItemToObject(json, "password", cJSON_CreateString(hash));
-    client->token = mx_create_token((gchar *)phone, (gchar *)password);
+    client->token = mx_create_token((gchar *)phone, (gchar *)hash);
     request = cJSON_PrintUnformatted(json);
     if (!request){
         g_warning("Failed to print make request.\n");

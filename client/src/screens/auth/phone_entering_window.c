@@ -37,7 +37,7 @@ static void generate_pass(GtkButton *button, t_client *client) {
                                                       "phone_info_mess")));
     buffer = GTK_ENTRY_BUFFER(gtk_builder_get_object(builder, "phone_buff"));
     gtk_entry_buffer_set_text(buffer, phone_value, -1);
-    if (phone_validator(builder, buffer))
+    // if (phone_validator(builder, buffer))
         mx_send_data(client->data_out, request);
     gtk_entry_set_text(phone, "");
     g_free(request);

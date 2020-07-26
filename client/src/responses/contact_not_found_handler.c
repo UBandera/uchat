@@ -8,14 +8,12 @@
  * RETURNS : void
  *   NOTES : -
  */
-void mx_auth_validated(cJSON *json, t_client *client) {
+void mx_contact_not_found(cJSON *json, t_client *client) {
+    GtkBuilder *builder = client->builder;
     gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
-    GtkWindow *current = gtk_application_get_active_window(client->app);
-    gchar *request = NULL;
+    GtkLabel *info = NULL;
 
-    g_print("message = %s\n", message);
-    mx_window_switcher(current, client->main_window);
-    request = mx_contact_list_request(client->token);
-    mx_send_data(client->data_out, request);
-    g_free(request);
+    info = GTK_LABEL(gtk_builder_get_object(builder, "info_label"));
+    gtk_label_set_text(info, message);
+    gtk_widget_show(GTK_WIDGET(info));
 }

@@ -1,12 +1,13 @@
 #include "client.h"
 
-gchar *mx_form_profile_data_request(void) {
+gchar *mx_contact_list_request(const gchar *token) {
     cJSON *json = cJSON_CreateObject();
     gchar *request = NULL;
 
     cJSON_AddItemToObject(json,
                           "request_type",
-                          cJSON_CreateNumber(RQ_PROFILE_DATA));
+                          cJSON_CreateNumber(RQ_CONTACT_LIST));
+    cJSON_AddItemToObject(json, "token", cJSON_CreateString(token));
     request = cJSON_PrintUnformatted(json);
     if (!request){
         g_warning("Failed to print make request.\n");

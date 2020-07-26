@@ -1,0 +1,14 @@
+#search_entry {
+    margin: 5px;
+    border: 0.5px solid #6d6d6d;
+    border-radius: 15px;
+    color: #6d6d6d;
+    transition: all 1s ease-out;
+}
+
+#search_entry:focus {
+    font: 13px sans-serif;
+    color: black;
+    border: 0.6px solid black;
+    box-shadow: none;
+}

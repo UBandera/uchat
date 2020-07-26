@@ -16,6 +16,13 @@ enum e_auth_data_validation {
 #define MX_FORBIDEN_PATTERN "[^A-Z&^a-z&^0-9&^(!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)]"
 #define MX_ALLOWED_PATTERN "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~]).{6,48}$"
 
+typedef struct s_contact_data {
+    GtkWidget *row;
+    gchar *first_name;
+    gchar *last_name;
+}              t_contact_data;
+
+
 typedef struct s_client {
     GSocketConnection *connection;
     GDataInputStream *data_in;
@@ -28,13 +35,24 @@ typedef struct s_client {
     GtkWindow *password_validation;
     GtkWindow *profile_setuping;
     GtkWindow *main_window;
+    GtkWindow *add_contact_dialog;
 
-    void (*response_handler[30])(cJSON *json,
-                                                  struct s_client *client);
+    GtkListBox *contacts;
+    GtkListBox *chat;
+    GtkWidget *chat_box;
+    GtkWidget *contact_view;
+    GtkWidget *contact_info;
+
+    GHashTable *contacts_table;
+
+    void (*response_handler[30])(cJSON *json, struct s_client *client);
 }              t_client;
 
 
 t_client **mx_get_client(void);
+void mx_init_handlers(t_client *client);
+void mx_receive_data(gchar *response, t_client *client);
+gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 
 // screens
 void mx_apply_styles(const gchar *path_to_css);
@@ -43,50 +61,36 @@ GtkWindow *mx_phone_entering_window(t_client *client);
 GtkWindow *mx_password_validate_window(t_client *client);
 GtkWindow *mx_profile_setuping_window(t_client *client);
 GtkWindow *mx_main_window(t_client *client);
+GtkWindow *mx_add_contact_dialog(t_client *client);
 
 
-void mx_routing(int argc, char **argv, t_client *client);
+void mx_show_contact_in_ui(t_client *client, gchar *first_name,
+                           gchar *last_name, gint user_id);
+gboolean mx_close_window_by_esc(GtkWidget *widget, GdkEventKey *event,
+                                gpointer data);
 
-void mx_edit_login(GtkEntry *entry, GtkEntryIconPosition icon_pos,
-                   GdkEvent *event, t_client *client);
 
 // requests
 gchar *mx_password_request(const gchar *phone);
 gchar *mx_auth_request(const gchar *phone, const gchar *password);
 gchar *mx_sign_up_request(const gchar *phone, const gchar *first_name,
                           const gchar *last_name, const gchar *email);
+gchar *mx_find_contact_request(const gchar *phone, const gchar *token);
+gchar *mx_add_contact_request(gint user_id, const gchar *token);
+gchar *mx_contact_list_request(const gchar *token);
 
-
-gchar *mx_form_auth_request(gchar *login, gchar *password, gint type);
-gchar *mx_form_contact_list_request(void);
-gchar *mx_form_chat_data_request(gint receiver_id,
-                                 gint from,
-                                 gint to);
-gchar *mx_form_profile_data_request(void);
-gchar *mx_form_send_message_request(gint receiver_id,
-                                    gchar *message);
-gchar *mx_chat_history_request(gint receiver_id);
-gchar *mx_form_signout_request(void);
-gchar *mx_form_recovery_password_request(gchar *login);
-
-void mx_receive_data(gchar *response, t_client *client);
-void mx_init_handlers(t_client *client);
 
 // responses
-void mx_handle_password(cJSON *json, t_client *client);
-void mx_sign_up_user(cJSON *json, t_client *client);
 void mx_auth_validated(cJSON *json, t_client *client);
+void mx_contact_list(cJSON *json, t_client *client);
+void mx_contact_not_found(cJSON *json, t_client *client);
+void mx_get_contact(cJSON *json, t_client *client);
 void mx_invalid_password_handler(cJSON *json, t_client *client);
+void mx_handle_password(cJSON *json, t_client *client);
 void mx_sms_error_handler(cJSON *json, t_client *client);
+void mx_sign_up_user(cJSON *json, t_client *client);
+void mx_add_contact(cJSON *json, t_client *client);
 
-
-void mx_sign_out_response(cJSON *json, t_client *client);
-void mx_chat_data_response(cJSON *json, t_client *client);
-void mx_contact_list_response(cJSON *json, t_client *client);
-void mx_profile_data_response(cJSON *json, t_client *client);
-void mx_send_message_response(cJSON *json, t_client *client);
-
-gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 
 // validation
 gint mx_auth_confirming(gchar *login, gchar *password,
@@ -95,7 +99,6 @@ gint mx_auth_confirming(gchar *login, gchar *password,
 // Utils
 gboolean mx_match(const gchar *str, const gchar *pattern,
                   gint compile_flags, gint match_flag);
-void get_message_data_from_json(cJSON *json, t_client *client);
 
 // Trash
 int mx_application_run(int argc, char **argv, GtkApplication *app);
