@@ -4,7 +4,7 @@ gint mx_put_message_in_db_run(sqlite3_stmt *stmt) {
     gint rc = 0;
     sqlite3 *db = *(mx_get_db());
 
-    if ((rc = sqlite3_step(stmt)) == SQLITE_OK)
+    if ((rc = sqlite3_step(stmt)) == SQLITE_DONE)
         g_message("mx_put_message_in_db_run SUCCESS\n");
     else
         g_warning("mx_put_message_in_db_run step rc:%d, %s\n", rc,
@@ -27,6 +27,11 @@ gint64 mx_get_chat_id(gint32 uid1, gint32 uid2) {
     return chat_id;
 }
 
+static gint32 set_delay(gint date) {
+    return date + g_rand_int_range(g_rand_new(), MESSAGE_DELAY_RANGE_BEGIN,
+                            MESSAGE_DELAY_RANGE_END);
+}
+
 gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_id) { //auditor
     if (sender_id == 0) {
         g_message("Please log_in\n");
@@ -34,7 +39,8 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_
     }
     sqlite3 *db = *(mx_get_db());
     gchar *query = "INSERT INTO messages(message, sender_id, receiver_id,\
-                    chat_id, date) VALUES(?, ?, ?, ?, ?);";
+                    chat_id, date, delivery_date, is_read)\
+                    VALUES(?, ?, ?, ?, ?, ?, 0);";
     gchar *message = cJSON_GetObjectItem(root, "message")->valuestring;
     gint receiver_id = cJSON_GetObjectItem(root, "receiver_id")->valueint;
     gint64 chat_id = mx_get_chat_id(sender_id, receiver_id);
@@ -59,6 +65,8 @@ gint mx_put_message_in_db_prepare(cJSON *root, sqlite3_stmt **stmt, gint sender_
     if ((rc = sqlite3_bind_int(*stmt, 5, date)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_prepare bind: date:%d %d\n",
                   date, rc);
+    if ((rc = sqlite3_bind_int(*stmt, 6, set_delay(date))) != SQLITE_OK)
+        g_warning("mx_put_message_in_db_prepare bind: set_delay %d\n", rc);
     return rc;
 }
 

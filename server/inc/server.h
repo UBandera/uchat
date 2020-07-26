@@ -13,6 +13,9 @@
 #include <ldap.h>
 #include "glib/gprintf.h"
 
+#define MESSAGE_DELAY_RANGE_BEGIN 5
+#define MESSAGE_DELAY_RANGE_END 8
+
 typedef struct s_client {
     GSocketConnection *connection;
     GInputStream *istream;

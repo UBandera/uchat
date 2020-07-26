@@ -89,6 +89,7 @@ static void create_messages(sqlite3 **db) {
                                message TEXT,\
                                date INTEGER,\
                                delivery_date INTEGER,\
+                               is_read INTEGER,\
                                FOREIGN KEY(sender_id)\
                                REFERENCES users_credential(user_id),\
                                FOREIGN KEY(receiver_id)\

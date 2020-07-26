@@ -17,15 +17,15 @@ gint mx_get_chat_history_prepare(cJSON *root,
     gint rc = 0;
 
     if ((rc = sqlite3_prepare_v2(db, query, -1, stmt, NULL)) != SQLITE_OK)
-        g_warning("mx_get_chat_history_prepare prepare: %d\n", rc);
+        g_warning("mx_get_chat_history_prepare prepare: %d", rc);
     if ((rc = sqlite3_bind_int64(*stmt, 1, chat_id)) != SQLITE_OK)
-        g_warning("mx_get_chat_history_prepare  bind: chat_id:%d %d\n",
+        g_warning("mx_get_chat_history_prepare  bind: chat_id:%d %d",
                   receiver_id, rc);
     if ((rc = sqlite3_bind_int(*stmt, 2, from)) != SQLITE_OK)
-        g_warning("mx_get_chat_history_prepare  bind: from:%d %d\n",
+        g_warning("mx_get_chat_history_prepare  bind: from:%d %d",
                   from, rc);
     if ((rc = sqlite3_bind_int(*stmt, 3, to)) != SQLITE_OK)
-        g_warning("mx_get_chat_history_prepare  bind: to:%d %d\n",
+        g_warning("mx_get_chat_history_prepare  bind: to:%d %d",
                   to, rc);
     return rc;
 }
@@ -71,6 +71,7 @@ gchar *mx_get_chat_history_run(sqlite3_stmt *stmt) {
                   rc, sqlite3_errmsg(db));
     if ((rc = sqlite3_finalize(stmt)) != SQLITE_OK)
         g_warning("mx_get_chat_history_run finalize rc:%d\n", rc);
+    g_message("%s", response);
     return response;
 }
 
@@ -96,7 +97,7 @@ void mx_get_chat_history(cJSON *root, t_client *client) {
         g_warning("mx_get_chat_history_prepare failed: %d\n", rc);
         // TODO: send error?;
     if ((response = mx_get_chat_history_run(stmt)) == NULL)
-        g_warning("mx_put_chat_in_db_run failed");
+        g_warning("mx_get_chat_in_db_run failed or no messages in chat");
         // TODO: send error?;
     else
         mx_send_data(client->data_out, response);
