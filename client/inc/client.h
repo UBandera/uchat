@@ -5,6 +5,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include "mx_json.h"
+#include <stdbool.h>
 
 enum e_auth_data_validation {
     MX_VALID = 0,
@@ -20,6 +21,8 @@ typedef struct s_contact_data {
     GtkWidget *row;
     gchar *first_name;
     gchar *last_name;
+    gint id;
+    GtkWidget *popup;
 }              t_contact_data;
 
 
