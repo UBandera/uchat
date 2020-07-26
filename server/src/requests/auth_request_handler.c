@@ -5,8 +5,8 @@ gchar *mx_auth_send_response(t_client *client, gchar *phone) {
     cJSON *json = cJSON_CreateObject();
     gchar *message = "User sign in successfully.";
     gchar *response = NULL;
-    client->uid = mx_get_user_id_by_phone(phone, *(mx_get_db()));
 
+    client->uid = mx_get_user_id_by_phone(phone, *(mx_get_db()));
     g_hash_table_insert(*online_users, &client->uid, client);
     cJSON_AddItemToObject(json,
                           "response_type",

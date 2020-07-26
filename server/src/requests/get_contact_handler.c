@@ -84,10 +84,10 @@ void mx_get_contact_handler(cJSON *root, t_client *client) {
             mx_get_contact_handler_prepare(&stmt, user_id, db);
             g_message("user_id = %d\n", user_id);
             response = mx_get_contact_handler_run(stmt, user_id);
+            cJSON_AddNumberToObject(response, "response_type", RS_CONTACT);
             // mx_get_profile_by_user_id(user_id, db);
             // gchar *response = mx_get_contacts_list();
             // gchar *response = "{\"response_type\":3,\"user_id\":1,\"name\":\"Artem\",\"last_name\":\"Shemidko\"}";
-            cJSON_AddNumberToObject(response, "response_type", RS_CONTACT);
             mx_send_data(client->data_out, cJSON_PrintUnformatted(response));
             // g_free(response);
             return;

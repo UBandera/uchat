@@ -19,14 +19,14 @@ gint mx_get_contacts_list_prepare(cJSON *root,
     return rc;
 }
 
-static gchar *get_contact(gint user_id) {
+static cJSON *get_contact(gint user_id) {
     sqlite3 *db = *(mx_get_db());
     sqlite3_stmt *stmt = NULL;
     cJSON *response = NULL;
 
     mx_get_contact_handler_prepare(&stmt, user_id, db);
     response = mx_get_contact_handler_run(stmt, user_id);
-    return cJSON_PrintUnformatted(response);
+    return response;
 }
 
 gchar *mx_get_contact_list_handler_response(sqlite3_stmt *stmt) {
@@ -36,10 +36,10 @@ gchar *mx_get_contact_list_handler_response(sqlite3_stmt *stmt) {
     gint rc = 0;
 
     while (rc != SQLITE_DONE) {
-        gchar *contact = get_contact((gint)sqlite3_column_int(stmt, 0));
-        g_message("%s\n", contact);
+        cJSON *contact = get_contact((gint)sqlite3_column_int(stmt, 0));
+        // g_message("%s\n", contact);
 
-        cJSON_AddItemToArray(contact_arr, cJSON_CreateString(contact));
+        cJSON_AddItemToArray(contact_arr, contact);
         rc = sqlite3_step(stmt);
     }
     cJSON_AddNumberToObject(contact_list, "response_type",
@@ -75,5 +75,5 @@ void mx_get_contacts_list(cJSON *root, t_client *client) {
     mx_get_contacts_list_prepare(root, &stmt, client->uid);
     response = mx_get_contacts_list_run(stmt, client->uid);
     mx_send_data(client->data_out, response);
-    
+
 }
