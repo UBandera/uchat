@@ -93,5 +93,6 @@ gint mx_get_contact_handler_prepare(sqlite3_stmt **stmt,
                                     gint user_id,
                                     sqlite3 *db);
 // cJSON *mx_get_contact_handler_response(sqlite3_stmt *stmt, gint user_id);
+gpointer mx_message_sheduler(gpointer data);
 cJSON *mx_get_contact_handler_run(sqlite3_stmt *stmt, gint user_id);
 #endif /* end of include guard: SERVER_H */
