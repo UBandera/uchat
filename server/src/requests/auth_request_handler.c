@@ -8,6 +8,7 @@ gchar *mx_auth_send_response(t_client *client, gchar *phone) {
     gint user_id = mx_get_user_id_by_phone(phone, *(mx_get_db()));
 
     g_hash_table_insert(*online_users, &user_id, client);
+    client->uid = user_id;
     cJSON_AddItemToObject(json,
                           "response_type",
                           cJSON_CreateNumber(RS_VALID));

@@ -73,6 +73,23 @@ static gboolean is_valid(cJSON *root) {
     return TRUE;
 }
 
+static gchar *mx_message_send_response(void) {
+    cJSON *json = cJSON_CreateObject();
+    gchar *message = "Message successfully sent.";
+    gchar *response = NULL;
+
+    cJSON_AddItemToObject(json,
+                          "response_type",
+                          cJSON_CreateNumber(RS_SEND_MESSAGE));
+    cJSON_AddItemToObject(json, "message", cJSON_CreateString(message));
+    response = cJSON_PrintUnformatted(json);
+    if (!response){
+        g_warning("Failed to print make request.\n");
+    }
+    cJSON_Delete(json);
+    return response;
+}
+
 void mx_send_message(cJSON *root, t_client *client) {
     sqlite3_stmt *stmt = NULL;
     gint rc = 0;
@@ -87,7 +104,12 @@ void mx_send_message(cJSON *root, t_client *client) {
     if ((rc = mx_put_message_in_db_run(stmt)) != SQLITE_OK)
         g_warning("mx_put_message_in_db_run failed: %d\n", rc);
         // TODO: send error?;
-    else
-        mx_send_data(client->data_out, "message sent\n");
+    else {
+        gchar *response = mx_message_send_response();
+
+        mx_send_data(client->data_out, response);
+        g_free(response);
+    }
+
     return;
 }

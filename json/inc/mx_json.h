@@ -11,8 +11,9 @@ enum e_request_types {
     RQ_SIGN_UP = 2,
     RQ_GET_CONTACT = 3,
     RQ_ADD_CONTACT = 4,
-    RQ_CONTACT_LIST = 5,
-    RQ_SEND_MESSAGE = 6,
+    RQ_SEND_MESSAGE = 5,
+    RQ_CHAT_HISTORY = 6,
+    RQ_CONTACT_LIST = 7,
     //
     RQ_RECOVERY_PASSWD,
     RQ_SIGN_IN,
