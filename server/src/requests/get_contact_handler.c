@@ -33,24 +33,24 @@ gint mx_get_contact_handler_prepare(sqlite3_stmt **stmt,
     return rc;
 }
 
-gchar *mx_get_contact_handler_response(sqlite3_stmt *stmt, gint user_id) {
+cJSON *mx_get_contact_handler_response(sqlite3_stmt *stmt, gint user_id) {
     cJSON *user_contact = cJSON_CreateObject();
-    gchar *response = NULL;
+    // gchar *response = NULL;
 
-    cJSON_AddNumberToObject(user_contact, "response_type", RS_CONTACT);
+    // cJSON_AddNumberToObject(user_contact, "response_type", RS_CONTACT);
     cJSON_AddNumberToObject(user_contact, "user_id", user_id);
     cJSON_AddStringToObject(user_contact, "name",
                             (gchar*)sqlite3_column_text(stmt, 0));
     cJSON_AddStringToObject(user_contact, "last_name",
                             (gchar*)sqlite3_column_text(stmt, 1));
-    response = cJSON_PrintUnformatted(user_contact);
-    return response;
+    // response = cJSON_PrintUnformatted(user_contact);
+    return user_contact;
 }
 
-gchar *mx_get_contact_handler_run(sqlite3_stmt *stmt, gint user_id) {
+cJSON *mx_get_contact_handler_run(sqlite3_stmt *stmt, gint user_id) {
     gint rc = 0;
     sqlite3 *db = *(mx_get_db());
-    gchar *response = NULL;
+    cJSON *response = NULL;
 
     if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
         response = mx_get_contact_handler_response(stmt, user_id);
@@ -72,19 +72,31 @@ void mx_get_contact_handler(cJSON *root, t_client *client) {
         gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
         sqlite3 *db = *(mx_get_db());
         sqlite3_stmt *stmt = NULL;
-        gchar *response = NULL;
+        cJSON *response = NULL;
 
         // if (!g_strcmp0(client->token, token)) {
             gint user_id = mx_get_user_id_by_phone(phone, db);
 
+            if (user_id == client->uid) {
+                g_warning("uid == contact\n");
+                return;
+            }
             mx_get_contact_handler_prepare(&stmt, user_id, db);
             g_message("user_id = %d\n", user_id);
             response = mx_get_contact_handler_run(stmt, user_id);
+            if (!response) {
+                gchar *error = mx_send_error_response(ER_CONTACT_NOT_FOUND,
+                                                      "Contact not found");
+
+                mx_send_data(client->data_out, error);
+                g_free(error);
+                return ;
+            }
+            cJSON_AddNumberToObject(response, "response_type", RS_CONTACT);
             // mx_get_profile_by_user_id(user_id, db);
             // gchar *response = mx_get_contacts_list();
             // gchar *response = "{\"response_type\":3,\"user_id\":1,\"name\":\"Artem\",\"last_name\":\"Shemidko\"}";
-            mx_send_data(client->data_out, response);
-            // mx_send_data(client->data_out, response);
+            mx_send_data(client->data_out, cJSON_PrintUnformatted(response));
             // g_free(response);
             return;
         // }

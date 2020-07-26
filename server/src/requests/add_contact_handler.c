@@ -14,56 +14,27 @@ static gboolean json_validator(cJSON *root) {
         return FALSE;
 }
 
-gchar *mx_get_contacts_list(void) {
-    gchar *response = NULL;
-    cJSON *json = cJSON_CreateObject();
-    cJSON *chat_list = cJSON_CreateArray();
-    cJSON *contact_item = NULL;
-
-    cJSON_AddItemToObject(json,
-                          "response_type",
-                          cJSON_CreateNumber(RS_CONTACT_LIST));
-    cJSON_AddItemToObject(json, "chat_list", chat_list);
-    contact_item = cJSON_CreateObject();
-    cJSON_AddItemToArray(chat_list, contact_item);
-    cJSON_AddItemToObject(contact_item, "name", cJSON_CreateString("Ivan"));
-    cJSON_AddItemToObject(contact_item, "last_name", cJSON_CreateString("Ivanov"));
-    cJSON_AddItemToObject(contact_item, "user_id", cJSON_CreateNumber(2));
-
-    // contact_item = cJSON_CreateObject();
-    // cJSON_AddItemToArray(chat_list, contact_item);
-    // cJSON_AddItemToObject(contact_item, "first_name", cJSON_CreateString("Jora"));
-    // cJSON_AddItemToObject(contact_item, "last_name", cJSON_CreateString("JORAH"));
-    // cJSON_AddItemToObject(contact_item, "user_id", cJSON_CreateNumber(3));
-
-    response = cJSON_PrintUnformatted(json);
-    if (!response){
-        g_warning("Failed to print make request.\n");
-    }
-    cJSON_Delete(json);
-    return response;
-}
-
-gchar *mx_add_contact_response(void) {
+gchar *mx_add_contact_response(gint contact) {
     cJSON *json = cJSON_CreateObject();
     gchar *response = NULL;
 
     cJSON_AddNumberToObject(json, "response_type", RS_ADD_CONTACT);
-    cJSON_AddStringToObject(json, "status", "success");
+    cJSON_AddNumberToObject(json, "contact", contact);
+    cJSON_AddStringToObject(json, "message", "Contact add successfully");
     response = cJSON_PrintUnformatted(json);
-    if (!response){
+    if (!response) {
         g_warning("Failed to print mx_add_contact_response.\n");
     }
     cJSON_Delete(json);
     return response;
 }
 
-gchar *mx_add_contact_run(sqlite3_stmt *stmt) {
+gchar *mx_add_contact_run(sqlite3_stmt *stmt, gint contact) {
     sqlite3 *db = *(mx_get_db());
     gint rc = 0;
 
     if ((rc = sqlite3_step(stmt)) == SQLITE_DONE) {
-        return mx_add_contact_response();
+        return mx_add_contact_response(contact);
     }
     else
         g_warning("mx_add_contact_run step rc:%d, %s\n", rc,
@@ -102,14 +73,14 @@ void mx_add_contact_handler(cJSON *root, t_client *client) {
         gchar *response = NULL;
 
         if (contact == client->uid) {
-            g_warning("uid == contact\n");
-            return;
+            response = mx_send_error_response(ER_CONTACT_NOT_FOUND,
+                                              "U can`t add yourself");
         }
-        // gchar *response = mx_get_contacts_list();
-        mx_add_contact_prepare(&stmt, contact, client->uid);
-        response = mx_add_contact_run(stmt);
-        g_message("Please add response handler on client for:%s\n", response);
-        // mx_send_data(client->data_out, response);
+        else {
+            mx_add_contact_prepare(&stmt, contact, client->uid);
+            response = mx_add_contact_run(stmt, contact);
+        }
+        mx_send_data(client->data_out, response);
         return;
         // }
         g_print("Not valid token\n");

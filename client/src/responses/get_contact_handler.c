@@ -9,25 +9,35 @@ void clear_entry(GtkBuilder *builder, const gchar *entry_name) {
     gtk_entry_buffer_set_text(buf, "\0", -1 );
 }
 
+static void open_exist_chat(t_client *client, gint user_id) {
+    GHashTable *contacts = client->contacts_table;
+    t_contact_data *node = NULL;
+    GtkButton *header = GTK_BUTTON(client->contact_info);
+    gchar *label = NULL;
+
+    node = (t_contact_data *)g_hash_table_lookup(contacts,
+                                                 GINT_TO_POINTER(user_id));
+    label = g_strjoin(" ", node->last_name, node->first_name, NULL);
+    gtk_list_box_select_row(client->contacts, GTK_LIST_BOX_ROW(node->row));
+    gtk_widget_set_visible(client->chat_box, TRUE);
+    gtk_button_set_label(header, label);
+    g_free(label);
+}
+
 static void add_contact(GtkWidget *widget, gpointer user_id) {
     t_client *client = *mx_get_client();
     gchar *request = NULL;
     gint new_contact = GPOINTER_TO_INT(user_id);
-    gchar *label = (gchar *)gtk_button_get_label(GTK_BUTTON(widget));
 
     gtk_widget_hide(widget);
     clear_entry(client->builder, "dialog_search");
     if (!g_hash_table_contains(client->contacts_table, user_id)) {
-        request = mx_add_contact_request(new_contact, "client->token");
+        request = mx_add_contact_request(new_contact, client->token);
         mx_send_data(client->data_out, request);
         g_free(request);
-        mx_show_contact_in_ui(client, NULL, label, new_contact);
     }
     else
-        mx_load_chat(client, user_id);
-    g_print("open_chat with user_id = %d\n", GPOINTER_TO_INT(user_id));
-    mx_window_switcher(client->add_contact_dialog, client->main_window);
-    gtk_widget_grab_focus(GTK_WIDGET(client->main_window));
+        open_exist_chat(client, new_contact);
 }
 
 /*

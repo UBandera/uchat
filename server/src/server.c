@@ -1,5 +1,5 @@
 #include "server.h"
-#define REQUEST_HANDLER_SIZE 7
+#define REQUEST_HANDLER_SIZE 9
 
 void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
     g_print("Connected user id is %lld\n", *(gint64 *)key);
@@ -19,8 +19,10 @@ void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_sign_up_request_handler,
     mx_get_contact_handler,
     mx_add_contact_handler,
+    mx_get_contacts_list,
     mx_send_message,
-    mx_get_chat_history
+    mx_get_chat_history,
+    mx_sign_out_request_handler,
 };
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
@@ -35,7 +37,8 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
         cJSON *root = cJSON_Parse(data);
         cJSON *req_type = cJSON_GetObjectItem(root, "request_type");
 
-        if (root != NULL && req_type != NULL) {
+        if (root != NULL && req_type != NULL
+            && req_type->valueint < REQUEST_HANDLER_SIZE) {
             request_handler[req_type->valueint](root, new_client);
             g_free(data);
             cJSON_Delete(root);

@@ -11,13 +11,13 @@ enum e_request_types {
     RQ_SIGN_UP = 2,
     RQ_GET_CONTACT = 3,
     RQ_ADD_CONTACT = 4,
-    RQ_SEND_MESSAGE = 5,
-    RQ_CHAT_HISTORY = 6,
-    RQ_CONTACT_LIST = 7,
+    RQ_CONTACT_LIST = 5,
+    RQ_SEND_MESSAGE = 6,
+    RQ_CHAT_HISTORY = 7,
+    RQ_SIGN_OUT = 8,
     //
     RQ_RECOVERY_PASSWD,
     RQ_SIGN_IN,
-    RQ_SIGN_OUT,
     RQ_PROFILE_DATA,
     RQ_SIZE
 };
@@ -31,10 +31,10 @@ enum e_response_types {
     RS_ADD_CONTACT,
     RS_SEND_MESSAGE,
     RS_GET_CHAT_HISTORY,
+    RS_SIGN_OUT,
     //
     // RS_SIGN_IN,
     // RS_SIGN_UP,
-    // RS_SIGN_OUT,
     // RS_CONTACT_LIST,
     // RS_CHAT_DATA,
     // RS_PROFILE_DATA,

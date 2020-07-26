@@ -29,7 +29,9 @@ static void find_user(GtkEntry *entry, t_client *client) {
     const gchar *input = gtk_entry_get_text(entry);
     gchar *request = NULL;
 
-    // gtk_widget_hide(GTK_WIDGET(info));
+    gtk_widget_hide(GTK_WIDGET(info));
+    if (client->contact_view)
+        gtk_widget_destroy(GTK_WIDGET(client->contact_view));
     // if (strlen(input) != 13) {
         // gtk_label_set_text(info, "Enter full number");
         // gtk_widget_show(GTK_WIDGET(info));

@@ -9,13 +9,13 @@
  *   NOTES : -
  */
 void mx_contact_list(cJSON *json, t_client *client) {
-    cJSON *contacts = cJSON_GetObjectItemCaseSensitive(json, "chat_list");
+    cJSON *contacts = cJSON_GetObjectItemCaseSensitive(json, "contacts");
     cJSON *data = NULL;
 
     cJSON_ArrayForEach(data, contacts) {
+        gint user_id = cJSON_GetObjectItem(data, "user_id")->valueint;
         gchar *first_name = cJSON_GetObjectItem(data, "name")->valuestring;
         gchar *last_name = cJSON_GetObjectItem(data, "last_name")->valuestring;
-        gint user_id = cJSON_GetObjectItem(data, "user_id")->valueint;
 
         mx_show_contact_in_ui(client, first_name, last_name, user_id);
     }
