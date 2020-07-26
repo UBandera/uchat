@@ -83,4 +83,10 @@ gchar *mx_send_error_response(gint type, gchar *message);
 
 void mx_send_message(cJSON *root, t_client *client);
 void mx_get_chat_history(cJSON *root, t_client *client);
+void mx_get_contacts_list(cJSON *root, t_client *client);
+gint mx_get_contact_handler_prepare(sqlite3_stmt **stmt,
+                                    gint user_id,
+                                    sqlite3 *db);
+// cJSON *mx_get_contact_handler_response(sqlite3_stmt *stmt, gint user_id);
+cJSON *mx_get_contact_handler_run(sqlite3_stmt *stmt, gint user_id);
 #endif /* end of include guard: SERVER_H */
