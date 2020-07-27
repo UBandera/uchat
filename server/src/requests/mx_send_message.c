@@ -118,6 +118,5 @@ void mx_send_message(cJSON *root, t_client *client) {
         mx_send_data(client->data_out, response);
         g_free(response);
     }
-
     return;
 }
