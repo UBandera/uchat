@@ -77,14 +77,10 @@ void mx_get_contact_handler(cJSON *root, t_client *client) {
         // if (!g_strcmp0(client->token, token)) {
             gint user_id = mx_get_user_id_by_phone(phone, db);
 
-            if (user_id == client->uid) {
-                g_warning("uid == contact\n");
-                return;
-            }
             mx_get_contact_handler_prepare(&stmt, user_id, db);
             g_message("user_id = %d\n", user_id);
             response = mx_get_contact_handler_run(stmt, user_id);
-            if (!response) {
+            if (!response || user_id == client->uid) {
                 gchar *error = mx_send_error_response(ER_CONTACT_NOT_FOUND,
                                                       "Contact not found");
 

@@ -1,19 +1,8 @@
 #include "client.h"
 
-gchar *mx_get_message_from_entry(GtkWidget *text_view) {
-    GtkTextIter start;
-    GtkTextIter end;
-    GtkTextBuffer *buffer = gtk_text_view_get_buffer((GtkTextView *)text_view);
-    gchar *text;
-
-    gtk_text_buffer_get_bounds(buffer, &start, &end);
-    text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-    return text;
-}
-
 static void send_message(GtkButton *button, GtkWidget *text_view) {
     t_client *client = *mx_get_client();
-    gchar *text = mx_get_message_from_entry(text_view);
+    gchar *text = g_strchug(mx_get_message_from_entry(text_view));
 
     if (strlen(text) > 0) {
         gchar *request = mx_send_message(client->chat_with,
@@ -22,13 +11,28 @@ static void send_message(GtkButton *button, GtkWidget *text_view) {
         mx_send_data(client->data_out, request);
         g_free(request);
     }
+    mx_scroll_to_bottom(client);
     g_free(text);
+    (void)button;
 }
 
-static gboolean mx_close_chat(GtkWidget *widget, GdkEventKey *event,
-                              GtkWidget *to_close) {
-    if (event->keyval == GDK_KEY_Escape) {
-        gtk_widget_set_visible(to_close, FALSE);
+static gboolean send_by_enter(GtkWidget *widget, GdkEventKey *event,
+                              gpointer data) {
+    guint keyval = event->keyval;
+
+    if (keyval == GDK_KEY_Return) {
+        t_client *client = *mx_get_client();
+        gchar *text = mx_get_message_from_entry(widget);
+
+        if (strlen(text) > 0) {
+            gchar *request = mx_send_message(client->chat_with,
+                                             client->token, text);
+
+            mx_send_data(client->data_out, request);
+            g_free(request);
+        }
+        mx_scroll_to_bottom(client);
+        g_free(text);
         return TRUE;
     }
     return FALSE;
@@ -37,15 +41,18 @@ static gboolean mx_close_chat(GtkWidget *widget, GdkEventKey *event,
 void mx_chat_control(GtkBuilder *builder, t_client *client) {
     GtkWidget *text_view = NULL;
     GtkButton *send_btn = NULL;
+    GtkWidget* scroll = GTK_WIDGET(gtk_builder_get_object(client->builder, "chat_scroll"));
 
-    client->chat_with = -1;
+    client->chat_with = 0;
+    client->scroll = GTK_WIDGET(gtk_builder_get_object(client->builder, "chat_scroll"));
     client->text_view = GTK_WIDGET(gtk_builder_get_object(builder,
                                                           "message_entry"));
     client->chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
     client->chat = GTK_LIST_BOX(gtk_builder_get_object(builder, "message_box"));
     send_btn = GTK_BUTTON(gtk_builder_get_object(builder, "send_btn"));
     text_view = GTK_WIDGET(gtk_builder_get_object(builder, "message_entry"));
+    g_signal_connect(text_view, "key_press_event", G_CALLBACK(send_by_enter), text_view);
     g_signal_connect(send_btn, "clicked", G_CALLBACK(send_message), text_view);
     g_signal_connect(client->chat, "key_press_event",
-                     G_CALLBACK(mx_close_chat), client->chat_box);
+                     G_CALLBACK(mx_close_widget), client->chat_box);
 }

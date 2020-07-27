@@ -11,7 +11,6 @@ gssize mx_send_data(GDataOutputStream *data_out, gchar *data) {
     }
     else {
         g_error("Write string error\n");
-
     }
     if (error) {
         g_error("%s\n", error->message);

@@ -39,11 +39,12 @@ typedef struct s_client {
     GtkWindow *main_window;
     GtkWindow *add_contact_dialog;
 
+    GtkWidget *chat_box;
     GtkListBox *contacts;
     GtkListBox *chat;
-    GtkWidget *chat_box;
-    GtkWidget *contact_view;
     GtkWidget *contact_info;
+    GtkWidget *contact_view;
+    GtkWidget *scroll;
 
     GtkWidget *text_view;
 
@@ -67,16 +68,17 @@ GtkWindow *mx_profile_setuping_window(t_client *client);
 GtkWindow *mx_main_window(t_client *client);
 GtkWindow *mx_add_contact_dialog(t_client *client);
 
-
-void mx_load_chat(t_client *client, gpointer user_id);
 void mx_chat_control(GtkBuilder *builder, t_client *client);
+void mx_top_bar_control(GtkBuilder *builder, t_client *client);
+gboolean mx_close_widget(GtkWidget *widget, GdkEventKey *event,
+                         GtkWidget *to_close);
+void mx_clear_entry(GtkBuilder *builder, const gchar *entry_name);
+void mx_scroll_to_bottom(t_client *client);
 gchar *mx_get_message_from_entry(GtkWidget *text_view);
 void mx_show_message_in_ui(t_client *client, gchar *message_text);
 void mx_remove_rows(GtkListBox *listbox);
 void mx_show_contact_in_ui(t_client *client, gchar *first_name,
                            gchar *last_name, gint user_id);
-gboolean mx_close_window_by_esc(GtkWidget *widget, GdkEventKey *event,
-                                gpointer data);
 
 
 // requests
