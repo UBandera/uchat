@@ -14,8 +14,10 @@ static gboolean clear_inputs(GtkWidget *widget, GdkEventKey *event,
 
         info = GTK_WIDGET(gtk_builder_get_object(builder, "info_label"));
         gtk_entry_buffer_set_text(buf, "\0", -1 );
-        if (client->contact_view)
-            gtk_widget_hide(client->contact_view);
+        if (client->contact_view) {
+            gtk_widget_destroy(client->contact_view);
+            client->contact_view = NULL;
+        }
         gtk_widget_hide(info);
         gtk_widget_hide(widget);
         return TRUE;
@@ -30,8 +32,10 @@ static void find_user(GtkEntry *entry, t_client *client) {
     gchar *request = NULL;
 
     gtk_widget_hide(GTK_WIDGET(info));
-    if (client->contact_view)
-        gtk_widget_destroy(GTK_WIDGET(client->contact_view));
+    if (client->contact_view) {
+        gtk_widget_destroy(client->contact_view);
+        client->contact_view = NULL;
+    }
     // if (strlen(input) != 13) {
         // gtk_label_set_text(info, "Enter full number");
         // gtk_widget_show(GTK_WIDGET(info));
@@ -42,7 +46,7 @@ static void find_user(GtkEntry *entry, t_client *client) {
         // gtk_widget_show(GTK_WIDGET(info));
         // return;
     // }
-    request = mx_find_contact_request((gchar *)input, "client->token");
+    request = mx_find_contact_request(input, client->token);
     mx_send_data(client->data_out, request);
     g_free(request);
 }
@@ -53,6 +57,7 @@ GtkWindow *mx_add_contact_dialog(t_client *client) {
     GtkWindow *window = NULL;
     GtkEntry *search = NULL;
 
+    client->contact_view = NULL;
     mx_apply_styles(MX_STYLES);
     if (!gtk_builder_add_from_file(builder,
                                    MX_MAIN_WINDOW,
@@ -60,7 +65,6 @@ GtkWindow *mx_add_contact_dialog(t_client *client) {
         g_error("%s\n", error->message);
     window = GTK_WINDOW(gtk_builder_get_object(builder, "contact_dialog"));
     search = GTK_ENTRY(gtk_builder_get_object(builder, "dialog_search"));
-    client->contact_view = NULL;
     gtk_entry_set_text(search, "");
     g_signal_connect(search, "activate", G_CALLBACK(find_user), client);
     // gtk_window_set_decorated(window, FALSE);

@@ -1,21 +1,5 @@
 #include "client.h"
 
-static void clear_chat_box(GtkListBox *box) {
-    GtkWidget *row = NULL;
-
-    for (int i = 0; ; i++) {
-        if ((row = GTK_WIDGET(gtk_list_box_get_row_at_index(box, i)))) {
-            GtkWidget *child = GTK_WIDGET(gtk_bin_get_child(GTK_BIN(row)));
-            gtk_widget_hide(row);
-            gtk_container_remove(GTK_CONTAINER(row), child);
-            gtk_container_remove(GTK_CONTAINER(box), row);
-        }
-        else {
-            break;
-        }
-    }
-}
-
 static void get_user_id(GtkWidget *widget, t_client *client) {
     GtkButton *header = GTK_BUTTON(client->contact_info);
     gchar *label = (gchar *)gtk_button_get_label(GTK_BUTTON(widget));
@@ -29,6 +13,7 @@ static void get_user_id(GtkWidget *widget, t_client *client) {
 gboolean get_chat(GtkWidget *widget, GdkEventButton *event,
                   t_contact_data *contact) {
     t_client *client = *mx_get_client();
+    GtkWidget *chat = client->chat_box;
 
     if (event->type == GDK_BUTTON_PRESS  &&  event->button == 1) {
         if (client->chat_with != contact->id) {
@@ -38,7 +23,7 @@ gboolean get_chat(GtkWidget *widget, GdkEventButton *event,
 
             client->chat_with = contact->id;
             get_user_id(widget, client);
-            clear_chat_box(GTK_LIST_BOX(client->chat));
+            mx_remove_rows(GTK_LIST_BOX(client->chat));
             gtk_widget_set_visible(chat, TRUE);
             request = mx_chat_history_request(contact->id, client->token, 0, 10);
             mx_send_data(client->data_out, request);
