@@ -1,5 +1,5 @@
 #include "server.h"
-#define REQUEST_HANDLER_SIZE 9
+#define REQUEST_HANDLER_SIZE 10
 
 void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
     g_print("Connected user id is %lld\n", *(gint64 *)key);
@@ -23,6 +23,7 @@ void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_send_message,
     mx_get_chat_history,
     mx_sign_out_request_handler,
+    mx_remove_contact_handler,
 };
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {

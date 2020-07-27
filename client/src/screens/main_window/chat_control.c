@@ -5,8 +5,8 @@ static void send_message(GtkButton *button, GtkWidget *text_view) {
     gchar *text = g_strchug(mx_get_message_from_entry(text_view));
 
     if (strlen(text) > 0) {
-        gchar *request = mx_send_message(client->chat_with,
-                                         client->token, text);
+        gchar *request = mx_send_message_request(client->chat_with,
+                                                 client->token, text);
 
         mx_send_data(client->data_out, request);
         g_free(request);

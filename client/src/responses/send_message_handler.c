@@ -1,6 +1,6 @@
 #include "client.h"
 
-void mx_send_message_handler(cJSON *json, t_client *client) {
+void mx_send_message(cJSON *json, t_client *client) {
     GtkBuilder *builder = client->builder;
     gchar *message = NULL;
     GtkTextBuffer *buffer = NULL;
