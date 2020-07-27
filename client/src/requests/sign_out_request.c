@@ -1,6 +1,6 @@
 #include "client.h"
 
-gchar *mx_sign_out(const gchar *token) {
+gchar *mx_sign_out_request(const gchar *token) {
     cJSON *json = cJSON_CreateObject();
     gchar *request = NULL;
 

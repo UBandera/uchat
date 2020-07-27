@@ -184,8 +184,6 @@
                             <property name="can_focus">False</property>
                             <!-- <child>
                               <object class="GtkListBoxRow">
-                                <property name="width_request">100</property>
-                                <property name="height_request">80</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="halign">center</property>
@@ -281,7 +279,7 @@
       <placeholder/>
     </child>
   </object>
-  <object class="GtkApplicationWindow" id="contact_dialog">
+  <!-- <object class="GtkApplicationWindow" id="contact_dialog">
     <property name="name">contact_dialog</property>
     <property name="height_request">100</property>
     <property name="can_focus">False</property>
@@ -345,5 +343,5 @@
         </child>
       </object>
     </child>
-  </object>
+  </object> -->
 </interface>

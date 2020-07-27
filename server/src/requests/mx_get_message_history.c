@@ -9,7 +9,7 @@ gint mx_get_chat_history_prepare(cJSON *root,
     }
     sqlite3 *db = *(mx_get_db());
     gchar *query = "SELECT message, sender_id, receiver_id, date FROM messages\
-                    WHERE chat_id = ? LIMIT ?, ?;";
+                    WHERE chat_id = ? AND receiver_id = ? LIMIT ?, ?;";
     gint receiver_id = cJSON_GetObjectItem(root, "receiver_id")->valueint;
     gint from = cJSON_GetObjectItem(root, "from")->valueint;
     gint to = cJSON_GetObjectItem(root, "to")->valueint;
@@ -21,11 +21,14 @@ gint mx_get_chat_history_prepare(cJSON *root,
     if ((rc = sqlite3_bind_int64(*stmt, 1, chat_id)) != SQLITE_OK)
         g_warning("mx_get_chat_history_prepare  bind: chat_id:%d %d",
                   receiver_id, rc);
-    if ((rc = sqlite3_bind_int(*stmt, 2, from)) != SQLITE_OK)
-        g_warning("mx_get_chat_history_prepare  bind: from:%d %d",
+    if ((rc = sqlite3_bind_int64(*stmt, 2, sender_id)) != SQLITE_OK)
+      g_warning("mx_get_chat_history_prepare  bind: sender_id:%d %d\n",
+                receiver_id, rc);
+    if ((rc = sqlite3_bind_int(*stmt, 3, from)) != SQLITE_OK)
+        g_warning("mx_get_chat_history_prepare  bind: from:%d %d\n",
                   from, rc);
-    if ((rc = sqlite3_bind_int(*stmt, 3, to)) != SQLITE_OK)
-        g_warning("mx_get_chat_history_prepare  bind: to:%d %d",
+    if ((rc = sqlite3_bind_int(*stmt, 4, to)) != SQLITE_OK)
+        g_warning("mx_get_chat_history_prepare  bind: to:%d %d\n",
                   to, rc);
     return rc;
 }
