@@ -25,8 +25,8 @@ static gboolean send_by_enter(GtkWidget *widget, GdkEventKey *event,
         gchar *text = mx_get_message_from_entry(widget);
 
         if (strlen(text) > 0) {
-            gchar *request = mx_send_message(client->chat_with,
-                                             client->token, text);
+            gchar *request = mx_send_message_request(client->chat_with,
+                                                     client->token, text);
 
             mx_send_data(client->data_out, request);
             g_free(request);
@@ -41,17 +41,20 @@ static gboolean send_by_enter(GtkWidget *widget, GdkEventKey *event,
 void mx_chat_control(GtkBuilder *builder, t_client *client) {
     GtkWidget *text_view = NULL;
     GtkButton *send_btn = NULL;
-    GtkWidget* scroll = GTK_WIDGET(gtk_builder_get_object(client->builder, "chat_scroll"));
+    GtkWidget* scroll = GTK_WIDGET(gtk_builder_get_object(client->builder,
+                                                          "chat_scroll"));
 
     client->chat_with = 0;
-    client->scroll = GTK_WIDGET(gtk_builder_get_object(client->builder, "chat_scroll"));
+    client->scroll = GTK_WIDGET(gtk_builder_get_object(client->builder,
+                                                       "chat_scroll"));
     client->text_view = GTK_WIDGET(gtk_builder_get_object(builder,
                                                           "message_entry"));
     client->chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
     client->chat = GTK_LIST_BOX(gtk_builder_get_object(builder, "message_box"));
     send_btn = GTK_BUTTON(gtk_builder_get_object(builder, "send_btn"));
     text_view = GTK_WIDGET(gtk_builder_get_object(builder, "message_entry"));
-    g_signal_connect(text_view, "key_press_event", G_CALLBACK(send_by_enter), text_view);
+    g_signal_connect(text_view, "key_press_event", G_CALLBACK(send_by_enter),
+                     text_view);
     g_signal_connect(send_btn, "clicked", G_CALLBACK(send_message), text_view);
     g_signal_connect(client->chat, "key_press_event",
                      G_CALLBACK(mx_close_widget), client->chat_box);
