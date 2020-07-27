@@ -47,7 +47,6 @@ gchar *mx_get_contact_list_handler_response(sqlite3_stmt *stmt) {
     cJSON_AddItemToObject(contact_list, "contacts", contact_arr);
     response = cJSON_PrintUnformatted(contact_list);
     cJSON_Delete(contact_list);
-    cJSON_Delete(contact_arr);
     return response;
 }
 

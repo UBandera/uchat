@@ -39,16 +39,19 @@ void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
 gint mx_free_client(t_client *client) {
     GHashTable *online_users = *(mx_get_online_users());
 
-    if (g_hash_table_remove(online_users, GINT_TO_POINTER(client->uid))
-        == TRUE) {
+    if (client->uid == 0) {
+        mx_dest_client(client);
+        return 1;
+    }
+    if (g_hash_table_remove(online_users,
+                            GINT_TO_POINTER(client->uid)) == TRUE) {
         mx_dest_client(client);
     }
     else {
-        g_error("Failed to delete user from hash table!");
+        g_warning("Failed to delete user from hash table!");
         return -1;
     }
     return 1;
-
 }
 
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
