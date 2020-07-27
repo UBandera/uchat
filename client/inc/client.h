@@ -100,6 +100,7 @@ gchar *mx_chat_history_request(gint user_id, const gchar *token,
                                gint from, gint to);
 gchar *mx_sign_out_request(const gchar *token);
 gchar *mx_remove_contact_request(gint user_id, const gchar *token);
+gchar *mx_clear_chat_request(gint user_id, const gchar *token);
 
 
 // responses
