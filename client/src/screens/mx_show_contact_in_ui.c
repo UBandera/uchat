@@ -17,7 +17,6 @@ static void clear_chat_box(GtkListBox *box) {
     }
 }
 
-
 static void get_user_id(GtkWidget *widget, t_client *client) {
     GtkButton *header = GTK_BUTTON(client->contact_info);
     gchar *label = (gchar *)gtk_button_get_label(GTK_BUTTON(widget));

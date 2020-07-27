@@ -8,7 +8,7 @@
  * RETURNS : void
  *   NOTES : -
  */
-void mx_invalid_password_handler(cJSON *json, t_client *client) {
+void mx_invalid_password(cJSON *json, t_client *client) {
     GtkBuilder *builder = client->builder;
     GtkLabel *info = GTK_LABEL(gtk_builder_get_object(builder,
                                                       "pass_info_mess"));

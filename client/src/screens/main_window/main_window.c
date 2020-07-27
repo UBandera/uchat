@@ -49,7 +49,7 @@ static void log_out(GtkButton *button, gpointer data) {
     t_client *client = *mx_get_client();
     gchar *request = NULL;
 
-    request = mx_sign_out(client->token);
+    request = mx_sign_out_request(client->token);
     mx_send_data(client->data_out, request);
     g_free(request);
 }
