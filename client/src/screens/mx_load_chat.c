@@ -20,8 +20,8 @@ static void clear_chat_box(GtkListBox *box) {
 void mx_load_chat(t_client *client, gpointer user_id) {
     if (client->chat_with != GPOINTER_TO_INT(user_id)) {
         GHashTable *contacts = client->contacts_table;
-        t_contact_data *node = NULL;
         GtkButton *header = GTK_BUTTON(client->contact_info);
+        t_contact_data *node = NULL;
         gchar *label = NULL;
         gchar *request = NULL;
 

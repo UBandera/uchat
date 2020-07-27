@@ -70,7 +70,7 @@ void mx_show_contact_in_ui(t_client *client, gchar *first_name,
         GtkWidget *contact = gtk_button_new_with_label(label);
 
         new_contact = setup_contact_struct(first_name, last_name, user_id);
-        new_contact->popup = mx_contact_context(new_contact, NULL);
+        new_contact->popup = mx_contact_context(new_contact);
         gtk_container_add(GTK_CONTAINER(new_contact->row), contact);
         gtk_container_add(GTK_CONTAINER(client->contacts), new_contact->row);
         gtk_widget_show_all(new_contact->row);
@@ -79,6 +79,6 @@ void mx_show_contact_in_ui(t_client *client, gchar *first_name,
         g_signal_connect(G_OBJECT(contact), "button-press-event",
                     G_CALLBACK(get_chat), new_contact);
         g_signal_connect(G_OBJECT(contact), "button-press-event",
-                    G_CALLBACK(mx_menu_callback), new_contact);
+                    G_CALLBACK(mx_menu_callback), new_contact->popup);
     }
 }

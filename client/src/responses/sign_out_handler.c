@@ -27,7 +27,7 @@ void mx_free_client_data(t_client *client) {
  * RETURNS : void
  *   NOTES : -
  */
-void mx_sign_out_handler(cJSON *json, t_client *client) {
+void mx_sign_out(cJSON *json, t_client *client) {
     // GtkBuilder *builder = client->builder;
     // gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
 

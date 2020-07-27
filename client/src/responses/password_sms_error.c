@@ -8,7 +8,7 @@
  * RETURNS : void
  *   NOTES : -
  */
-void mx_sms_error_handler(cJSON *json, t_client *client) {
+void mx_sms_error(cJSON *json, t_client *client) {
     GtkBuilder *builder = client->builder;
     GtkLabel *info = GTK_LABEL(gtk_builder_get_object(builder,
                                                       "phone_info_mess"));
