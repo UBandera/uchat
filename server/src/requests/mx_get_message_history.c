@@ -52,6 +52,8 @@ gchar *mx_form_chat_history_response(sqlite3_stmt *stmt) {
     cJSON_AddNumberToObject(chat_history, "response_type",
                             RS_GET_CHAT_HISTORY);
     cJSON_AddItemToObject(chat_history, "messages", message_arr);
+    cJSON_Delete(chat_history);
+    cJSON_Delete(message_arr);
     response = cJSON_PrintUnformatted(chat_history);
     return response;
 }

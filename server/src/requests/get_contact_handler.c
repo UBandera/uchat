@@ -97,7 +97,7 @@ void mx_get_contact_handler(cJSON *root, t_client *client) {
             // gchar *response = mx_get_contacts_list();
             // gchar *response = "{\"response_type\":3,\"user_id\":1,\"name\":\"Artem\",\"last_name\":\"Shemidko\"}";
             mx_send_data(client->data_out, cJSON_PrintUnformatted(response));
-            // g_free(response);
+            cJSON_Delete(response);
             return;
         // }
         g_print("Not valid token\n");
