@@ -6,7 +6,7 @@ gchar *mx_clear_chat_request(gint user_id, const gchar *token) {
 
     cJSON_AddItemToObject(json,
                           "request_type",
-                          cJSON_CreateNumber(RQ_CONTACT_LIST));
+                          cJSON_CreateNumber(RQ_CLEAR_CHAT));
     cJSON_AddItemToObject(json, "user_id", cJSON_CreateNumber(user_id));
     cJSON_AddItemToObject(json, "token", cJSON_CreateString(token));
     request = cJSON_PrintUnformatted(json);

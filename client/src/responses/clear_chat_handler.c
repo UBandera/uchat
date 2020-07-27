@@ -1,6 +1,6 @@
 #include "client.h"
 
-void mx_remove_contact(cJSON *json, t_client *client) {
+void mx_clear_chat(cJSON *json, t_client *client) {
     gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
     gint user_id = cJSON_GetObjectItem(json, "user_id")->valueint;
     GHashTable *contacts = client->contacts_table;
