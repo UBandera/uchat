@@ -13,6 +13,17 @@ sqlite3 **mx_get_db(void) {
     return &db;
 }
 
+void mx_dest_client(gpointer data) {
+    t_client *socket = (t_client*)data;
+
+    g_object_unref(socket->istream);
+    g_object_unref(socket->ostream);
+    g_object_unref(socket->data_in);
+    g_object_unref(socket->data_out);
+    g_object_unref(socket->connection);
+    g_free(socket);
+}
+
 void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_password_request_handler,
     mx_auth_request_handler,
@@ -26,6 +37,24 @@ void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_remove_contact_handler,
 };
 
+gint mx_free_client(t_client *client) {
+    GHashTable *online_users = *(mx_get_online_users());
+
+    if (client->uid == 0) {
+        mx_dest_client(client);
+        return 1;
+    }
+    if (g_hash_table_remove(online_users,
+                            GINT_TO_POINTER(client->uid)) == TRUE) {
+        mx_dest_client(client);
+    }
+    else {
+        g_warning("Failed to delete user from hash table!");
+        return -1;
+    }
+    return 1;
+}
+
 void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     t_client *new_client = (t_client*)socket;
     GError *error = NULL;
@@ -33,8 +62,8 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
 
     data = g_data_input_stream_read_line_finish(new_client->data_in,
                                                 res, NULL, &error);
-        g_print("input data: %s\n", data);
     if (data) {
+        g_print("input data: %s\n", data);
         cJSON *root = cJSON_Parse(data);
         cJSON *req_type = cJSON_GetObjectItem(root, "request_type");
 
@@ -53,6 +82,7 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     }
     else {
         g_print("Client logout!\n");
+        mx_free_client(new_client);
         return;
     }
     g_data_input_stream_read_line_async(new_client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, new_client);
@@ -86,24 +116,13 @@ gboolean incoming_callback(GSocketService *service,
     return FALSE;
 }
 
-void mx_dest_client(gpointer data) {
-    t_client *socket = (t_client*)data;
-
-    g_object_unref(socket->istream);
-    g_object_unref(socket->ostream);
-    g_object_unref(socket->data_in);
-    g_object_unref(socket->data_out);
-    g_object_unref(socket->connection);
-    g_free(socket);
-}
-
 int main(int argc, char **argv) {
     GSocketService *service = NULL;
     GMainLoop *loop = NULL;
     GError *error = NULL;
     GHashTable **online_users = mx_get_online_users();
 
-    *online_users = g_hash_table_new_full(g_int_hash, NULL, NULL, NULL);
+    *online_users = g_hash_table_new(NULL, NULL);
     service = g_socket_service_new();
 
     mx_db_init();
@@ -112,6 +131,7 @@ int main(int argc, char **argv) {
     g_signal_connect(service, "incoming", G_CALLBACK(incoming_callback), NULL);
 
     g_print("Waiting for client!\n");
+    g_thread_new("message sheduler", mx_message_sheduler, *(mx_get_db()));
 
     loop = g_main_loop_new(NULL, FALSE);
     g_main_loop_run(loop);

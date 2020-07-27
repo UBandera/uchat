@@ -14,6 +14,7 @@ void mx_free_client_data(t_client *client) {
     mx_remove_rows(client->contacts);
     mx_remove_rows(client->chat);
     gtk_widget_hide(client->chat_box);
+    client->chat_with = 0;
     if (client->contacts_table) {
         g_hash_table_destroy(client->contacts_table);
         client->contacts_table = g_hash_table_new(NULL, NULL);
