@@ -70,7 +70,7 @@ static t_contact_data *setup_contact_struct(gchar *first_name,
     return contact;
 }
 
-GtkWidget *crate_popup(t_contact_data *contact) {
+GtkWidget *crate_popup(GtkWidget *row) {
     GtkWidget *pmenu = NULL;
     GtkWidget *ebox = NULL;
     GtkWidget *open_contact = NULL;
@@ -78,7 +78,7 @@ GtkWidget *crate_popup(t_contact_data *contact) {
     GtkWidget *clear_chat = NULL;
 
     ebox = GTK_WIDGET(gtk_event_box_new());
-    gtk_container_add(GTK_CONTAINER(contact->row), ebox);
+    gtk_container_add(GTK_CONTAINER(row), ebox);
     pmenu = GTK_WIDGET(gtk_menu_new());
     open_contact = gtk_menu_item_new_with_label("Open contact info");
     gtk_widget_show(open_contact);
