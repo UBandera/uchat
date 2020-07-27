@@ -83,8 +83,7 @@ gboolean mx_close_window_by_esc(GtkWidget *widget, GdkEventKey *event,
 
 gboolean mx_menu_callback(GtkWidget *widget, GdkEventButton *event,
                           GtkWidget *menu);
-GtkWidget *mx_contact_context(t_contact_data *contact,
-                              GtkWidget *contact_button);
+GtkWidget *mx_contact_context(t_contact_data *contact);
 // requests
 gchar *mx_password_request(const gchar *phone);
 gchar *mx_auth_request(const gchar *phone, const gchar *password);
