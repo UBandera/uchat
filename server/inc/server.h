@@ -77,7 +77,7 @@ void mx_sign_up_request_handler(cJSON *root, t_client *client);
 void mx_get_contact_handler(cJSON *root, t_client *client);
 void mx_add_contact_handler(cJSON *root, t_client *client);
 void mx_sign_out_request_handler(cJSON *root, t_client *client);
-
+void mx_remove_contact_handler(cJSON *root, t_client *client);
 
 void mx_add_user_to_bd(cJSON *root, t_client *client, sqlite3 *db);
 gint mx_get_user_id_by_phone(gchar *phone, sqlite3 *db);

@@ -1,15 +1,13 @@
 #include "client.h"
 
-gchar *mx_send_message_request(gint user_id, const gchar *token,
-                               const gchar *message) {
+gchar *mx_remove_contact_request(gint user_id, const gchar *token) {
     cJSON *json = cJSON_CreateObject();
     gchar *request = NULL;
 
     cJSON_AddItemToObject(json,
                           "request_type",
-                          cJSON_CreateNumber(RQ_SEND_MESSAGE));
-    cJSON_AddItemToObject(json, "receiver_id", cJSON_CreateNumber(user_id));
-    cJSON_AddItemToObject(json, "message", cJSON_CreateString(message));
+                          cJSON_CreateNumber(RQ_REMOVE_CONTACT));
+    cJSON_AddItemToObject(json, "user_id", cJSON_CreateNumber(user_id));
     cJSON_AddItemToObject(json, "token", cJSON_CreateString(token));
     request = cJSON_PrintUnformatted(json);
     if (!request) {

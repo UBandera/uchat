@@ -13,6 +13,7 @@ void mx_remove_rows(GtkListBox *listbox) {
 void mx_free_client_data(t_client *client) {
     mx_remove_rows(client->contacts);
     mx_remove_rows(client->chat);
+    gtk_widget_hide(client->chat_box);
     if (client->contacts_table) {
         g_hash_table_destroy(client->contacts_table);
         client->contacts_table = g_hash_table_new(NULL, NULL);
@@ -27,7 +28,7 @@ void mx_free_client_data(t_client *client) {
  * RETURNS : void
  *   NOTES : -
  */
-void mx_sign_out_handler(cJSON *json, t_client *client) {
+void mx_sign_out(cJSON *json, t_client *client) {
     // GtkBuilder *builder = client->builder;
     // gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
 
