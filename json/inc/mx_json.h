@@ -20,7 +20,6 @@ enum e_request_types {
     RQ_RECOVERY_PASSWD,
     RQ_SIGN_IN,
     RQ_PROFILE_DATA,
-    RQ_SIZE,
     RQ_NEW_MESSAGE
 };
 
