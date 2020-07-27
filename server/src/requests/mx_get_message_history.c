@@ -21,7 +21,7 @@ gint mx_get_chat_history_prepare(cJSON *root,
     if ((rc = sqlite3_bind_int64(*stmt, 1, chat_id)) != SQLITE_OK)
         g_warning("mx_get_chat_history_prepare  bind: chat_id:%d %d",
                   receiver_id, rc);
-    if ((rc = sqlite3_bind_int64(*stmt, 2, sender_id)) != SQLITE_OK)
+    if ((rc = sqlite3_bind_int(*stmt, 2, receiver_id)) != SQLITE_OK)
       g_warning("mx_get_chat_history_prepare  bind: sender_id:%d %d\n",
                 receiver_id, rc);
     if ((rc = sqlite3_bind_int(*stmt, 3, from)) != SQLITE_OK)
