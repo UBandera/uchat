@@ -100,7 +100,7 @@ gchar *mx_chat_history_request(gint user_id, const gchar *token,
                                gint from, gint to);
 gchar *mx_sign_out_request(const gchar *token);
 gchar *mx_remove_contact_request(gint user_id, const gchar *token);
-
+void mx_get_message_handler(cJSON *json, t_client *client);
 
 // responses
 void mx_auth_validated(cJSON *json, t_client *client);
