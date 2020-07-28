@@ -5,7 +5,6 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include "mx_json.h"
-// #include <stdbool.h>
 
 enum e_auth_data_validation {
     MX_VALID = 0,
@@ -41,6 +40,7 @@ typedef struct s_client {
     GtkWindow *profile_setuping;
     GtkWindow *main_window;
     GtkWindow *add_contact_dialog;
+    GtkWindow *contact_info_window;
     GtkWindow *profile_window;
 
     GtkWidget *chat_box;
@@ -75,6 +75,7 @@ GtkWindow *mx_profile_setuping_window(t_client *client);
 GtkWindow *mx_main_window(t_client *client);
 GtkWindow *mx_add_contact_dialog(t_client *client);
 GtkWindow *mx_profile_window(t_client *client);
+GtkWindow *mx_contact_info_window(t_client *client);
 
 
 void mx_chat_control(GtkBuilder *builder, t_client *client);
@@ -114,6 +115,7 @@ gchar *mx_change_data_request(const gchar *first_name,
                               const gchar *last_name, const gchar *email,
                               const gchar *token);
 gchar *mx_clear_chat_request(gint user_id, const gchar *token);
+gchar *mx_contact_info_request(gint user_id, const gchar *token);
 
 // responses
 void mx_auth_validated(cJSON *json, t_client *client);
@@ -131,7 +133,10 @@ void mx_add_contact(cJSON *json, t_client *client);
 void mx_sign_out(cJSON *json, t_client *client);
 void mx_profile_data(cJSON *json, t_client *client);
 void mx_clear_chat(cJSON *json, t_client *client);
+void mx_contact_info(cJSON *json, t_client *client);
+void mx_change_profile(cJSON *json, t_client *client);
 void mx_get_message_handler(cJSON *json, t_client *client);
+
 
 // validation
 gint mx_auth_confirming(gchar *login, gchar *password,

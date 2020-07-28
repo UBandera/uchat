@@ -1,23 +1,32 @@
 #include "client.h"
 
+static void contact_info(GtkWidget *widget, gpointer user_id) {
+    t_client *client = *mx_get_client();
+    gchar *request = NULL;
+    gint id = GPOINTER_TO_INT(user_id);
+
+    request = mx_contact_info_request(id, client->token);
+    mx_send_data(client->data_out, request);
+    g_free(request);
+}
+
 static void open_exist_chat(t_client *client, gint user_id) {
     GHashTable *contacts = client->contacts_table;
-    t_contact_data *node = NULL;
+    t_contact_data *node = (t_contact_data *)g_hash_table_lookup(contacts,
+                                                 GINT_TO_POINTER(user_id));
     GtkButton *header = GTK_BUTTON(client->contact_info);
-    gchar *label = NULL;
+    gchar *label = g_strjoin(" ", node->last_name, node->first_name, NULL);;
     gchar *request = NULL;
 
     mx_remove_rows(GTK_LIST_BOX(client->chat));
     client->chat_with = user_id;
-    node = (t_contact_data *)g_hash_table_lookup(contacts,
-                                                 GINT_TO_POINTER(user_id));
-    label = g_strjoin(" ", node->last_name, node->first_name, NULL);
+    mx_window_switcher(client->add_contact_dialog, client->main_window);
     request = mx_chat_history_request(client->chat_with, client->token, 0, 10);
     gtk_list_box_select_row(client->contacts, GTK_LIST_BOX_ROW(node->row));
     gtk_widget_set_visible(client->chat_box, TRUE);
     gtk_button_set_label(header, label);
+    g_signal_connect(header, "clicked", G_CALLBACK(contact_info), GINT_TO_POINTER(user_id));
     mx_send_data(client->data_out, request);
-    mx_window_switcher(client->add_contact_dialog, client->main_window);
     g_free(request);
     g_free(label);
 }

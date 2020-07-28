@@ -16,6 +16,7 @@ static void activate(GtkApplication *app, t_client *client) {
     client->main_window = mx_main_window(client);
     client->add_contact_dialog = mx_add_contact_dialog(client);
     client->profile_window = mx_profile_window(client);
+    client->contact_info_window = mx_contact_info_window(client);
 
     gtk_application_add_window(app, client->phone_entering);
     gtk_application_add_window(app, client->password_validation);
@@ -23,6 +24,7 @@ static void activate(GtkApplication *app, t_client *client) {
     gtk_application_add_window(app, client->main_window);
     gtk_application_add_window(app, client->add_contact_dialog);
     gtk_application_add_window(app, client->profile_window);
+    gtk_application_add_window(app, client->contact_info_window);
     gtk_widget_show(GTK_WIDGET(client->phone_entering));
 }
 
