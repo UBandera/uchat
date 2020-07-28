@@ -17,11 +17,12 @@ enum e_request_types {
     RQ_SIGN_OUT = 8,
     RQ_REMOVE_CONTACT = 9,
     RQ_CLEAR_CHAT = 10,
-    RQ_CONTACT_INFO = 11,
+    RQ_PROFILE_DATA = 11,
+    RQ_CHANGE_PROFILE = 12,
+    RQ_CONTACT_INFO = 13,
     //
     RQ_RECOVERY_PASSWD,
     RQ_SIGN_IN,
-    RQ_PROFILE_DATA,
     RQ_NEW_MESSAGE
 };
 
@@ -38,7 +39,7 @@ enum e_response_types {
     RS_REMOVE_CONTACT,
     RS_CLEAR_CHAT,
     RS_CONTACT_INFO,
-
+    RS_PROFILE_DATA,
     //
     // RS_SIGN_IN,
     // RS_SIGN_UP,

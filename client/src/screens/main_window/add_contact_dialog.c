@@ -1,7 +1,7 @@
 #include "client.h"
 
 #define MX_STYLES "./src/screens/main_window/dialog.css"
-#define MX_MAIN_WINDOW "./src/screens/glade/new_contact.glade"
+#define MX_MAIN_WINDOW "./src/screens/glade/contact_add.glade"
 #define MX_ALLOW_PATTERN "/^[+]{1}[0-9]{12}$"
 
 static void close_window(GtkWidget *button, GtkWidget *widget) {
