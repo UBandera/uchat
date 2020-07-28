@@ -1,5 +1,6 @@
 #include "client.h"
 
+#define MX_STYLES "./src/screens/main_window/window_main.css"
 #define MX_MAIN_WINDOW "./src/screens/glade/main.glade"
 
 static void controling(GtkBuilder *builder, t_client *client) {
@@ -24,7 +25,7 @@ GtkWindow *mx_main_window(t_client *client) {
     GError *error = NULL;
     GtkWindow *window = NULL;
 
-    // mx_apply_styles(MX_STYLES);
+    mx_apply_styles(MX_STYLES);
     if (!gtk_builder_add_from_file(builder,
                                    MX_MAIN_WINDOW,
                                    &error))

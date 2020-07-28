@@ -3,6 +3,7 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="contact_dialog">
+    <property name="name">contact_dialog</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_FOCUS_CHANGE_MASK</property>
     <property name="resizable">False</property>
@@ -28,6 +29,7 @@
             <property name="layout_style">center</property>
             <child>
               <object class="GtkButton" id="close_settings1">
+                <property name="name">close_settings1</property>
                 <property name="label" translatable="yes">Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

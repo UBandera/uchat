@@ -1,0 +1,80 @@
+/* #props, #props:hover, #props:focus {
+    background-color: salmon;
+} */
+#props, #props:focus,
+#props:active, #props:hover,
+#add_contact, #add_contact:focus,
+#add_contact:active, #add_contact:hover,
+#search_contact, #search_contact:focus,
+#search_contact:active, #search_contact:hover {
+    /* background: #FFC93E; */
+    background: #FFC400;
+    border-style: hidden;
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
+    /* color: black; */
+    color: #081D3C;
+    font-size: 14px;
+}
+
+#props, #props:focus,
+#props:active, #props:hover {
+    border-left: 1px solid rgba(176, 173, 173, 0.934);
+    border-radius: 0;
+}
+#add_contact, #add_contact:focus,
+#add_contact:active, #add_contact:hover {
+    border-right: 1px solid rgba(176, 173, 173, 0.934);
+    border-radius: 0;
+}
+#search_contact {
+    color: rgba(176, 173, 173, 0.934);
+    font-size: 11px;
+}
+
+#contact:focus{ 
+    /* border: none;
+    background: rgb(113, 103, 103);
+    opacity: 0.3;
+    border-bottom: 1px solid silver;
+    border-radius: 0;
+    padding: 10px;
+    font: 14px sans-serif;
+    border-style: outset;
+    background: transparent;
+    color: rgb(45, 43, 43);
+    border-bottom: 1px solid silver;
+    box-shadow: none;  */
+    background:  rgb(122, 9, 9);
+    /* color: rgb(45, 43, 43); */
+    color: #081D3C;
+    border-bottom: 1px solid silver;
+    padding: 10px;
+    box-shadow: none;
+    border-style: outset;
+    box-shadow: none;
+ } 
+
+
+
+#window {
+    /* background: #FFC93E; */
+    background: #FFC400;
+    opacity: 0.9;
+}
+
+#contacts_box, #message_box {
+    /* background:  #FFC93E; */
+    background: #FFC400;
+}
+
+#contact_info, #chat_bottom {
+    background: rgb(244, 181, 23);
+}
+
+
+
+
+
+
