@@ -16,6 +16,7 @@ enum e_request_types {
     RQ_CHAT_HISTORY = 7,
     RQ_SIGN_OUT = 8,
     RQ_REMOVE_CONTACT = 9,
+    RQ_CLEAR_CHAT = 10,
     //
     RQ_RECOVERY_PASSWD,
     RQ_SIGN_IN,
@@ -34,6 +35,7 @@ enum e_response_types {
     RS_GET_CHAT_HISTORY,
     RS_SIGN_OUT,
     RS_REMOVE_CONTACT,
+    RS_CLEAR_CHAT,
     //
     // RS_SIGN_IN,
     // RS_SIGN_UP,

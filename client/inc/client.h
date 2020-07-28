@@ -100,6 +100,7 @@ gchar *mx_chat_history_request(gint user_id, const gchar *token,
                                gint from, gint to);
 gchar *mx_sign_out_request(const gchar *token);
 gchar *mx_remove_contact_request(gint user_id, const gchar *token);
+gchar *mx_clear_chat_request(gint user_id, const gchar *token);
 
 
 // responses
@@ -116,7 +117,7 @@ void mx_get_chat_history(cJSON *json, t_client *client);
 void mx_remove_contact(cJSON *json, t_client *client);
 void mx_add_contact(cJSON *json, t_client *client);
 void mx_sign_out(cJSON *json, t_client *client);
-
+void mx_clear_chat(cJSON *json, t_client *client);
 
 // validation
 gint mx_auth_confirming(gchar *login, gchar *password,
