@@ -25,7 +25,7 @@ gboolean get_chat(GtkWidget *widget, GdkEventButton *event,
             get_user_id(widget, client);
             mx_remove_rows(GTK_LIST_BOX(client->chat));
             gtk_widget_set_visible(chat, TRUE);
-            request = mx_chat_history_request(contact->id, client->token, 0, 10);
+            request = mx_chat_history_request(contact->id, client->token, 0, 20);
             mx_send_data(client->data_out, request);
             gtk_widget_show(chat);
             g_free(request);

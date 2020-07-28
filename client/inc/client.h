@@ -19,10 +19,8 @@ enum e_auth_data_validation {
 
 typedef struct s_contact_data {
     GtkWidget *row;
-    gchar *phone;
     gchar *first_name;
     gchar *last_name;
-    gchar *email;
     gint id;
     GtkWidget *popup;
 }              t_contact_data;
@@ -80,7 +78,8 @@ void mx_chat_control(GtkBuilder *builder, t_client *client);
 void mx_top_bar_control(GtkBuilder *builder, t_client *client);
 gboolean mx_close_widget(GtkWidget *widget, GdkEventKey *event,
                          GtkWidget *to_close);
-void mx_clear_entry(GtkBuilder *builder, const gchar *entry_name);
+void mx_set_entry_value(GtkBuilder *builder, const gchar *entry_name,
+                        const gchar *value);
 void mx_scroll_to_bottom(t_client *client);
 gchar *mx_get_message_from_entry(GtkWidget *text_view);
 void mx_show_message_in_ui(t_client *client, gchar *message_text);
@@ -108,6 +107,7 @@ gchar *mx_chat_history_request(gint user_id, const gchar *token,
 gchar *mx_sign_out_request(const gchar *token);
 gchar *mx_remove_contact_request(gint user_id, const gchar *token);
 gchar *mx_clear_chat_request(gint user_id, const gchar *token);
+gchar *mx_contact_info_request(gint user_id, const gchar *token);
 
 
 // responses
@@ -125,6 +125,8 @@ void mx_remove_contact(cJSON *json, t_client *client);
 void mx_add_contact(cJSON *json, t_client *client);
 void mx_sign_out(cJSON *json, t_client *client);
 void mx_clear_chat(cJSON *json, t_client *client);
+void mx_contact_info(cJSON *json, t_client *client);
+
 
 // validation
 gint mx_auth_confirming(gchar *login, gchar *password,

@@ -11,9 +11,6 @@ static void controling(GtkBuilder *builder, t_client *client) {
     client->contacts_table = g_hash_table_new(NULL, NULL);
     client->contacts = GTK_LIST_BOX(gtk_builder_get_object(builder,
                                                            "contacts_box"));
-    client->contact_info = GTK_WIDGET(
-                         gtk_builder_get_object(client->builder,
-                                                "contact_info_btn"));
     mx_top_bar_control(builder, client);
     mx_chat_control(builder, client);
 

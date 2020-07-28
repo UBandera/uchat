@@ -39,7 +39,7 @@ cJSON *mx_get_contact_handler_response(sqlite3_stmt *stmt, gint user_id) {
 
     // cJSON_AddNumberToObject(user_contact, "response_type", RS_CONTACT);
     cJSON_AddNumberToObject(user_contact, "user_id", user_id);
-    cJSON_AddStringToObject(user_contact, "name",
+    cJSON_AddStringToObject(user_contact, "first_name",
                             (gchar*)sqlite3_column_text(stmt, 0));
     cJSON_AddStringToObject(user_contact, "last_name",
                             (gchar*)sqlite3_column_text(stmt, 1));

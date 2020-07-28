@@ -41,8 +41,7 @@ static gboolean send_by_enter(GtkWidget *widget, GdkEventKey *event,
 void mx_chat_control(GtkBuilder *builder, t_client *client) {
     GtkWidget *text_view = NULL;
     GtkButton *send_btn = NULL;
-    GtkWidget* scroll = GTK_WIDGET(gtk_builder_get_object(client->builder,
-                                                          "chat_scroll"));
+    GtkWidget* scroll = NULL;
 
     client->chat_with = 0;
     client->scroll = GTK_WIDGET(gtk_builder_get_object(client->builder,

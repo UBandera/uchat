@@ -15,9 +15,9 @@ void mx_auth_validated(cJSON *json, t_client *client) {
 
     g_print("message = %s\n", message);
     if (current == client->profile_setuping) {
-        mx_clear_entry(client->builder, "first_name");
-        mx_clear_entry(client->builder, "last_name");
-        mx_clear_entry(client->builder, "email");
+        mx_set_entry_value(client->builder, "first_name", "\0");
+        mx_set_entry_value(client->builder, "last_name", "\0");
+        mx_set_entry_value(client->builder, "email", "\0");
     }
     mx_window_switcher(current, client->main_window);
     request = mx_contact_list_request(client->token);
