@@ -3,7 +3,7 @@
 void mx_setup_as_read(cJSON *root, t_client *client) {
     sqlite3 *db = *(mx_get_db());
     gchar *query = "UPDATE messages SET is_read = 1 WHERE\
-                    chat_id = ? AND receiver_id = ?;";
+                    chat_id = ? AND receiver_id = ? AND is_read = 0;";
     gint contact_id = cJSON_GetObjectItem(root, "contact_id")->valueint;
     g_print("chat_with = %d -> client-uid = %d\n", contact_id, client->uid);
     gint64 chat_id = mx_get_chat_id(client->uid, contact_id);
