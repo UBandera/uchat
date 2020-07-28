@@ -110,6 +110,7 @@ gchar *mx_profile_data_request(const gchar *token);
 gchar *mx_change_data_request(const gchar *phone, const gchar *first_name,
                               const gchar *last_name, const gchar *email,
                               const gchar *token);
+gchar *mx_clear_chat_request(gint user_id, const gchar *token);
 
 // responses
 void mx_auth_validated(cJSON *json, t_client *client);
@@ -126,6 +127,7 @@ void mx_remove_contact(cJSON *json, t_client *client);
 void mx_add_contact(cJSON *json, t_client *client);
 void mx_sign_out(cJSON *json, t_client *client);
 void mx_profile_data(cJSON *json, t_client *client);
+void mx_clear_chat(cJSON *json, t_client *client);
 
 
 // validation
