@@ -9,7 +9,8 @@ gint mx_get_chat_history_prepare(cJSON *root,
     }
     sqlite3 *db = *(mx_get_db());
     gchar *query = "SELECT message, sender_id, receiver_id, date FROM messages\
-                    WHERE chat_id = ? AND receiver_id = ? LIMIT ?, ?;";
+                    WHERE chat_id = ? AND receiver_id = ?\
+                    ORDER BY delivery_date ASC LIMIT ?, ?;";
     gint receiver_id = cJSON_GetObjectItem(root, "contact_id")->valueint;
     gint from = cJSON_GetObjectItem(root, "from")->valueint;
     gint to = cJSON_GetObjectItem(root, "to")->valueint;

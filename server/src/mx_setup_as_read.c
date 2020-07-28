@@ -13,7 +13,7 @@ void mx_setup_as_read(cJSON *root, t_client *client) {
     if ((rc = sqlite3_prepare_v2(db, query, -1, &stmt, NULL)) != SQLITE_OK)
         g_warning("mx_setup_as_read_prepare prepare: %d", rc);
     if ((rc = sqlite3_bind_int64(stmt, 1, chat_id)) != SQLITE_OK)
-        g_warning("mx_setup_as_read_prepare  bind: chat_id:%d %d",
+        g_warning("mx_setup_as_read_prepare  bind: chat_id:%lld %d",
                   chat_id, rc);
     if ((rc = sqlite3_bind_int(stmt, 2, client->uid)) != SQLITE_OK)
       g_warning("mx_setup_as_read_prepare  bind: sender_id:%d %d\n",
