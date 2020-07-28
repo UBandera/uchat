@@ -33,28 +33,45 @@
     font-size: 11px;
 }
 
-#contact:focus{ 
-    /* border: none;
-    background: rgb(113, 103, 103);
-    opacity: 0.3;
+
+
+#contact, #contact:focus{
+    /* color: snow;
+    background: rgb(28, 27, 27); */
+    /* border-bottom: 1px solid silver; */
+    /* padding: 10px; */
+    /* box-shadow: none;
+    border-style: outset; */
+    color: snow;
     border-bottom: 1px solid silver;
-    border-radius: 0;
-    padding: 10px;
-    font: 14px sans-serif;
-    border-style: outset;
-    background: transparent;
-    color: rgb(45, 43, 43);
-    border-bottom: 1px solid silver;
-    box-shadow: none;  */
-    background:  rgb(122, 9, 9);
-    /* color: rgb(45, 43, 43); */
-    color: #081D3C;
-    border-bottom: 1px solid silver;
-    padding: 10px;
+    background: rgb(28, 27, 27);
     box-shadow: none;
     border-style: outset;
+    border-width: 1px;
+    text-shadow: none;
+}
+
+#contact:hover{
+    background-color:  orange;
+    color: snow;
     box-shadow: none;
- } 
+    border-style: outset;
+    border-width: 1px;
+    text-shadow: none;
+    /* box-shadow: none;
+    border-width: 1px;
+    text-shadow: none; */
+}
+ 
+#message{
+    /* font-family:monospace; */
+    color: snow;
+    background: rgb(28, 27, 27);
+    box-shadow: none;
+    border-style: outset;
+    border-width: 1px;
+    text-shadow: none;
+}
 
 
 
