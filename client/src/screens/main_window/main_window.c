@@ -6,7 +6,7 @@ static void controling(GtkBuilder *builder, t_client *client) {
     GtkButton *add_contact = NULL;
     GtkButton *profile = NULL;
     GtkSearchEntry *search = NULL;
-
+    GtkWidget *placeholder = GTK_WIDGET(gtk_label_new("Add contact first"));
 
     client->contacts_table = g_hash_table_new(NULL, NULL);
     client->contacts = GTK_LIST_BOX(gtk_builder_get_object(builder,
@@ -14,6 +14,8 @@ static void controling(GtkBuilder *builder, t_client *client) {
     client->contact_info = GTK_WIDGET(
                          gtk_builder_get_object(client->builder,
                                                 "contact_info_btn"));
+    gtk_list_box_set_placeholder(client->contacts, placeholder);
+    gtk_widget_show(placeholder);
     mx_top_bar_control(builder, client);
     mx_chat_control(builder, client);
 

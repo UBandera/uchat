@@ -15,11 +15,14 @@ static gboolean json_validator(cJSON *root) {
 }
 
 gchar *mx_add_contact_response(gint contact) {
-    cJSON *json = cJSON_CreateObject();
+    cJSON *json = NULL;
     gchar *response = NULL;
+    sqlite3 *db = *(mx_get_db());
+    sqlite3_stmt *stmt = NULL;
 
+    mx_get_contact_handler_prepare(&stmt, contact, db);
+    json = mx_get_contact_handler_run(stmt, contact);
     cJSON_AddNumberToObject(json, "response_type", RS_ADD_CONTACT);
-    cJSON_AddNumberToObject(json, "contact", contact);
     cJSON_AddStringToObject(json, "message", "Contact add successfully");
     response = cJSON_PrintUnformatted(json);
     if (!response) {
@@ -72,14 +75,8 @@ void mx_add_contact_handler(cJSON *root, t_client *client) {
         sqlite3_stmt *stmt= NULL;
         gchar *response = NULL;
 
-        if (contact == client->uid) {
-            response = mx_send_error_response(ER_CONTACT_NOT_FOUND,
-                                              "U can`t add yourself");
-        }
-        else {
-            mx_add_contact_prepare(&stmt, contact, client->uid);
-            response = mx_add_contact_run(stmt, contact);
-        }
+        mx_add_contact_prepare(&stmt, contact, client->uid);
+        response = mx_add_contact_run(stmt, contact);
         mx_send_data(client->data_out, response);
         return;
         // }

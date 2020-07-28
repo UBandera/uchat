@@ -14,7 +14,7 @@ void mx_contact_list(cJSON *json, t_client *client) {
 
     cJSON_ArrayForEach(data, contacts) {
         gint user_id = cJSON_GetObjectItem(data, "user_id")->valueint;
-        gchar *first_name = cJSON_GetObjectItem(data, "name")->valuestring;
+        gchar *first_name = cJSON_GetObjectItem(data, "first_name")->valuestring;
         gchar *last_name = cJSON_GetObjectItem(data, "last_name")->valuestring;
 
         mx_show_contact_in_ui(client, first_name, last_name, user_id);

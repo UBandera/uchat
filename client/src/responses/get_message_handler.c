@@ -1,6 +1,6 @@
 #include "client.h"
 
-#define MX_STYLES "./src/screens/auth/test.css"
+#define MX_STYLES "./src/screens/auth/notify_on.css"
 
 /*
  * PURPOSE : Autogenerates function contract comments
