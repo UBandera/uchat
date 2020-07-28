@@ -57,7 +57,6 @@ static void init_items(GtkWidget *menu, t_contact_data *contact) {
 
 GtkWidget *mx_contact_context(t_contact_data *contact) {
     GtkWidget *menu = NULL;
-    GtkWidget *ebox = NULL;
 
     menu = GTK_WIDGET(gtk_menu_new());
     init_items(menu, contact);

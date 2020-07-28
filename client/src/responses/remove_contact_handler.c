@@ -1,7 +1,6 @@
 #include "client.h"
 
 void mx_remove_contact(cJSON *json, t_client *client) {
-    gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
     gint user_id = cJSON_GetObjectItem(json, "contact")->valueint;
     GHashTable *contacts = client->contacts_table;
     t_contact_data *node = NULL;

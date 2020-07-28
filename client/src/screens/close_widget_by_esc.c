@@ -7,4 +7,5 @@ gboolean mx_close_widget(GtkWidget *widget, GdkEventKey *event,
         return TRUE;
     }
     return FALSE;
+    (void)widget;
 }

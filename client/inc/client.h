@@ -5,7 +5,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include "mx_json.h"
-#include <stdbool.h>
+// #include <stdbool.h>
 
 enum e_auth_data_validation {
     MX_VALID = 0,

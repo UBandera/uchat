@@ -36,4 +36,6 @@ void mx_sign_out(cJSON *json, t_client *client) {
     mx_free_client_data(client);
     // gtk_widget_hide(GTK_WIDGET(client->main_window));
     mx_window_switcher(client->main_window, client->phone_entering);
+    (void)json;
+    
 }

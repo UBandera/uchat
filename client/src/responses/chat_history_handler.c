@@ -14,7 +14,7 @@ void mx_get_chat_history(cJSON *json, t_client *client) {
 
     cJSON_ArrayForEach(data, contacts) {
         gchar *message = cJSON_GetObjectItem(data, "message")->valuestring;
-        gint date = cJSON_GetObjectItem(data, "date")->valueint;
+        // gint date = cJSON_GetObjectItem(data, "date")->valueint;
 
         g_print("chat history handler\n");
         mx_show_message_in_ui(client, message);

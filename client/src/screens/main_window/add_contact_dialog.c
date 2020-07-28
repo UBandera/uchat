@@ -30,6 +30,7 @@ static gboolean clear_inputs(GtkWidget *widget, GdkEventKey *event,
         return TRUE;
     }
     return FALSE;
+    (void)search;
 }
 
 static void find_user(GtkEntry *entry, t_client *client) {

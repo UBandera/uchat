@@ -17,8 +17,6 @@ gboolean get_chat(GtkWidget *widget, GdkEventButton *event,
 
     if (event->type == GDK_BUTTON_PRESS  &&  event->button == 1) {
         if (client->chat_with != contact->id) {
-            GtkBuilder *builder = client->builder;
-            GtkWidget *chat = client->chat_box;
             gchar *request = NULL;
 
             client->chat_with = contact->id;

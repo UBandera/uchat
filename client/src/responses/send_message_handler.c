@@ -1,7 +1,6 @@
 #include "client.h"
 
 void mx_send_message(cJSON *json, t_client *client) {
-    GtkBuilder *builder = client->builder;
     gchar *message = NULL;
     GtkTextBuffer *buffer = NULL;
 
@@ -10,4 +9,5 @@ void mx_send_message(cJSON *json, t_client *client) {
     mx_show_message_in_ui(client, message);
     gtk_text_buffer_set_text(buffer, "\0", -1);
     g_free(message);
+    (void)json;
 }

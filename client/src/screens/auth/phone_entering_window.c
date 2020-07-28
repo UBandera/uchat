@@ -41,7 +41,9 @@ static void generate_pass(GtkButton *button, t_client *client) {
         mx_send_data(client->data_out, request);
     gtk_entry_set_text(phone, "");
     g_free(request);
+    return;
     (void)button;
+    phone_validator(builder, buffer);
 }
 
 static void controling(GtkBuilder *builder, t_client *client) {

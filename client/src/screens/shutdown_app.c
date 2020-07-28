@@ -8,6 +8,9 @@ void clear_hash_table(gpointer key, gpointer value, gpointer user_data) {
     if (contact->last_name)
         g_free(contact->last_name);
     g_free(contact);
+    return;
+    (void)key;
+    (void)user_data;
 }
 
 void shut_down(GtkApplication *app, t_client *client) {
@@ -24,4 +27,6 @@ void shut_down(GtkApplication *app, t_client *client) {
         client->contacts_table = NULL;
     }
     g_application_quit(G_APPLICATION(client->app));
+    return;
+    (void)app;
 }
