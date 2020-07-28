@@ -9,7 +9,7 @@ gchar *mx_chat_history_request(gint user_id, const gchar *token,
                           "request_type",
                           cJSON_CreateNumber(RQ_CHAT_HISTORY));
     cJSON_AddItemToObject(json, "token", cJSON_CreateString(token));
-    cJSON_AddItemToObject(json, "receiver_id", cJSON_CreateNumber(user_id));
+    cJSON_AddItemToObject(json, "contact_id", cJSON_CreateNumber(user_id));
     cJSON_AddItemToObject(json, "from", cJSON_CreateNumber(from));
     cJSON_AddItemToObject(json, "to", cJSON_CreateNumber(to));
     request = cJSON_PrintUnformatted(json);

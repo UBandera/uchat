@@ -26,7 +26,7 @@ static gboolean phone_validator(GtkBuilder *builder, GtkEntryBuffer *buffer) {
     return TRUE;
 }
 
-static void generate_pass(GtkButton *button, t_client *client) {
+static void generate_pass(GtkWidget *widget, t_client *client) {
     GtkEntryBuffer *buffer = NULL;
     GtkBuilder *builder = client->builder;
     GtkEntry *phone = GTK_ENTRY(gtk_builder_get_object(builder, "phone"));
@@ -41,7 +41,7 @@ static void generate_pass(GtkButton *button, t_client *client) {
         mx_send_data(client->data_out, request);
     gtk_entry_set_text(phone, "");
     g_free(request);
-    (void)button;
+    (void)widget;
 }
 
 static void controling(GtkBuilder *builder, t_client *client) {
@@ -53,6 +53,7 @@ static void controling(GtkBuilder *builder, t_client *client) {
     next = GTK_BUTTON(gtk_builder_get_object(builder, "first_next_button"));
     phone = GTK_ENTRY(gtk_builder_get_object(builder, "phone"));
     gtk_entry_set_text(phone, gtk_entry_buffer_get_text(buffer));
+    g_signal_connect(phone, "activate", G_CALLBACK(generate_pass), client);
     g_signal_connect(next, "clicked", G_CALLBACK(generate_pass), client);
 }
 

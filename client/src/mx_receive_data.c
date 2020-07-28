@@ -12,6 +12,7 @@ static void auth_handlers(t_client *client) {
     client->response_handler[RS_GET_CHAT_HISTORY] = mx_get_chat_history;
     client->response_handler[RS_SIGN_OUT] = mx_sign_out;
     client->response_handler[RS_REMOVE_CONTACT] = mx_remove_contact;
+    client->response_handler[RS_NEW_MESSAGE] = mx_get_message_handler;
     client->response_handler[RS_CLEAR_CHAT] = mx_clear_chat;
     client->response_handler[RS_PROFILE_DATA] = mx_profile_data;
 
