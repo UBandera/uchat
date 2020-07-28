@@ -32,19 +32,30 @@ static void local_search(GtkEntry *entry, GtkListBox *box) {
     }
 }
 
-static void log_out(GtkButton *button, gpointer data) {
+void get_profile(GtkButton *button, gpointer data) {
     t_client *client = *mx_get_client();
     gchar *request = NULL;
 
-    request = mx_sign_out_request(client->token);
+    request = mx_profile_data_request(client->token);
     mx_send_data(client->data_out, request);
+    gtk_widget_show(GTK_WIDGET(client->profile_window));
     g_free(request);
+}
+
+static gboolean open_by_left_key(GtkWidget *widget, GdkEventButton *event,
+                          t_contact_data *contact) {
+    if (event->type == GDK_BUTTON_PRESS  &&  event->button == 1) {
+        get_profile(NULL, NULL);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 void mx_top_bar_control(GtkBuilder *builder, t_client *client) {
     GtkButton *add_contact = NULL;
     GtkButton *profile = NULL;
     GtkSearchEntry *search = NULL;
+    GtkWidget *popup = mx_profile_context(client);
 
     profile = GTK_BUTTON(gtk_builder_get_object(builder, "props"));
     add_contact = GTK_BUTTON(
@@ -56,5 +67,8 @@ void mx_top_bar_control(GtkBuilder *builder, t_client *client) {
                      G_CALLBACK(local_search), client->contacts);
     g_signal_connect(add_contact, "clicked",
                      G_CALLBACK(add_contact_btn_callback), client->contacts);
-    g_signal_connect(profile, "clicked", G_CALLBACK(log_out), NULL);
+    g_signal_connect(profile, "button-press-event",
+                     G_CALLBACK(open_by_left_key), NULL);
+    g_signal_connect(profile, "button-press-event",
+                     G_CALLBACK(mx_menu_callback), popup);
 }
