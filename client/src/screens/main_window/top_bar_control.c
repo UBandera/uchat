@@ -2,9 +2,10 @@
 
 static void add_contact_btn_callback(GtkButton *button, GtkListBox *box) {
     t_client *client = *mx_get_client();
-    GtkWindow *current = gtk_application_get_active_window(client->app);
 
     gtk_widget_show(GTK_WIDGET(client->add_contact_dialog));
+    (void)button;
+    (void)box;
 }
 
 static gboolean searching(gchar *label, gchar *search) {
@@ -25,6 +26,7 @@ static void local_search(GtkEntry *entry, GtkListBox *box) {
         }
         GtkButton *child = GTK_BUTTON(gtk_bin_get_child(GTK_BIN(row)));
         gchar *label = (gchar *)gtk_button_get_label(child);
+
         if (!searching(label, search))
             gtk_widget_hide(GTK_WIDGET(row));
         else
@@ -40,15 +42,19 @@ void get_profile(GtkButton *button, gpointer data) {
     mx_send_data(client->data_out, request);
     gtk_widget_show(GTK_WIDGET(client->profile_window));
     g_free(request);
+    (void)button;
+    (void)data;
 }
 
 static gboolean open_by_left_key(GtkWidget *widget, GdkEventButton *event,
-                          t_contact_data *contact) {
+                                 t_contact_data *contact) {
     if (event->type == GDK_BUTTON_PRESS  &&  event->button == 1) {
         get_profile(NULL, NULL);
         return TRUE;
     }
     return FALSE;
+    (void)widget;
+    (void)contact;
 }
 
 void mx_top_bar_control(GtkBuilder *builder, t_client *client) {

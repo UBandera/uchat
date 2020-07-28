@@ -4,9 +4,6 @@
 #define MX_MAIN_WINDOW "./src/screens/glade/main.glade"
 
 static void controling(GtkBuilder *builder, t_client *client) {
-    GtkButton *add_contact = NULL;
-    GtkButton *profile = NULL;
-    GtkSearchEntry *search = NULL;
     GtkWidget *placeholder = GTK_WIDGET(gtk_label_new("Add contact first"));
 
     client->contacts_table = g_hash_table_new(NULL, NULL);

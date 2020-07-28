@@ -10,4 +10,5 @@
  */
 void mx_change_profile(cJSON *json, t_client *client) {
     mx_window_switcher(client->profile_window, client->main_window);
+    (void)json;
 }

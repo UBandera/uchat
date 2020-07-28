@@ -36,12 +36,14 @@ static gboolean send_by_enter(GtkWidget *widget, GdkEventKey *event,
         return TRUE;
     }
     return FALSE;
+    (void)data;
 }
 
 void mx_chat_control(GtkBuilder *builder, t_client *client) {
     GtkWidget *text_view = NULL;
     GtkButton *send_btn = NULL;
-    GtkWidget *placeholder = GTK_WIDGET(gtk_label_new("Add contact first"));
+    GtkWidget *placeholder = GTK_WIDGET(gtk_label_new("U don`t receive letter"));
+
 
     client->chat_with = 0;
     client->scroll = GTK_WIDGET(gtk_builder_get_object(client->builder,

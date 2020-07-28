@@ -62,6 +62,8 @@ typedef struct s_client {
 t_client **mx_get_client(void);
 void mx_init_handlers(t_client *client);
 void mx_receive_data(gchar *data, t_client *client);
+void mx_get_data(GObject *source_object, GAsyncResult *res,
+                 gpointer user_data);
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 
 // screens

@@ -52,6 +52,7 @@ static void add_info(GtkButton *button, t_client *client) {
 
 static void move_focus(GtkWidget *widget, GtkWidget *to_focus) {
     gtk_widget_grab_focus(to_focus);
+    (void)widget;
 }
 
 

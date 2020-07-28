@@ -9,4 +9,5 @@ gboolean mx_menu_callback(GtkWidget *widget, GdkEventButton *event,
         return TRUE;
     }
     return FALSE;
+    (void)widget;
 }
