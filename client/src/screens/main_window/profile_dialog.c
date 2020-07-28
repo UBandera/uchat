@@ -10,9 +10,9 @@ static void change_data(GtkWidget *widget, t_client *client) {
     GtkEntry *email = GTK_ENTRY(gtk_builder_get_object(client->builder,
                                                        "profile_email"));
     gchar *request = NULL;
-  
-    if (strlen(gtk_entry_get_text(first_name)) !=0 && 
-        strlen(gtk_entry_get_text(last_name)) !=0 && 
+
+    if (strlen(gtk_entry_get_text(first_name)) !=0 &&
+        strlen(gtk_entry_get_text(last_name)) !=0 &&
         strlen(gtk_entry_get_text(email)) !=0) {
         request = mx_change_data_request(gtk_entry_get_text(first_name),
                                         gtk_entry_get_text(last_name),
@@ -21,9 +21,9 @@ static void change_data(GtkWidget *widget, t_client *client) {
         mx_send_data(client->data_out, request);
         g_free(request);
     }
-    else 
+    else
         gtk_widget_show_all(client->label);
-
+    (void)widget;
 }
 
 

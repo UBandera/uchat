@@ -42,7 +42,7 @@ static void generate_pass(GtkWidget *widget, t_client *client) {
     gtk_entry_set_text(phone, "");
     g_free(request);
     return;
-    (void)button;
+    (void)widget;
 }
 
 static void controling(GtkBuilder *builder, t_client *client) {

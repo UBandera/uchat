@@ -8,6 +8,7 @@ static void contact_info(GtkWidget *widget, gpointer user_id) {
     request = mx_contact_info_request(id, client->token);
     mx_send_data(client->data_out, request);
     g_free(request);
+    (void)widget;
 }
 
 static void open_exist_chat(t_client *client, gint user_id) {

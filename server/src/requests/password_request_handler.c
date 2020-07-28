@@ -31,22 +31,21 @@ static void send_response(gint status, t_client *client) {
 
 void mx_password_request_handler(cJSON *root, t_client *client) {
     if (cJSON_GetObjectItem(root, "phone")) {
-        // gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
+        gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
         gint status = 0;
         gchar *body = NULL;
-        // gchar *password = mx_generate_password();
-        gchar *password = "asdf";
+        gchar *password = mx_generate_password();
 
         client->password = g_compute_checksum_for_string(
                          G_CHECKSUM_SHA256, password, strlen(password));
-        body = mx_recovery_body("ARTEM", "asdf");
-        g_print("passwd: asdf\n");
+        // body = mx_recovery_body("ARTEM", "asdf");
+        // g_print("passwd: asdf\n");
         // status = mx_send_mail("shemedvedd@gmail.com", body);
-        // body = mx_create_sms_body(phone, password);
-        // status = mx_send_sms(body);
+        body = mx_create_sms_body(phone, password);
+        status = mx_send_sms(body);
         send_response(status, client);
         g_free(body);
-        // g_free(password);
+        g_free(password);
         return;
     }
     g_warning("Not valid request\n");
