@@ -53,6 +53,7 @@ typedef struct s_client {
     GtkWidget *text_view;
 
     GHashTable *contacts_table;
+    GtkWidget *label;
 
     void (*response_handler[30])(cJSON *json, struct s_client *client);
 }              t_client;
@@ -109,7 +110,7 @@ gchar *mx_chat_history_request(gint user_id, const gchar *token,
 gchar *mx_sign_out_request(const gchar *token);
 gchar *mx_remove_contact_request(gint user_id, const gchar *token);
 gchar *mx_profile_data_request(const gchar *token);
-gchar *mx_change_data_request(const gchar *phone, const gchar *first_name,
+gchar *mx_change_data_request(const gchar *first_name,
                               const gchar *last_name, const gchar *email,
                               const gchar *token);
 gchar *mx_clear_chat_request(gint user_id, const gchar *token);
