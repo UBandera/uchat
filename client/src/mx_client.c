@@ -14,7 +14,9 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer user_data) {
     if (data) {
         mx_receive_data(data, client);
     }
-    g_data_input_stream_read_line_async(client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, client);
+    g_data_input_stream_read_line_async(client->data_in,
+                                        G_PRIORITY_DEFAULT, NULL,
+                                        get_data, client);
     (void)source_object;
 }
 
@@ -46,19 +48,19 @@ int main(int argc, char **argv) {
     GError *error = NULL;
     t_client **client = mx_get_client();
 
+    if (argc != 3) {
+        g_error("Usage: ./uchat <IP address> <Port>\n");
+        return 1;
+    }
     socket = g_socket_client_new();
-    g_socket_client_set_protocol(socket, G_SOCKET_PROTOCOL_TCP);
-    g_socket_client_set_socket_type(socket, G_SOCKET_TYPE_STREAM);
-    connection = g_socket_client_connect_to_host(socket, (gchar *)"0.0.0.0",
-                                                 5050, NULL, &error);
+    connection = g_socket_client_connect_to_host(
+               socket, argv[1], g_ascii_strtoll(argv[2], NULL, 10),
+               NULL, &error);
     if (error) {
         g_error("%s\n", error->message);
         g_clear_error(&error);
     }
     *client = init_client(connection);
-    mx_application_run(argc, argv, (*client)->app);
-
-    g_object_unref(connection);
-    g_free(*client);
+    mx_application_run(0, NULL, (*client)->app);
     return 0;
 }
