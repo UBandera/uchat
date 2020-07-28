@@ -14,6 +14,7 @@ static void auth_handlers(t_client *client) {
     client->response_handler[RS_REMOVE_CONTACT] = mx_remove_contact;
     client->response_handler[RS_CLEAR_CHAT] = mx_clear_chat;
     client->response_handler[RS_PROFILE_DATA] = mx_profile_data;
+    client->response_handler[RS_CHANGE_PROFILE] = mx_change_profile;
 
     client->response_handler[ER_SENT_PASS] = mx_sms_error;
     client->response_handler[ER_PASS] = mx_invalid_password;
