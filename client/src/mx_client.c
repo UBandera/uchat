@@ -6,27 +6,13 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer user_data) {
     gsize size = 0;
     gchar *data = NULL;
 
-    if (!g_socket_connection_is_connected(client->connection)) {
-        g_print("Server logout!\n");
-        return;
-    }
     data = g_data_input_stream_read_line_finish(client->data_in, res, &size, &error);
     if (error) {
         g_error("%s\n", error->message);
         g_clear_error(&error);
     }
     if (data) {
-        cJSON *root = cJSON_Parse(data);
-        cJSON *res_type = cJSON_GetObjectItem(root, "response_type");
-        g_print("data = %s\n", data);
-
-        if (root != NULL && res_type != NULL) {
-            client->response_handler[res_type->valueint](root, client);
-            g_free(data);
-            cJSON_Delete(root);
-        }
-        else
-            g_warning("Invalid request\n");
+        mx_receive_data(data, client);
     }
     g_data_input_stream_read_line_async(client->data_in, G_PRIORITY_DEFAULT, NULL, get_data, client);
     (void)source_object;
@@ -44,6 +30,8 @@ t_client *init_client(GSocketConnection *connection) {
     client->data_in = g_data_input_stream_new(istream);
     client->data_out = g_data_output_stream_new(ostream);
     client->builder = gtk_builder_new();
+    client->token = NULL;
+    client->contacts_table = NULL;
     mx_application_init(client);
     mx_init_handlers(client);
     g_data_input_stream_read_line_async(client->data_in,

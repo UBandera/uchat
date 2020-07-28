@@ -31,6 +31,7 @@ GtkWindow *mx_main_window(t_client *client) {
         g_error("%s\n", error->message);
     window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
     controling(builder, client);
+    g_signal_connect(window, "destroy", G_CALLBACK(shut_down), client);
     g_signal_connect(window, "key_press_event",
                      G_CALLBACK(mx_close_widget), client->chat_box);
     return window;

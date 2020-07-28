@@ -62,7 +62,7 @@ typedef struct s_client {
 
 t_client **mx_get_client(void);
 void mx_init_handlers(t_client *client);
-void mx_receive_data(gchar *response, t_client *client);
+void mx_receive_data(gchar *data, t_client *client);
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 
 // screens
@@ -107,6 +107,7 @@ gchar *mx_chat_history_request(gint user_id, const gchar *token,
                                gint from, gint to);
 gchar *mx_sign_out_request(const gchar *token);
 gchar *mx_remove_contact_request(gint user_id, const gchar *token);
+gchar *mx_clear_chat_request(gint user_id, const gchar *token);
 
 
 // responses
@@ -123,7 +124,7 @@ void mx_get_chat_history(cJSON *json, t_client *client);
 void mx_remove_contact(cJSON *json, t_client *client);
 void mx_add_contact(cJSON *json, t_client *client);
 void mx_sign_out(cJSON *json, t_client *client);
-
+void mx_clear_chat(cJSON *json, t_client *client);
 
 // validation
 gint mx_auth_confirming(gchar *login, gchar *password,
@@ -133,9 +134,8 @@ gint mx_auth_confirming(gchar *login, gchar *password,
 gboolean mx_match(const gchar *str, const gchar *pattern,
                   gint compile_flags, gint match_flag);
 
-// Trash
 int mx_application_run(int argc, char **argv, GtkApplication *app);
 void mx_application_init(t_client *client);
-// void mx_notify(GApplication *application);
+void shut_down(GtkApplication *app, t_client *client);
 
 #endif /* end of include guard: CLIENT_H */

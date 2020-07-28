@@ -88,6 +88,7 @@ GtkWindow *mx_profile_setuping_window(t_client *client) {
     if (!gtk_builder_add_from_file(builder, MX_PROFILE_SETUP_WINDOW, &error))
         g_error("%s\n", error->message);
     window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
+    g_signal_connect(window, "destroy", G_CALLBACK(shut_down), client);
     controling(builder, client);
     return window;
 }
