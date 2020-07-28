@@ -42,6 +42,8 @@ static gboolean send_by_enter(GtkWidget *widget, GdkEventKey *event,
 void mx_chat_control(GtkBuilder *builder, t_client *client) {
     GtkWidget *text_view = NULL;
     GtkButton *send_btn = NULL;
+    GtkWidget *placeholder = GTK_WIDGET(gtk_label_new("U don`t receive letter"));
+
 
     client->chat_with = 0;
     client->scroll = GTK_WIDGET(gtk_builder_get_object(client->builder,
@@ -52,9 +54,9 @@ void mx_chat_control(GtkBuilder *builder, t_client *client) {
     client->chat = GTK_LIST_BOX(gtk_builder_get_object(builder, "message_box"));
     send_btn = GTK_BUTTON(gtk_builder_get_object(builder, "send_btn"));
     text_view = GTK_WIDGET(gtk_builder_get_object(builder, "message_entry"));
+    gtk_list_box_set_placeholder(client->chat, placeholder);
+    gtk_widget_show(placeholder);
     g_signal_connect(text_view, "key_press_event", G_CALLBACK(send_by_enter),
                      text_view);
     g_signal_connect(send_btn, "clicked", G_CALLBACK(send_message), text_view);
-    g_signal_connect(client->chat, "key_press_event",
-                     G_CALLBACK(mx_close_widget), client->chat_box);
 }

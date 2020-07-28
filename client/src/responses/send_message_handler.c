@@ -10,6 +10,7 @@ static gboolean json_validator(cJSON *json) {
 }
 
 void mx_send_message(cJSON *json, t_client *client) {
+
     if (json_validator(json)) {
         GtkTextBuffer *buffer = NULL;
 

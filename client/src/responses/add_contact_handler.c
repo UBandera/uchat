@@ -31,6 +31,7 @@ void mx_add_contact(cJSON *json, t_client *client) {
         g_print("message = %s\n", message);
         mx_window_switcher(client->add_contact_dialog, client->main_window);
         gtk_widget_grab_focus(GTK_WIDGET(client->main_window));
+        g_free(label);
     }
     else {
         g_message("Invalid add contact response\n");

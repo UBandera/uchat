@@ -1,5 +1,7 @@
 #include "client.h"
 
+#define MX_STYLES "./src/screens/auth/notify_off.css"
+
 static gboolean json_validator(cJSON *json) {
     cJSON *data = cJSON_GetObjectItemCaseSensitive(json, "messages");
     const cJSON *item = NULL;
@@ -23,6 +25,7 @@ static gboolean json_validator(cJSON *json) {
  *   NOTES : -
  */
 void mx_get_chat_history(cJSON *json, t_client *client) {
+
     if (json_validator(json)) {
         cJSON *data = cJSON_GetObjectItemCaseSensitive(json, "messages");
         cJSON *messages = NULL;
