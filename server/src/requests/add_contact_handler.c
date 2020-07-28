@@ -24,6 +24,7 @@ gchar *mx_add_contact_response(gint contact) {
     json = mx_get_contact_handler_run(stmt, contact);
     cJSON_AddNumberToObject(json, "response_type", RS_ADD_CONTACT);
     cJSON_AddStringToObject(json, "message", "Contact add successfully");
+    cJSON_AddNumberToObject(json, "contact", contact);
     response = cJSON_PrintUnformatted(json);
     if (!response) {
         g_warning("Failed to print mx_add_contact_response.\n");

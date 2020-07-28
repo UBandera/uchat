@@ -25,14 +25,20 @@ static gboolean json_validator(cJSON *json) {
  *   NOTES : -
  */
 void mx_get_chat_history(cJSON *json, t_client *client) {
-
     if (json_validator(json)) {
         cJSON *data = cJSON_GetObjectItemCaseSensitive(json, "messages");
         cJSON *messages = NULL;
+        t_contact_data *node = NULL;
 
+        node = (t_contact_data *)g_hash_table_lookup(client->contacts_table,
+            GINT_TO_POINTER(client->chat_with));
+        GtkWidget *child = GTK_WIDGET(gtk_bin_get_child(GTK_BIN(node->row)));
+
+        gtk_widget_set_name(child, "notify_disable");
+        mx_apply_styles(MX_STYLES);
         cJSON_ArrayForEach(messages, data) {
-            gchar *message = cJSON_GetObjectItem(data, "message")->valuestring;
-            gint date = cJSON_GetObjectItem(data, "date")->valueint;
+            gchar *message = cJSON_GetObjectItem(messages, "message")->valuestring;
+            gint date = cJSON_GetObjectItem(messages, "date")->valueint;
 
             mx_show_message_in_ui(client, message);
             date *= 1;

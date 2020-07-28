@@ -23,6 +23,7 @@ void mx_init_handlers(t_client *client) {
 }
 
 void mx_receive_data(gchar *data, t_client *client) {
+    g_print("data from server: %s\n", data);
     cJSON *json = cJSON_Parse(data);
     cJSON *response = cJSON_GetObjectItemCaseSensitive(json, "response_type");
 

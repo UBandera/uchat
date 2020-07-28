@@ -39,7 +39,6 @@ void mx_password_request_handler(cJSON *root, t_client *client) {
         client->password = g_compute_checksum_for_string(
                          G_CHECKSUM_SHA256, password, strlen(password));
         // body = mx_recovery_body("ARTEM", "asdf");
-        // g_print("passwd: asdf\n");
         // status = mx_send_mail("shemedvedd@gmail.com", body);
         body = mx_create_sms_body(phone, password);
         status = mx_send_sms(body);

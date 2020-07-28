@@ -39,7 +39,7 @@ static gchar *mx_delete_chat_response(gint user_id) {
 
     cJSON_AddItemToObject(json,
                           "response_type",
-                          cJSON_CreateNumber(RQ_CLEAR_CHAT));
+                          cJSON_CreateNumber(RS_CLEAR_CHAT));
     cJSON_AddItemToObject(json, "message", cJSON_CreateString(message));
     cJSON_AddItemToObject(json, "user_id", cJSON_CreateNumber(user_id));
     response = cJSON_PrintUnformatted(json);

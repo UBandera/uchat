@@ -86,7 +86,7 @@ INCS = $(foreach dir, $(INCD), $(wildcard $(dir)/*.h))
 
 OBJTEST = $(OBJS)
 #compilier
-CC = clang
+CC = clang -g
 
 CFLAGS = -std=c11 $(addprefix -W, all extra error pedantic)
 CPPFLAGS = -DMX_CLIENT='"$(CLIENT_WD)"' $(INCD_CLIENT) -D_GNU_SOURCE \

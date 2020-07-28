@@ -21,7 +21,7 @@ gint mx_get_contact_handler_prepare(sqlite3_stmt **stmt,
         g_message("User not excist\n");
         return -1;
     }
-    gchar *query = "SELECT name, last_name FROM user_profile\
+    gchar *query = "SELECT first_name, last_name FROM user_profile\
                     WHERE user_id = ?;";
     gint rc = 0;
 
@@ -89,9 +89,6 @@ void mx_get_contact_handler(cJSON *root, t_client *client) {
                 return ;
             }
             cJSON_AddNumberToObject(response, "response_type", RS_CONTACT);
-            // mx_get_profile_by_user_id(user_id, db);
-            // gchar *response = mx_get_contacts_list();
-            // gchar *response = "{\"response_type\":3,\"user_id\":1,\"name\":\"Artem\",\"last_name\":\"Shemidko\"}";
             mx_send_data(client->data_out, cJSON_PrintUnformatted(response));
             cJSON_Delete(response);
             return;

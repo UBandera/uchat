@@ -15,8 +15,7 @@ static void close_window(GtkWidget *button, GtkWidget *widget) {
     info = GTK_WIDGET(gtk_builder_get_object(builder, "info_label"));
     gtk_entry_buffer_set_text(buf, "\0", -1 );
     if (client->contact_view) {
-        gtk_widget_destroy(client->contact_view);
-        client->contact_view = NULL;
+        gtk_widget_hide(client->contact_view);
     }
     gtk_widget_hide(info);
     gtk_widget_hide(widget);
@@ -41,19 +40,18 @@ static void find_user(GtkEntry *entry, t_client *client) {
 
     gtk_widget_hide(GTK_WIDGET(info));
     if (client->contact_view) {
-        gtk_widget_destroy(client->contact_view);
-        client->contact_view = NULL;
+        gtk_widget_hide(client->contact_view);
     }
-    // if (strlen(input) != 13) {
-        // gtk_label_set_text(info, "Enter full number");
-        // gtk_widget_show(GTK_WIDGET(info));
-        // return;
-    // }
-    // if (mx_match(input, MX_ALLOW_PATTERN, 0, 0)) {
-        // gtk_label_set_text(info, "Not valid phone number");
-        // gtk_widget_show(GTK_WIDGET(info));
-        // return;
-    // }
+    if (strlen(input) != 13) {
+        gtk_label_set_text(info, "Enter full number");
+        gtk_widget_show(GTK_WIDGET(info));
+        return;
+    }
+    if (mx_match(input, MX_ALLOW_PATTERN, 0, 0)) {
+        gtk_label_set_text(info, "Not valid phone number");
+        gtk_widget_show(GTK_WIDGET(info));
+        return;
+    }
     request = mx_find_contact_request(input, client->token);
     mx_send_data(client->data_out, request);
     g_free(request);
