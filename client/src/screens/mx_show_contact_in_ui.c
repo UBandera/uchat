@@ -1,5 +1,7 @@
 #include "client.h"
 
+
+
 static void get_user_id(GtkWidget *widget, t_client *client) {
     GtkButton *header = GTK_BUTTON(client->contact_info);
     gchar *label = (gchar *)gtk_button_get_label(GTK_BUTTON(widget));
@@ -54,7 +56,7 @@ void mx_show_contact_in_ui(t_client *client, gchar *first_name,
         gchar *label = g_strjoin(" ", last_name, first_name, NULL);
         GtkWidget *contact = gtk_button_new_with_label(label);
 
-        g_print("create_contact_button\n");
+        gtk_widget_set_name(contact, "contact");
         new_contact = setup_contact_struct(first_name, last_name, user_id);
         new_contact->popup = mx_contact_context(new_contact);
         gtk_container_add(GTK_CONTAINER(new_contact->row), contact);
@@ -63,7 +65,7 @@ void mx_show_contact_in_ui(t_client *client, gchar *first_name,
         g_print("add_contact_button\n");
         g_hash_table_insert(client->contacts_table,
                             GINT_TO_POINTER(user_id), new_contact);
-        g_signal_connect(G_OBJECT(contact), "button-press-event",
+        g_signal_connect(G_OBJECT(contact), "button-press-event",                     
                     G_CALLBACK(get_chat), new_contact);
         g_signal_connect(G_OBJECT(contact), "button-press-event",
                     G_CALLBACK(mx_menu_callback), new_contact->popup);
