@@ -10,7 +10,7 @@ gint mx_get_chat_history_prepare(cJSON *root,
     sqlite3 *db = *(mx_get_db());
     gchar *query = "SELECT message, sender_id, receiver_id, date FROM messages\
                     WHERE chat_id = ? AND receiver_id = ? LIMIT ?, ?;";
-    gint receiver_id = cJSON_GetObjectItem(root, "receiver_id")->valueint;
+    gint receiver_id = cJSON_GetObjectItem(root, "contact_id")->valueint;
     gint from = cJSON_GetObjectItem(root, "from")->valueint;
     gint to = cJSON_GetObjectItem(root, "to")->valueint;
     gint64 chat_id = mx_get_chat_id(sender_id, receiver_id);
@@ -21,7 +21,7 @@ gint mx_get_chat_history_prepare(cJSON *root,
     if ((rc = sqlite3_bind_int64(*stmt, 1, chat_id)) != SQLITE_OK)
         g_warning("mx_get_chat_history_prepare  bind: chat_id:%d %d",
                   receiver_id, rc);
-    if ((rc = sqlite3_bind_int(*stmt, 2, receiver_id)) != SQLITE_OK)
+    if ((rc = sqlite3_bind_int(*stmt, 2, sender_id)) != SQLITE_OK)
       g_warning("mx_get_chat_history_prepare  bind: sender_id:%d %d\n",
                 receiver_id, rc);
     if ((rc = sqlite3_bind_int(*stmt, 3, from)) != SQLITE_OK)
@@ -80,7 +80,7 @@ gchar *mx_get_chat_history_run(sqlite3_stmt *stmt) {
 }
 
 static gboolean is_valid(cJSON *root) {
-    cJSON *receiver_id = cJSON_GetObjectItemCaseSensitive(root, "receiver_id");
+    cJSON *receiver_id = cJSON_GetObjectItemCaseSensitive(root, "contact_id");
 
     if (!cJSON_IsNumber(receiver_id))
         return FALSE;
@@ -103,7 +103,9 @@ void mx_get_chat_history(cJSON *root, t_client *client) {
     if ((response = mx_get_chat_history_run(stmt)) == NULL)
         g_warning("mx_get_chat_in_db_run failed or no messages in chat");
         // TODO: send error?;
-    else
+    else {
         mx_send_data(client->data_out, response);
+        mx_setup_as_read(root, client);
+    }
     return;
 }
