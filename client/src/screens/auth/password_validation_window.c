@@ -16,7 +16,7 @@ static void mx_edit_login(GtkEntry *entry, GtkEntryIconPosition icon_pos,
     (void)event;
 }
 
-static void verify_user(GtkButton *button, t_client *client) {
+static void verify_user(GtkWidget *widget, t_client *client) {
     GtkBuilder *builder = client->builder;
     gchar *request = NULL;
     GtkEntry *phone = NULL;
@@ -33,10 +33,10 @@ static void verify_user(GtkButton *button, t_client *client) {
     buffer = GTK_ENTRY_BUFFER(gtk_builder_get_object(builder, "phone_buff"));
     gtk_entry_set_text(password, "");
     g_free(request);
-    (void)button;
+    (void)widget;
 }
 
-static void go_back(GtkButton *button, t_client *client) {
+static void go_back(GtkWidget *widget, t_client *client) {
     GtkBuilder *builder = client->builder;
     GtkEntry *phone = NULL;
     GtkEntry *password = NULL;
@@ -49,19 +49,23 @@ static void go_back(GtkButton *button, t_client *client) {
     gtk_entry_set_text(phone, "");
     gtk_entry_set_text(password, "");
     mx_window_switcher(client->password_validation, client->phone_entering);
-    (void)button;
+    (void)widget;
 }
 
 static void controling(GtkBuilder *builder, t_client *client) {
     GtkButton *next = NULL;
     GtkButton *back = NULL;
     GtkEntry *phone_edit = NULL;
+    GtkEntry *password = NULL;
 
     next = GTK_BUTTON(gtk_builder_get_object(builder, "second_next_button"));
     back = GTK_BUTTON(gtk_builder_get_object(builder, "second_back_button"));
     phone_edit = GTK_ENTRY(gtk_builder_get_object(builder, "phone_edit"));
+    password = GTK_ENTRY(gtk_builder_get_object(builder, "password"));
+    gtk_widget_grab_focus(GTK_WIDGET(password));
     g_signal_connect(phone_edit, "icon-press",
                      G_CALLBACK(mx_edit_login), client);
+    g_signal_connect(password, "activate", G_CALLBACK(verify_user), client);
     g_signal_connect(next, "clicked", G_CALLBACK(verify_user), client);
     g_signal_connect(back, "clicked", G_CALLBACK(go_back), client);
 }
