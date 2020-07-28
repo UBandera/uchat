@@ -27,9 +27,9 @@ gchar *mx_get_profile_info_response(sqlite3_stmt *stmt) {
     cJSON_AddStringToObject(profile_info, "first_name",
                             (gchar*)sqlite3_column_text(stmt, 0));
     cJSON_AddStringToObject(profile_info, "last_name",
-                            (gchar*)sqlite3_column_text(stmt, 0));
+                            (gchar*)sqlite3_column_text(stmt, 1));
     cJSON_AddStringToObject(profile_info, "email",
-                            (gchar*)sqlite3_column_text(stmt, 0));
+                            (gchar*)sqlite3_column_text(stmt, 2));
     response = cJSON_PrintUnformatted(profile_info);
     cJSON_Delete(profile_info);
     return response;
