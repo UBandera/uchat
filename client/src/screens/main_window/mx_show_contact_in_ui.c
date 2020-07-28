@@ -62,6 +62,7 @@ void mx_show_contact_in_ui(t_client *client, gchar *first_name,
         gtk_container_add(GTK_CONTAINER(new_contact->row), contact);
         gtk_container_add(GTK_CONTAINER(client->contacts), new_contact->row);
         gtk_widget_show_all(new_contact->row);
+        g_print("add_contact_button\n");
         g_hash_table_insert(client->contacts_table,
                             GINT_TO_POINTER(user_id), new_contact);
         g_signal_connect(G_OBJECT(contact), "button-press-event",                     

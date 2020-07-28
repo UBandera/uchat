@@ -50,6 +50,11 @@ static void add_info(GtkButton *button, t_client *client) {
     (void)button;
 }
 
+static void move_focus(GtkWidget *widget, GtkWidget *to_focus) {
+    gtk_widget_grab_focus(to_focus);
+}
+
+
 static void go_back(GtkButton *button, t_client *client) {
     GtkBuilder *builder = client->builder;
     GtkEntry *first_name = NULL;
@@ -66,6 +71,20 @@ static void go_back(GtkButton *button, t_client *client) {
     (void)button;
 }
 
+static void enter_handling(GtkBuilder *builder, t_client *client) {
+    GtkEntry *first_name = NULL;
+    GtkEntry *last_name = NULL;
+    GtkEntry *email = NULL;
+
+    first_name = GTK_ENTRY(gtk_builder_get_object(builder, "first_name"));
+    last_name = GTK_ENTRY(gtk_builder_get_object(builder, "last_name"));
+    email = GTK_ENTRY(gtk_builder_get_object(builder, "email"));
+    g_signal_connect(first_name, "activate", G_CALLBACK(move_focus), GTK_WIDGET(last_name));
+    g_signal_connect(last_name, "activate", G_CALLBACK(move_focus), GTK_WIDGET(email));
+    g_signal_connect(email, "activate", G_CALLBACK(add_info), client);
+    gtk_widget_grab_focus(GTK_WIDGET(first_name));
+}
+
 static void controling(GtkBuilder *builder, t_client *client) {
     GtkButton *next = NULL;
     GtkButton *back = NULL;
@@ -74,7 +93,7 @@ static void controling(GtkBuilder *builder, t_client *client) {
     back = GTK_BUTTON(gtk_builder_get_object(builder, "third_back_button"));
     next = GTK_BUTTON(gtk_builder_get_object(builder, "sign"));
     photo = GTK_BUTTON(gtk_builder_get_object(builder, "photo"));
-
+    enter_handling(builder, client);
     g_signal_connect(next, "clicked", G_CALLBACK(add_info), client);
     g_signal_connect(back, "clicked", G_CALLBACK(go_back), client);
 }

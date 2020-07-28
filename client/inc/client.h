@@ -132,8 +132,7 @@ void mx_sign_out(cJSON *json, t_client *client);
 void mx_profile_data(cJSON *json, t_client *client);
 void mx_clear_chat(cJSON *json, t_client *client);
 void mx_contact_info(cJSON *json, t_client *client);
-
-
+void mx_get_message_handler(cJSON *json, t_client *client);
 
 // validation
 gint mx_auth_confirming(gchar *login, gchar *password,

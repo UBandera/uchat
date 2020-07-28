@@ -20,8 +20,8 @@ void mx_send_notification(t_client *client,
                           sqlite3_stmt *stmt) {
     cJSON *notification = cJSON_CreateObject();
     gchar *response = NULL;
-     
-    cJSON_AddNumberToObject(notification, "request_type", RQ_NEW_MESSAGE);
+
+    cJSON_AddNumberToObject(notification, "response_type", RS_NEW_MESSAGE);
     cJSON_AddNumberToObject(notification, "sender_id",
                             sqlite3_column_int(stmt, 0));
     cJSON_AddNumberToObject(notification, "receiver_id",
@@ -62,10 +62,9 @@ gpointer mx_message_sheduler(gpointer data) {
                 g_message(":(");
             }
             if ((client = g_hash_table_lookup(*online_users,
-                                              GINT_TO_POINTER(receiver_id)))
-                != NULL) {
+                                              GINT_TO_POINTER(receiver_id)))) {
                 g_message("client->uid = %d", client->uid);
-                mx_send_notification(client, stmt);                
+                mx_send_notification(client, stmt);
             }
         }
         g_usleep(5000000);

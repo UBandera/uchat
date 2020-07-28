@@ -37,6 +37,7 @@ enum e_response_types {
     RS_GET_CHAT_HISTORY,
     RS_SIGN_OUT,
     RS_REMOVE_CONTACT,
+    RS_NEW_MESSAGE,
     RS_CLEAR_CHAT,
     RS_CONTACT_INFO,
     RS_PROFILE_DATA,
