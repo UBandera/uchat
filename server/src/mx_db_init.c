@@ -26,7 +26,7 @@ static void create_user_profile(sqlite3 **db) {
                            NULL, NULL, &errmsg)) != SQLITE_OK) {
         if ((rc = sqlite3_exec(*db, "CREATE TABLE user_profile (\
                                user_id INTEGER,\
-                               name TEXT NOT NULL,\
+                               first_name TEXT NOT NULL,\
                                last_name TEXT NOT NULL,\
                                email TEXT, \
                                photo BLOB,\

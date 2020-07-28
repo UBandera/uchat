@@ -1,5 +1,5 @@
 #include "server.h"
-#define REQUEST_HANDLER_SIZE 11
+#define REQUEST_HANDLER_SIZE 13
 
 void print_hash_table(gpointer key, gpointer value, gpointer user_data) {
     g_print("Connected user id is %lld\n", *(gint64 *)key);
@@ -36,6 +36,8 @@ void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_sign_out_request_handler,
     mx_remove_contact_handler,
     mx_delete_chat,
+    mx_get_profile_info,
+    mx_change_profile,
 };
 
 gint mx_free_client(t_client *client) {

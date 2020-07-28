@@ -40,6 +40,7 @@ enum e_response_types {
     RS_CLEAR_CHAT,
     RS_CONTACT_INFO,
     RS_PROFILE_DATA,
+    RS_CHANGE_PROFILE,
     //
     // RS_SIGN_IN,
     // RS_SIGN_UP,

@@ -24,7 +24,7 @@ static gchar *push_login(sqlite3 *db, cJSON *root, gchar *password) {
 static gint push_profile_info(gint user_id, gchar *name,
                               gchar *last_name, gchar *email) {
     sqlite3 *db = *mx_get_db();
-    gchar *query = "INSERT INTO user_profile(user_id, name, last_name, email) \
+    gchar *query = "INSERT INTO user_profile(user_id, first_name, last_name, email) \
                     VALUES(?, ?, ?, ?);";
     sqlite3_stmt *stmt = NULL;
     gint rc = 0;
