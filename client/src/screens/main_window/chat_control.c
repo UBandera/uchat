@@ -56,6 +56,4 @@ void mx_chat_control(GtkBuilder *builder, t_client *client) {
     g_signal_connect(text_view, "key_press_event", G_CALLBACK(send_by_enter),
                      text_view);
     g_signal_connect(send_btn, "clicked", G_CALLBACK(send_message), text_view);
-    g_signal_connect(client->chat, "key_press_event",
-                     G_CALLBACK(mx_close_widget), client->chat_box);
 }
