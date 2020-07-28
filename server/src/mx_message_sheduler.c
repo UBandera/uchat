@@ -70,4 +70,5 @@ gpointer mx_message_sheduler(gpointer data) {
         g_usleep(5000000);
         mx_message_sheduler_reset(stmt);
     }
+    (void)data;
 }
