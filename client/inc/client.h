@@ -5,7 +5,6 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include "mx_json.h"
-#include <stdbool.h>
 
 enum e_auth_data_validation {
     MX_VALID = 0,
@@ -41,6 +40,7 @@ typedef struct s_client {
     GtkWindow *profile_setuping;
     GtkWindow *main_window;
     GtkWindow *add_contact_dialog;
+    GtkWindow *contact_info_window;
     GtkWindow *profile_window;
 
     GtkWidget *chat_box;
@@ -61,7 +61,7 @@ typedef struct s_client {
 
 t_client **mx_get_client(void);
 void mx_init_handlers(t_client *client);
-void mx_receive_data(gchar *response, t_client *client);
+void mx_receive_data(gchar *data, t_client *client);
 gssize mx_send_data(GDataOutputStream *data_out, gchar *data);
 
 // screens
@@ -73,6 +73,7 @@ GtkWindow *mx_profile_setuping_window(t_client *client);
 GtkWindow *mx_main_window(t_client *client);
 GtkWindow *mx_add_contact_dialog(t_client *client);
 GtkWindow *mx_profile_window(t_client *client);
+GtkWindow *mx_contact_info_window(t_client *client);
 
 
 void mx_chat_control(GtkBuilder *builder, t_client *client);
@@ -112,6 +113,7 @@ gchar *mx_change_data_request(const gchar *first_name,
                               const gchar *last_name, const gchar *email,
                               const gchar *token);
 gchar *mx_clear_chat_request(gint user_id, const gchar *token);
+gchar *mx_contact_info_request(gint user_id, const gchar *token);
 
 // responses
 void mx_auth_validated(cJSON *json, t_client *client);
@@ -129,6 +131,7 @@ void mx_add_contact(cJSON *json, t_client *client);
 void mx_sign_out(cJSON *json, t_client *client);
 void mx_profile_data(cJSON *json, t_client *client);
 void mx_clear_chat(cJSON *json, t_client *client);
+void mx_contact_info(cJSON *json, t_client *client);
 void mx_change_profile(cJSON *json, t_client *client);
 void mx_get_message_handler(cJSON *json, t_client *client);
 
@@ -141,9 +144,8 @@ gint mx_auth_confirming(gchar *login, gchar *password,
 gboolean mx_match(const gchar *str, const gchar *pattern,
                   gint compile_flags, gint match_flag);
 
-// Trash
 int mx_application_run(int argc, char **argv, GtkApplication *app);
 void mx_application_init(t_client *client);
-// void mx_notify(GApplication *application);
+void shut_down(GtkApplication *app, t_client *client);
 
 #endif /* end of include guard: CLIENT_H */

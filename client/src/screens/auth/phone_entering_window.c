@@ -58,6 +58,7 @@ static void controling(GtkBuilder *builder, t_client *client) {
 }
 
 
+
 GtkWindow *mx_phone_entering_window(t_client *client) {
     GtkBuilder *builder = client->builder;
     GError *error = NULL;
@@ -69,6 +70,7 @@ GtkWindow *mx_phone_entering_window(t_client *client) {
                                    &error))
         g_error("%s\n", error->message);
     window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
+    g_signal_connect(window, "destroy", G_CALLBACK(shut_down), client);
     controling(builder, client);
     return window;
 }
