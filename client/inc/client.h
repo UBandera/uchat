@@ -41,6 +41,7 @@ typedef struct s_client {
     GtkWindow *profile_setuping;
     GtkWindow *main_window;
     GtkWindow *add_contact_dialog;
+    GtkWindow *profile_window;
 
     GtkWidget *chat_box;
     GtkListBox *contacts;
@@ -70,22 +71,27 @@ GtkWindow *mx_password_validate_window(t_client *client);
 GtkWindow *mx_profile_setuping_window(t_client *client);
 GtkWindow *mx_main_window(t_client *client);
 GtkWindow *mx_add_contact_dialog(t_client *client);
+GtkWindow *mx_profile_window(t_client *client);
+
 
 void mx_chat_control(GtkBuilder *builder, t_client *client);
 void mx_top_bar_control(GtkBuilder *builder, t_client *client);
 gboolean mx_close_widget(GtkWidget *widget, GdkEventKey *event,
                          GtkWidget *to_close);
-void mx_clear_entry(GtkBuilder *builder, const gchar *entry_name);
+void mx_set_entry_value(GtkBuilder *builder, const gchar *entry_name,
+                        const gchar *value);
 void mx_scroll_to_bottom(t_client *client);
 gchar *mx_get_message_from_entry(GtkWidget *text_view);
 void mx_show_message_in_ui(t_client *client, gchar *message_text);
 void mx_remove_rows(GtkListBox *listbox);
 void mx_show_contact_in_ui(t_client *client, gchar *first_name,
                            gchar *last_name, gint user_id);
-
+void get_profile(GtkButton *button, gpointer data);
 gboolean mx_menu_callback(GtkWidget *widget, GdkEventButton *event,
                           GtkWidget *menu);
 GtkWidget *mx_contact_context(t_contact_data *contact);
+GtkWidget *mx_profile_context(t_client *client);
+
 // requests
 gchar *mx_password_request(const gchar *phone);
 gchar *mx_auth_request(const gchar *phone, const gchar *password);
@@ -100,9 +106,11 @@ gchar *mx_chat_history_request(gint user_id, const gchar *token,
                                gint from, gint to);
 gchar *mx_sign_out_request(const gchar *token);
 gchar *mx_remove_contact_request(gint user_id, const gchar *token);
-void mx_get_message_handler(cJSON *json, t_client *client);
+gchar *mx_profile_data_request(const gchar *token);
+gchar *mx_change_data_request(const gchar *phone, const gchar *first_name,
+                              const gchar *last_name, const gchar *email,
+                              const gchar *token);
 gchar *mx_clear_chat_request(gint user_id, const gchar *token);
-
 
 // responses
 void mx_auth_validated(cJSON *json, t_client *client);
@@ -118,7 +126,9 @@ void mx_get_chat_history(cJSON *json, t_client *client);
 void mx_remove_contact(cJSON *json, t_client *client);
 void mx_add_contact(cJSON *json, t_client *client);
 void mx_sign_out(cJSON *json, t_client *client);
+void mx_profile_data(cJSON *json, t_client *client);
 void mx_clear_chat(cJSON *json, t_client *client);
+void mx_get_message_handler(cJSON *json, t_client *client);
 
 // validation
 gint mx_auth_confirming(gchar *login, gchar *password,

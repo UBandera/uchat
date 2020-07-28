@@ -1,6 +1,5 @@
 #include "client.h"
 
-
 static void open_exist_chat(t_client *client, gint user_id) {
     GHashTable *contacts = client->contacts_table;
     t_contact_data *node = NULL;
@@ -29,7 +28,7 @@ static void add_contact(GtkWidget *widget, gpointer user_id) {
     gint new_contact = GPOINTER_TO_INT(user_id);
 
     gtk_widget_hide(widget);
-    mx_clear_entry(client->builder, "dialog_search");
+    mx_set_entry_value(client->builder, "dialog_search", "\0");
     if (!g_hash_table_contains(client->contacts_table, user_id)) {
         request = mx_add_contact_request(new_contact, client->token);
         mx_send_data(client->data_out, request);

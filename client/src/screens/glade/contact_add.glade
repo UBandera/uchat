@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="contact_dialog">
     <property name="can_focus">False</property>
+    <property name="events">GDK_FOCUS_CHANGE_MASK</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="deletable">False</property>
     <child internal-child="vbox">
-      <object class="GtkBox" id="add_dialog_box">
+      <object class="GtkBox">
+        <property name="name">dialog_profile_prefs</property>
         <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="homogeneous">True</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
             <property name="can_focus">False</property>
@@ -21,6 +32,7 @@
                 <property name="can_focus">True</property>
                 <property name="focus_on_click">False</property>
                 <property name="receives_default">True</property>
+                <property name="relief">none</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -30,37 +42,9 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHeaderBar" id="settings">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="valign">start</property>
-            <property name="vexpand">False</property>
-            <property name="title">Add contact</property>
-            <property name="has_subtitle">False</property>
-            <property name="spacing">0</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Enter phone number</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -76,7 +60,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">3</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -87,10 +71,25 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">4</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="valign">start</property>
+        <property name="vexpand">False</property>
+        <property name="title">Add contact</property>
+        <property name="has_subtitle">False</property>
+        <property name="spacing">0</property>
+        <property name="show_close_button">True</property>
+      </object>
+    </child>
+    <style>
+      <class name="profile-settings-wnd"/>
+    </style>
   </object>
 </interface>
