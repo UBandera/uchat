@@ -20,9 +20,6 @@ static gboolean json_validator(cJSON *json) {
  */
 void mx_sign_up_user(cJSON *json, t_client *client) {
     if (json_validator(json)) {
-        gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
-
-        g_print("message is %s\n", message);
         mx_window_switcher(client->password_validation, client->profile_setuping);
     }
     else {
