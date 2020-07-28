@@ -1,5 +1,15 @@
 #include "client.h"
 
+static gboolean json_validator(cJSON *json) {
+    cJSON *message = cJSON_GetObjectItemCaseSensitive(json, "message");
+
+    if (message && cJSON_IsString(message))
+            return TRUE;
+    else
+        return FALSE;
+}
+
+
 /*
  * PURPOSE : Autogenerates function contract comments
  *  PARAMS : json - formed json receiving from server response string
@@ -9,8 +19,14 @@
  *   NOTES : -
  */
 void mx_sign_up_user(cJSON *json, t_client *client) {
-    gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
+    if (json_validator(json)) {
+        gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
 
-    g_print("message is %s\n", message);
-    mx_window_switcher(client->password_validation, client->profile_setuping);
+        g_print("message is %s\n", message);
+        mx_window_switcher(client->password_validation, client->profile_setuping);
+    }
+    else {
+        g_message("Invalid sign out response\n");
+    }
+
 }

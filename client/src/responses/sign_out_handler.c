@@ -1,13 +1,12 @@
 #include "client.h"
 
-void mx_remove_rows(GtkListBox *listbox) {
-    GList *children = NULL;
-    GList *iter = NULL;
+static gboolean json_validator(cJSON *json) {
+    cJSON *message = cJSON_GetObjectItemCaseSensitive(json, "message");
 
-    children = gtk_container_get_children(GTK_CONTAINER(listbox));
-    for (iter = children; iter != NULL; iter = g_list_next(iter))
-        gtk_widget_destroy(GTK_WIDGET(iter->data));
-    g_list_free(children);
+    if (message && cJSON_IsString(message))
+            return TRUE;
+    else
+        return FALSE;
 }
 
 void mx_free_client_data(t_client *client) {
@@ -30,12 +29,11 @@ void mx_free_client_data(t_client *client) {
  *   NOTES : -
  */
 void mx_sign_out(cJSON *json, t_client *client) {
-    // GtkBuilder *builder = client->builder;
-    // gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
-
-    mx_free_client_data(client);
-    // gtk_widget_hide(GTK_WIDGET(client->main_window));
-    mx_window_switcher(client->main_window, client->phone_entering);
-    (void)json;
-    
+    if (json_validator(json)) {
+        mx_free_client_data(client);
+        mx_window_switcher(client->main_window, client->phone_entering);
+    }
+    else {
+        g_message("Invalid sign out response\n");
+    }
 }

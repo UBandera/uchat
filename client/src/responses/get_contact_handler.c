@@ -38,6 +38,18 @@ static void add_contact(GtkWidget *widget, gpointer user_id) {
         open_exist_chat(client, new_contact);
 }
 
+static gboolean json_validator(cJSON *json) {
+    cJSON *user_id = cJSON_GetObjectItemCaseSensitive(json, "user_id");
+    cJSON *name = cJSON_GetObjectItemCaseSensitive(json, "name");
+    cJSON *last_name = cJSON_GetObjectItemCaseSensitive(json, "last_name");
+
+    if (user_id && cJSON_IsNumber(user_id) &&
+        name && cJSON_IsString(name) &&
+        last_name && cJSON_IsString(last_name))
+            return TRUE;
+    else
+        return FALSE;
+}
 /*
  * PURPOSE : Autogenerates function contract comments
  *  PARAMS : json - formed json receiving from server response string
@@ -47,17 +59,22 @@ static void add_contact(GtkWidget *widget, gpointer user_id) {
  *   NOTES : -
  */
 void mx_get_contact(cJSON *json, t_client *client) {
-    gint user_id = cJSON_GetObjectItem(json, "user_id")->valueint;
-    gchar *name = cJSON_GetObjectItem(json, "name")->valuestring;
-    gchar *last_name = cJSON_GetObjectItem(json, "last_name")->valuestring;
-    gchar *label = g_strjoin(" ", last_name, name, NULL);
-    GtkBox *box = NULL;
+    if (json_validator(json)) {
+        gint user_id = cJSON_GetObjectItem(json, "user_id")->valueint;
+        gchar *name = cJSON_GetObjectItem(json, "name")->valuestring;
+        gchar *last_name = cJSON_GetObjectItem(json, "last_name")->valuestring;
+        gchar *label = g_strjoin(" ", last_name, name, NULL);
+        GtkBox *box = NULL;
 
-    client->contact_view = GTK_WIDGET(gtk_button_new_with_label(label));
-    box = GTK_BOX(gtk_builder_get_object(client->builder, "add_dialog_box"));
-    g_free(label);
-    gtk_container_add(GTK_CONTAINER(box), client->contact_view);
-    g_signal_connect(client->contact_view, "clicked", G_CALLBACK(add_contact),
-                     GINT_TO_POINTER(user_id));
-    gtk_widget_show(client->contact_view);
+        client->contact_view = GTK_WIDGET(gtk_button_new_with_label(label));
+        box = GTK_BOX(gtk_builder_get_object(client->builder, "add_dialog_box"));
+        gtk_container_add(GTK_CONTAINER(box), client->contact_view);
+        g_signal_connect(client->contact_view, "clicked", G_CALLBACK(add_contact),
+                         GINT_TO_POINTER(user_id));
+        gtk_widget_show(client->contact_view);
+        g_free(label);
+    }
+    else {
+        g_message("Invalid get contactd response\n");
+    }
 }
