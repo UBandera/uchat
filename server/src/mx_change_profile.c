@@ -81,5 +81,4 @@ void mx_change_profile(cJSON *root, t_client *client) {
         g_free(response);
     }
     return;
-
 }

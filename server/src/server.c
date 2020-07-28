@@ -24,10 +24,6 @@ void mx_dest_client(gpointer data) {
     g_free(socket);
 }
 
-void mx_get_profile_info() {
-    return;
-}
-
 void (*const request_handler[REQUEST_HANDLER_SIZE])() = {
     mx_password_request_handler,
     mx_auth_request_handler,

@@ -97,4 +97,5 @@ gpointer mx_message_sheduler(gpointer data);
 cJSON *mx_get_contact_handler_run(sqlite3_stmt *stmt, gint user_id);
 void mx_delete_chat(cJSON *root, t_client *client);
 void mx_change_profile(cJSON *root, t_client *client);
+void mx_get_profile_info(cJSON *root, t_client *client);
 #endif /* end of include guard: SERVER_H */
