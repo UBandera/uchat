@@ -1,7 +1,7 @@
 #include "client.h"
 
 #define MX_STYLES "./src/screens/main_window/dialog.css"
-#define MX_MAIN_WINDOW "./src/screens/glade/new_contact.glade"
+#define MX_MAIN_WINDOW "./src/screens/glade/contact_add.glade"
 #define MX_ALLOW_PATTERN "/^[+]{1}[0-9]{12}$"
 
 static gboolean clear_inputs(GtkWidget *widget, GdkEventKey *event,
@@ -67,7 +67,6 @@ GtkWindow *mx_add_contact_dialog(t_client *client) {
     search = GTK_ENTRY(gtk_builder_get_object(builder, "dialog_search"));
     gtk_entry_set_text(search, "");
     g_signal_connect(search, "activate", G_CALLBACK(find_user), client);
-    // gtk_window_set_decorated(window, FALSE);
     gtk_window_set_transient_for(window, client->main_window);
     g_signal_connect(window, "key_press_event",
                      G_CALLBACK(clear_inputs), search);
