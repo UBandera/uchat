@@ -47,12 +47,14 @@ void get_profile(GtkButton *button, gpointer data) {
 }
 
 static gboolean open_by_left_key(GtkWidget *widget, GdkEventButton *event,
-                          t_contact_data *contact) {
+                                 t_contact_data *contact) {
     if (event->type == GDK_BUTTON_PRESS  &&  event->button == 1) {
         get_profile(NULL, NULL);
         return TRUE;
     }
     return FALSE;
+    (void)widget;
+    (void)contact;
 }
 
 void mx_top_bar_control(GtkBuilder *builder, t_client *client) {

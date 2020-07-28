@@ -20,6 +20,7 @@ static void change_data(GtkWidget *widget, t_client *client) {
                                       client->token);
     mx_send_data(client->data_out, request);
     g_free(request);
+    (void)widget;
 }
 
 

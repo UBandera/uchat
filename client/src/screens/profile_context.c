@@ -1,14 +1,5 @@
 #include "client.h"
 
-static void open_contact(t_contact_data *contact) {
-    t_client *client = *mx_get_client();
-    gchar *request = NULL;
-
-    request = mx_remove_contact_request(contact->id, client->token);
-    mx_send_data(client->data_out, request);
-    g_free(request);
-}
-
 static void log_out(t_client *client) {
     gchar *request = NULL;
 
@@ -19,7 +10,6 @@ static void log_out(t_client *client) {
 
 GtkWidget *mx_profile_context(t_client *client) {
     GtkWidget *menu = NULL;
-    GtkWidget *ebox = NULL;
     GtkWidget *open_profile = NULL;
     GtkWidget *sign_out = NULL;
 

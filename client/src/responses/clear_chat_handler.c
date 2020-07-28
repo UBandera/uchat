@@ -14,7 +14,6 @@ static gboolean json_validator(cJSON *json) {
 
 void mx_clear_chat(cJSON *json, t_client *client) {
     if (json_validator(json)) {
-        gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
         gint user_id = cJSON_GetObjectItem(json, "user_id")->valueint;
         GHashTable *contacts = client->contacts_table;
         t_contact_data *node = NULL;

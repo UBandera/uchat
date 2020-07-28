@@ -5,7 +5,7 @@ static gboolean json_validator(cJSON *json) {
     const cJSON *item = NULL;
 
     cJSON_ArrayForEach(item, data) {
-        cJSON *user_id = = cJSON_GetObjectItemCaseSensitive(item, "user_id");
+        cJSON *user_id = cJSON_GetObjectItemCaseSensitive(item, "user_id");
         cJSON *first_name = cJSON_GetObjectItemCaseSensitive(item, "name");
         cJSON *last_name = cJSON_GetObjectItemCaseSensitive(item, "last_name");
 
@@ -14,7 +14,7 @@ static gboolean json_validator(cJSON *json) {
             user_id && cJSON_IsNumber(user_id))
             return TRUE;
     }
-    return FALSE
+    return FALSE;
 }
 
 /*

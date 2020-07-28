@@ -5,13 +5,13 @@ static gboolean json_validator(cJSON *json) {
     const cJSON *item = NULL;
 
     cJSON_ArrayForEach(item, data) {
-        cJSON *message = = cJSON_GetObjectItemCaseSensitive(item, "message");
+        cJSON *message = cJSON_GetObjectItemCaseSensitive(item, "message");
         cJSON *date = cJSON_GetObjectItemCaseSensitive(item, "date");
 
         if (message && cJSON_IsString(message) && cJSON_IsNumber(date))
             return TRUE;
     }
-    return FALSE
+    return FALSE;
 }
 
 /*
@@ -32,7 +32,7 @@ void mx_get_chat_history(cJSON *json, t_client *client) {
             gint date = cJSON_GetObjectItem(data, "date")->valueint;
 
             mx_show_message_in_ui(client, message);
-            date = date;
+            date *= 1;
         }
     }
     else {

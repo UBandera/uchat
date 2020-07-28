@@ -21,7 +21,6 @@ static gboolean json_validator(cJSON *json) {
  */
 void mx_auth_validated(cJSON *json, t_client *client) {
     if (json_validator(json)) {
-        gchar *message = cJSON_GetObjectItem(json, "message")->valuestring;
         GtkWindow *current = gtk_application_get_active_window(client->app);
         gchar *request = NULL;
 
