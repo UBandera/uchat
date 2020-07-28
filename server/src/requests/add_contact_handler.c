@@ -2,10 +2,9 @@
 
 static gboolean json_validator(cJSON *root) {
     cJSON *phone = cJSON_GetObjectItemCaseSensitive(root, "phone");
-    cJSON *token = cJSON_GetObjectItemCaseSensitive(root, "token");
 
-    if (phone && token) {
-        if (cJSON_IsString(phone) && cJSON_IsString(token))
+    if (phone) {
+        if (cJSON_IsString(phone))
             return TRUE;
         else
             return FALSE;
@@ -70,8 +69,7 @@ gint mx_add_contact_prepare(sqlite3_stmt **stmt,
 }
 
 void mx_add_contact_handler(cJSON *root, t_client *client) {
-    // if (json_validator(root)) {
-        gchar *token = cJSON_GetObjectItem(root, "token")->valuestring;
+    if (json_validator(root)) {
         gint contact = cJSON_GetObjectItem(root, "user_id")->valueint;
         sqlite3_stmt *stmt= NULL;
         gchar *response = NULL;
@@ -80,8 +78,6 @@ void mx_add_contact_handler(cJSON *root, t_client *client) {
         response = mx_add_contact_run(stmt, contact);
         mx_send_data(client->data_out, response);
         return;
-        // }
-        g_print("Not valid token\n");
-    // }
+    }
     g_warning("Not valid request\n");
 }

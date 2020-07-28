@@ -58,11 +58,10 @@ gint mx_free_client(t_client *client) {
     return 1;
 }
 
-static gboolean json_validator(const gchar *data) {
-    cJSON *root = cJSON_Parse(data);
+static gboolean json_validator(const cJSON *root, t_client *client) {
     cJSON *req_type = cJSON_GetObjectItemCaseSensitive(root, "request_type");
 
-    if (!root || !req_type || !cJSON_IsNumber(req_type)
+    if (!root || !req_type || !cJSON_IsNumber(req_type))
         return FALSE;
     if (req_type->valueint > REQUEST_HANDLER_SIZE)
         return FALSE;
@@ -70,7 +69,7 @@ static gboolean json_validator(const gchar *data) {
         cJSON *token = cJSON_GetObjectItemCaseSensitive(root, "token");
 
         if (token && cJSON_IsString(token)
-            && client->token == token->valuestring)
+            && !g_strcmp0(client->token, token->valuestring))
             return TRUE;
         else
             return FALSE;
@@ -87,7 +86,9 @@ void get_data(GObject *source_object, GAsyncResult *res, gpointer socket) {
     data = g_data_input_stream_read_line_finish(new_client->data_in,
                                                 res, NULL, &error);
     if (data) {
-        if (json_validator(data)) {
+        g_message("data from client - %s\n", data);
+        cJSON *root = cJSON_Parse(data);
+        if (json_validator(root, new_client)) {
             cJSON *req_type = cJSON_GetObjectItem(root, "request_type");
 
             request_handler[req_type->valueint](root, new_client);
@@ -121,15 +122,12 @@ gboolean incoming_callback(GSocketService *service,
     GDataOutputStream *data_out = g_data_output_stream_new(ostream);
     t_client *socket = g_malloc(sizeof(t_client));
 
-    g_print("Client connected!\n");
-
     socket->istream = g_object_ref(istream);
     socket->ostream = g_object_ref(ostream);
     socket->data_in = g_object_ref(data_in);
     socket->data_out = g_object_ref(data_out);
     socket->connection = g_object_ref(connection);
     socket->uid = 0;
-
     g_data_input_stream_read_line_async(socket->data_in, G_PRIORITY_DEFAULT, NULL, get_data, socket);
     (void)service;
     (void)source_object;
