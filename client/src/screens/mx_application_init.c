@@ -8,6 +8,7 @@ int mx_application_run(int argc, char **argv, GtkApplication *app) {
     return status;
 }
 
+
 static void activate(GtkApplication *app, t_client *client) {
     client->phone_entering = mx_phone_entering_window(client);
     client->password_validation = mx_password_validate_window(client);
@@ -24,7 +25,8 @@ static void activate(GtkApplication *app, t_client *client) {
 }
 
 void mx_application_init(t_client *client) {
-  client->app = gtk_application_new("org.gnome.chat.desktop",
+    client->app = gtk_application_new("org.gnome.chat.desktop",
                                     G_APPLICATION_FLAGS_NONE);
-  g_signal_connect(client->app, "activate", G_CALLBACK(activate), client);
+    g_signal_connect(client->app, "activate", G_CALLBACK(activate), client);
+
 }

@@ -36,6 +36,7 @@ enum e_response_types {
     RS_SIGN_OUT,
     RS_REMOVE_CONTACT,
     RS_CLEAR_CHAT,
+
     //
     // RS_SIGN_IN,
     // RS_SIGN_UP,
@@ -47,9 +48,10 @@ enum e_response_types {
 };
 
 enum e_response_errors {
-    ER_SENT_PASS = 25,
-    ER_PASS = 26,
-    ER_CONTACT_NOT_FOUND = 27,
+    ER_SENT_PASS = RS_CLEAR_CHAT + 1,
+    ER_PASS,
+    ER_CONTACT_NOT_FOUND,
+    RS_SIZE,
 //
     // ER_SIGN_IN = -1,
     // ER_SIGN_UP = -2,
