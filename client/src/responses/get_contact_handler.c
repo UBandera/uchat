@@ -49,8 +49,11 @@ static void add_contact(GtkWidget *widget, gpointer user_id) {
  */
 void mx_get_contact(cJSON *json, t_client *client) {
     gint user_id = cJSON_GetObjectItem(json, "user_id")->valueint;
-    gchar *name = cJSON_GetObjectItem(json, "name")->valuestring;
+    gchar *phone = cJSON_GetObjectItem(json, "phone")->valuestring;
+    gchar *first_name = cJSON_GetObjectItem(json, "first_name")->valuestring;
     gchar *last_name = cJSON_GetObjectItem(json, "last_name")->valuestring;
+    gchar *email = cJSON_GetObjectItem(json, "email")->valuestring;
+
     gchar *label = g_strjoin(" ", last_name, name, NULL);
     GtkBox *box = NULL;
 

@@ -19,8 +19,10 @@ enum e_auth_data_validation {
 
 typedef struct s_contact_data {
     GtkWidget *row;
+    gchar *phone;
     gchar *first_name;
     gchar *last_name;
+    gchar *email;
     gint id;
     GtkWidget *popup;
 }              t_contact_data;
@@ -41,6 +43,7 @@ typedef struct s_client {
     GtkWindow *profile_setuping;
     GtkWindow *main_window;
     GtkWindow *add_contact_dialog;
+    GtkWindow *contact_info_window;
 
     GtkWidget *chat_box;
     GtkListBox *contacts;
@@ -70,6 +73,8 @@ GtkWindow *mx_password_validate_window(t_client *client);
 GtkWindow *mx_profile_setuping_window(t_client *client);
 GtkWindow *mx_main_window(t_client *client);
 GtkWindow *mx_add_contact_dialog(t_client *client);
+GtkWindow *mx_contact_info_window(t_client *client);
+
 
 void mx_chat_control(GtkBuilder *builder, t_client *client);
 void mx_top_bar_control(GtkBuilder *builder, t_client *client);
@@ -86,6 +91,8 @@ void mx_show_contact_in_ui(t_client *client, gchar *first_name,
 gboolean mx_menu_callback(GtkWidget *widget, GdkEventButton *event,
                           GtkWidget *menu);
 GtkWidget *mx_contact_context(t_contact_data *contact);
+
+
 // requests
 gchar *mx_password_request(const gchar *phone);
 gchar *mx_auth_request(const gchar *phone, const gchar *password);
