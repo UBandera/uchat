@@ -83,4 +83,5 @@ void mx_add_contact_handler(cJSON *root, t_client *client) {
         g_print("Not valid token\n");
     // }
     g_warning("Not valid request\n");
+    (void)token;
 }

@@ -1,34 +1,58 @@
-#test
-APP = uchat_server
 
+SERVER = uchat_server
+
+EMPTY =
+SPACE = $(EMPTY) $(EMPTY)
+VPATH = VPATH = $(subst $(SPACE), :, $(SRCD))
+
+# server working directory
+SERVER_WD = server/$(SERVER)_wd
+
+GLIB_H = `pkg-config --cflags glib-2.0 gio-2.0 gtk+-3.0`
+cJSON_H = -I ../json/inc 
+OPENSSL_H = -I /usr/local/opt/openssl/include 
+CURL_H = -I ../curl/include/ 
+
+CURL_L = ../curl/lib/.libs/libcurl.a /usr/local/opt/openssl/lib/libcrypto.a /usr/local/opt/openssl/lib/libssl.a
+GLIB_L = `pkg-config --cflags --libs glib-2.0  --libs gio-2.0 --libs gtk+-3.0`
+DB_L = -lsqlite3
+LDAP_L = -lldap
+
+OBJD = obj
+SRCD = src src/mailing src/requests ../json/src
+INCS = inc
+SRCS = $(foreach dir, $(SRCD), $(wildcard $(dir)/*.c))
+OBJS = $(addprefix $(OBJD)/, $(notdir $(SRCS:%.c=%.o)))
+
+#compilier
 CC = clang
-CFLAGS = -g -std=c11 $(addprefix -W, all extra pedantic) #Add error
-DFLAGS = -fsanitize=address -fsanitize=undefined
-GLIB = `pkg-config --cflags --libs glib-2.0  --libs gio-2.0 --libs gtk+-3.0`
-cJSON = -I ../json/inc ../json/src/*.c
-SRCS = -I inc src/*.c src/mailing/*.c src/requests/*.c
 
-OPENSSL = -I /usr/local/opt/openssl/include /usr/local/opt/openssl/lib/libcrypto.a /usr/local/opt/openssl/lib/libssl.a
-CURL = $(OPENSSL) -lldap -I ../curl/include/ ../curl/lib/.libs/libcurl.a
-CURL1 = $(OPENSSL) -lldap -I ../curl1/curl/include/ ../curl1/curl/lib/.libs/libcurl.a
+CFLAGS = -std=c11 $(addprefix -W, all error extra pedantic)
 
+all: $(SERVER)
 
-all:
-		@$(CC) $(CFLAGS) $(DFLAGS) $(GLIB) $(cJSON) $(CURL) -lsqlite3 $(SRCS) -o  $(APP)
-
-$(APP): $(SRCS)
-	$(CC) $(DFLAGS) $(INC) $^ -o $@
+$(SERVER): $(OBJS)
+	@$(CC) -o $@ $^ $(CURL_L) $(LDAP_L) $(GLIB_L) $(DB_L)
 	@printf "\033[32;1m$@ created\033[0m\n"
-	
-archive:
-		@$(CC) $(CFLAGS) $(DFLAGS) $(GLIB) $(cJSON) $(CURL1) -lsqlite3 $(SRCS) -o  $(APP)
 
-curl_archive_install:
-	make -C ../curl1/curl
+$(OBJS): obj/%.o: %.c $(INCS) | $(OBJD)
+	@$(CC) $(CFLAGS) -I $(INCS) $(GLIB_H) $(cJSON_H) $(CURL_H) $(OPENSSL_H) -c $< -o $@
+	@printf "\033[32mcompiled: \033[0m$(notdir $<)\n"
 
-curl_install:
-	mv ../Makefile ../curl
-	make -C ../curl
+$(OBJD):
+	@mkdir -p $(SERVER)_wd
+	@mkdir -p $@
+	@printf "\033[32;1m$@ created\033[0m\n"
 
-curl_uninstall:
-	make uninstall -C ../curl
+uninstall: clean
+	@rm -rf $(SERVER)
+	@printf "\033[34;1mdeleted $(SERVER)\033[0m\n"
+
+clean:
+	@rm -rf $(OBJD)
+	@rm -rf $(SERVER_WD)/database.db
+	@printf "\033[34;1mdeleted $(OBJD)\033[0m\n"
+
+reinstall: uninstall all
+
+.PHONY: all uninstall clean reinstall
