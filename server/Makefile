@@ -1,42 +1,42 @@
 
 SERVER = uchat_server
 
-OPENSSL = -I /usr/local/opt/openssl/include 
-CURL1 = $(OPENSSL) -I ../curl1/curl/include/ 
-CURL_L = -lldap ../curl1/curl/lib/.libs/libcurl.a /usr/local/opt/openssl/lib/libcrypto.a /usr/local/opt/openssl/lib/libssl.a
-
 EMPTY =
 SPACE = $(EMPTY) $(EMPTY)
 VPATH = VPATH = $(subst $(SPACE), :, $(SRCD))
 
-# client working directory
+# server working directory
 SERVER_WD = server/$(SERVER)_wd
 
-OBJD = obj
-GLIB = `pkg-config --cflags --libs glib-2.0  --libs gio-2.0 --libs gtk+-3.0`
-GLIBO = `pkg-config --cflags glib-2.0 gio-2.0 gtk+-3.0`
+GLIB_H = `pkg-config --cflags glib-2.0 gio-2.0 gtk+-3.0`
 cJSON_H = -I ../json/inc 
+OPENSSL_H = -I /usr/local/opt/openssl/include 
+CURL_H = -I ../curl/include/ 
 
+CURL_L = ../curl/lib/.libs/libcurl.a /usr/local/opt/openssl/lib/libcrypto.a /usr/local/opt/openssl/lib/libssl.a
+GLIB_L = `pkg-config --cflags --libs glib-2.0  --libs gio-2.0 --libs gtk+-3.0`
+DB_L = -lsqlite3
+LDAP_L = -lldap
+
+OBJD = obj
 SRCD = src src/mailing src/requests ../json/src
 INCS = inc
 SRCS = $(foreach dir, $(SRCD), $(wildcard $(dir)/*.c))
 OBJS = $(addprefix $(OBJD)/, $(notdir $(SRCS:%.c=%.o)))
-DB = -lsqlite3
 
 #compilier
 CC = clang
 
-# CFLAGS = -std=c11 $(addprefix -W, all extra error pedantic)
-CFLAGS = -std=c11 $(addprefix -W, all extra pedantic)
+CFLAGS = -std=c11 $(addprefix -W, all error extra pedantic)
 
 all: $(SERVER)
 
 $(SERVER): $(OBJS)
-	@$(CC) -o $@ $^ $(CURL_L) $(GLIB) $(DB)
+	@$(CC) -o $@ $^ $(CURL_L) $(LDAP_L) $(GLIB_L) $(DB_L)
 	@printf "\033[32;1m$@ created\033[0m\n"
 
 $(OBJS): obj/%.o: %.c $(INCS) | $(OBJD)
-	@$(CC) $(CFLAGS) -I $(INCS) $(GLIBO) $(cJSON_H) $(CURL1) -c $< -o $@
+	@$(CC) $(CFLAGS) -I $(INCS) $(GLIB_H) $(cJSON_H) $(CURL_H) $(OPENSSL_H) -c $< -o $@
 	@printf "\033[32mcompiled: \033[0m$(notdir $<)\n"
 
 $(OBJD):
