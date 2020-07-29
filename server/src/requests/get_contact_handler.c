@@ -2,10 +2,9 @@
 
 static gboolean json_validator(cJSON *root) {
     cJSON *phone = cJSON_GetObjectItemCaseSensitive(root, "phone");
-    cJSON *token = cJSON_GetObjectItemCaseSensitive(root, "token");
 
-    if (phone && token) {
-        if (cJSON_IsString(phone) && cJSON_IsString(token))
+    if (phone) {
+        if (cJSON_IsString(phone))
             return TRUE;
         else
             return FALSE;
@@ -21,7 +20,7 @@ gint mx_get_contact_handler_prepare(sqlite3_stmt **stmt,
         g_message("User not excist\n");
         return -1;
     }
-    gchar *query = "SELECT name, last_name FROM user_profile\
+    gchar *query = "SELECT first_name, last_name FROM user_profile\
                     WHERE user_id = ?;";
     gint rc = 0;
 
@@ -67,36 +66,28 @@ cJSON *mx_get_contact_handler_run(sqlite3_stmt *stmt, gint user_id) {
 }
 
 void mx_get_contact_handler(cJSON *root, t_client *client) {
-    // if (json_validator(root)) {
-        gchar *token = cJSON_GetObjectItem(root, "token")->valuestring;
+    if (json_validator(root)) {
         gchar *phone = cJSON_GetObjectItem(root, "phone")->valuestring;
         sqlite3 *db = *(mx_get_db());
         sqlite3_stmt *stmt = NULL;
         cJSON *response = NULL;
+        gint user_id = mx_get_user_id_by_phone(phone, db);
 
-        // if (!g_strcmp0(client->token, token)) {
-            gint user_id = mx_get_user_id_by_phone(phone, db);
+        mx_get_contact_handler_prepare(&stmt, user_id, db);
+        g_message("user_id = %d\n", user_id);
+        response = mx_get_contact_handler_run(stmt, user_id);
+        if (!response || user_id == client->uid) {
+            gchar *error = mx_send_error_response(ER_CONTACT_NOT_FOUND,
+                                                  "Contact not found");
 
-            mx_get_contact_handler_prepare(&stmt, user_id, db);
-            g_message("user_id = %d\n", user_id);
-            response = mx_get_contact_handler_run(stmt, user_id);
-            if (!response || user_id == client->uid) {
-                gchar *error = mx_send_error_response(ER_CONTACT_NOT_FOUND,
-                                                      "Contact not found");
-
-                mx_send_data(client->data_out, error);
-                g_free(error);
-                return ;
-            }
-            cJSON_AddNumberToObject(response, "response_type", RS_CONTACT);
-            // mx_get_profile_by_user_id(user_id, db);
-            // gchar *response = mx_get_contacts_list();
-            // gchar *response = "{\"response_type\":3,\"user_id\":1,\"name\":\"Artem\",\"last_name\":\"Shemidko\"}";
-            mx_send_data(client->data_out, cJSON_PrintUnformatted(response));
-            cJSON_Delete(response);
-            return;
-        // }
-        g_print("Not valid token\n");
-    // }
+            mx_send_data(client->data_out, error);
+            g_free(error);
+            return ;
+        }
+        cJSON_AddNumberToObject(response, "response_type", RS_CONTACT);
+        mx_send_data(client->data_out, cJSON_PrintUnformatted(response));
+        cJSON_Delete(response);
+        return;
+    }
     g_warning("Not valid request\n");
 }

@@ -42,12 +42,12 @@
     /* padding: 10px; */
     /* box-shadow: none;
     border-style: outset; */
-    color: snow;
-    border-bottom: 1px solid silver;
-    background: rgb(28, 27, 27);
+    background: #ecbd25;
+    border: none;
+    border-bottom: 0.8px solid black;
+    border-radius: 0px;
+    outline: none;
     box-shadow: none;
-    border-style: outset;
-    border-width: 1px;
     text-shadow: none;
 }
 
@@ -62,7 +62,7 @@
     border-width: 1px;
     text-shadow: none; */
 }
- 
+
 #message{
     /* font-family:monospace; */
     color: snow;
@@ -89,9 +89,3 @@
 #contact_info, #chat_bottom {
     background: rgb(244, 181, 23);
 }
-
-
-
-
-
-

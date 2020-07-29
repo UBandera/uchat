@@ -1,8 +1,7 @@
 #include "server.h"
 
-gint mx_get_contacts_list_prepare(cJSON *root,
-                                 sqlite3_stmt **stmt,
-                                 gint user_id) {
+gint mx_get_contacts_list_prepare(sqlite3_stmt **stmt,
+                                  gint user_id) {
     if (user_id == 0) {
         g_message("Please login\n");
         return -1;
@@ -73,8 +72,8 @@ void mx_get_contacts_list(cJSON *root, t_client *client) {
     sqlite3_stmt *stmt = NULL;
     gchar *response = NULL;
 
-    mx_get_contacts_list_prepare(root, &stmt, client->uid);
+    mx_get_contacts_list_prepare(&stmt, client->uid);
     response = mx_get_contacts_list_run(stmt, client->uid);
     mx_send_data(client->data_out, response);
-
+    (void)root;
 }

@@ -26,6 +26,15 @@ static void change_data(GtkWidget *widget, t_client *client) {
     (void)widget;
 }
 
+static gboolean close_widget(GtkWidget *widget, GdkEventKey *event,
+                             GtkWidget *to_close) {
+    if (event->keyval == GDK_KEY_Escape) {
+        gtk_widget_set_visible(to_close, FALSE);
+        return TRUE;
+    }
+    return FALSE;
+    (void)widget;
+}
 
 GtkWindow *mx_profile_window(t_client *client) {
     GtkBuilder *builder = client->builder;
@@ -44,6 +53,6 @@ GtkWindow *mx_profile_window(t_client *client) {
     g_signal_connect(change, "clicked", G_CALLBACK(change_data), client);
     gtk_window_set_transient_for(window, client->main_window);
     g_signal_connect(window, "key_press_event",
-                     G_CALLBACK(mx_close_widget), window);
+                     G_CALLBACK(close_widget), window);
     return window;
 }

@@ -57,10 +57,6 @@ gpointer mx_message_sheduler(gpointer data) {
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             gint receiver_id = sqlite3_column_int(stmt, 1);
 
-            // g_message("%d\n", receiver_id);
-            if (online_users == NULL) {
-                g_message(":(");
-            }
             if ((client = g_hash_table_lookup(*online_users,
                                               GINT_TO_POINTER(receiver_id)))) {
                 g_message("client->uid = %d", client->uid);

@@ -15,6 +15,10 @@ void mx_remove_contact(cJSON *json, t_client *client) {
         GHashTable *contacts = client->contacts_table;
         t_contact_data *node = NULL;
 
+        if (user_id == client->chat_with) {
+            mx_remove_rows(client->chat);
+            gtk_widget_hide(client->chat_box);
+        }
         node = (t_contact_data *)g_hash_table_lookup(contacts,
                                                      GINT_TO_POINTER(user_id));
         gtk_widget_destroy(GTK_WIDGET(node->row));
