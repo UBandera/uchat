@@ -12,6 +12,7 @@
 #include <time.h>
 #include <ldap.h>
 #include "glib/gprintf.h"
+#include <sys/stat.h>
 
 #define MESSAGE_DELAY_RANGE_BEGIN 5
 #define MESSAGE_DELAY_RANGE_END 8

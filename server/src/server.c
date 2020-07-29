@@ -119,6 +119,28 @@ gboolean incoming_callback(GSocketService *service,
     return FALSE;
 }
 
+void mx_daemon(void) {
+    pid_t process_id = 0;
+    pid_t sid = 0;
+
+    process_id = fork();
+    if (process_id < 0) {
+        g_printerr("fork failed!\n");
+        exit(1);
+    }
+    if (process_id > 0) {
+        g_print("process_id of child process %d \n", process_id);
+        exit(0);
+    }
+    umask(0);
+    sid = setsid();
+    if (sid < 0)
+        exit(1);
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
+}
+
 int main(int argc, char **argv) {
     GSocketService *service = NULL;
     GMainLoop *loop = NULL;
@@ -136,6 +158,7 @@ int main(int argc, char **argv) {
     g_print("Waiting for client!\n");
     g_thread_new("message sheduler", mx_message_sheduler, *(mx_get_db()));
 
+    mx_daemon();
     loop = g_main_loop_new(NULL, FALSE);
     g_main_loop_run(loop);
     (void)argc;
